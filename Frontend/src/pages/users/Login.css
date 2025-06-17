@@ -1,0 +1,158 @@
+/* Container for the entire login section */
+.login-container {
+  /* margin-top: 1.5rem; */
+  position: relative;
+  top: 100px;
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 0.5rem;
+}
+
+/* Title styling */
+.login-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+}
+
+/* Form container for centering and width control */
+.form-container {
+  max-width: 24rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form styling */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Form group (label + input + feedback) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  position: relative; /* For positioning the eye icon */
+}
+
+/* Label styling */
+.form-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+/* Input styling */
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  box-shadow: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Eye icon styling for password visibility toggle */
+.eye, .eyeoff {
+  position: absolute;
+  right: 0.75rem;
+  top: 2.75rem; /* Adjust based on label and input height */
+  font-size: 1.25rem;
+  color: #6b7280; /* Gray color for the icon */
+  cursor: pointer;
+}
+
+/* Submit button styling */
+.submit-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #ef4444; /* Red color to match original bg-red-500 */
+  color: #ffffff;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #dc2626; /* Darker red on hover (equivalent to red-600) */
+}
+
+.submit-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #ef4444;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .login-container {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .login-title {
+    font-size: 1.75rem;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .form-input {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .submit-button {
+    padding: 0.75rem 1rem;
+  }
+
+  .eye, .eyeoff {
+    top: 2.5rem; /* Adjust for smaller screens */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .login-container {
+    max-width: 26rem;
+  }
+
+  .login-title {
+    font-size: 2rem;
+  }
+
+  .form-container {
+    max-width: 22rem;
+  }
+
+  .form-input {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .eye, .eyeoff {
+    top: 2.75rem;
+  }
+}

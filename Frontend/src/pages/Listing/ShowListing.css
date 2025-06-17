@@ -1,0 +1,280 @@
+/* ShowListing.css */
+.show-listing-container {
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 100px;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.show-listing-title {
+  margin-bottom: 1.5rem;
+}
+
+.show-listing-title h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: center;
+}
+
+.show-listing-card {
+  margin: 0 auto;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.show-listing-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.show-listing-body {
+  padding: 1rem;
+}
+
+.show-listing-text {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #2d3748;
+}
+
+.show-listing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-dark {
+  background-color: #2d3748;
+  color: #ffffff;
+}
+
+.btn-dark:hover {
+  background-color: #1a202c;
+}
+
+.show-listing-reviews {
+  margin: 1.5rem 0;
+}
+
+.show-listing-reviews h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.star-rating {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 1rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.star-rating input:checked + label {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  resize: none;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.invalid-feedback {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.btn-outline-dark {
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  border: 1px solid #2d3748;
+  color: #2d3748;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-outline-dark:hover {
+  background-color: #2d3748;
+  color: #ffffff;
+}
+
+.reviews-list p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.review-card {
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.review-body {
+  padding: 1rem;
+}
+
+.review-author {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.review-rating {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.review-comment {
+  font-size: 1rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.show-listing-map {
+  margin: 1.5rem 0;
+}
+
+.show-listing-map h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 200px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .show-listing-container {
+    padding: 1rem;
+    margin-top: 50px;
+  }
+
+  .show-listing-title h3 {
+    font-size: 1.5rem;
+  }
+
+  .show-listing-img {
+    height: 150px;
+  }
+
+  .show-listing-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .show-listing-map h3 {
+    font-size: 1.25rem;
+  }
+
+  .map-placeholder {
+    height: 150px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .show-listing-container {
+    max-width: 26rem;
+  }
+
+  .show-listing-title h3 {
+    font-size: 1.75rem;
+  }
+
+  .show-listing-img {
+    height: 180px;
+  }
+}
