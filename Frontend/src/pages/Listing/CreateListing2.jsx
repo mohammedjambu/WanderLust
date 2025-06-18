@@ -32,11 +32,10 @@ const CreateListing2 = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/"); // Navigate to AllListing page after selection
-    // Placeholder for next page navigation or form submission
-    console.log('Selected place:', selectedOption);
-  };
+  e.preventDefault();
+  localStorage.setItem("selectedCategory", selectedOption); // store in localStorage
+  navigate("/"); // or wherever your next form page is
+};
 
   return (
     <div className="listing-container">

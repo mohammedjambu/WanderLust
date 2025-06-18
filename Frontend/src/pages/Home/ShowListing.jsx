@@ -1,14 +1,29 @@
 import React from 'react';
-import './ListingDetail.css';
+import './ShowListing.css';
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const ListingDetail = ({ listing }) => {
-    const { id } = useParams(); // Get the id from the URL to construct the edit link
+const ShowListing = () => {
+  const { id } = useParams();
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!listing || !listing.image) {
-    return <div>Error: Listing data is missing or invalid.</div>;
-  }
-  
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_BASE}/api/listings/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setListing(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching listing:", err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <h2>Loading...</h2>;
+  if (!listing) return <h2>Listing not found</h2>;
 
   return (
     <div className="listing-detail-container">
@@ -93,4 +108,4 @@ const ListingDetail = ({ listing }) => {
   );
 };
 
-export default ListingDetail;
+export default ShowListing;

@@ -1,18 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Login.css";
-import { IoMdEye } from "react-icons/io";
-import { IoMdEyeOff } from "react-icons/io";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { authDataContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  let navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const { serverUrl, setCurrentUser } = useContext(authDataContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Clear previous error
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/auth/login`,
+        { username, password },
+        { withCredentials: true }
+      );
+      setCurrentUser(res.data.user); // Assuming this is the logged-in user
+      // setCurrentUser && setCurrentUser(res.data.user);
+      console.log("Login successful");
+      navigate("/"); // Redirect on successful login
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.response?.data?.error || "Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="login-container">
       <h1 className="login-title">Login</h1>
       <div className="form-container">
-        <form action="/login" method="POST" className="login-form" noValidate>
+        <form onSubmit={handleSubmit} className="login-form" noValidate>
           <div className="form-group">
             <label htmlFor="username" className="form-label">
               Username
@@ -22,6 +48,8 @@ const Login = () => {
               id="username"
               type="text"
               className="form-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
@@ -35,28 +63,25 @@ const Login = () => {
               id="password"
               type={show ? "text" : "password"}
               className="form-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {!show && (
-              <IoMdEye
-                className="eye"
-                onClick={() => setShow((prev) => !prev)}
-              />
-            )}
-            {show && (
-              <IoMdEyeOff
-                className="eyeoff"
-                onClick={() => setShow((prev) => !prev)}
-              />
+            {!show ? (
+              <IoMdEye className="eye" onClick={() => setShow(true)} />
+            ) : (
+              <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
             )}
           </div>
 
-          <button type="submit" className="submit-button" onClick={() => navigate("/")}>
+          {error && <p className="error-text">{error}</p>}
+
+          <button type="submit" className="submit-button">
             Login
           </button>
-          
+
           <p className="text-[18px]">
-            Already have an account?{" "}
+            Don't have an account?{" "}
             <span
               className="text-[19px] text-[red] cursor-pointer"
               onClick={() => navigate("/signup")}
@@ -64,7 +89,6 @@ const Login = () => {
               SignUp
             </span>
           </p>
-
         </form>
       </div>
     </div>

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://localhost:8080",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,4 +31,5 @@
     "tailwindcss": "^3.4.17",
     "vite": "^6.3.5"
   }
+  
 }

@@ -17,10 +17,18 @@ async function main() {
 }
 
 const initDB = async () => {
-    await Listing.deleteMany({});       // First delete previous data
-    initData.data = initData.data.map((obj) => ({ ...obj, owner: "67fca0b80d629e439a8c2a78" })); // Add owner id to each object
-    await Listing.insertMany(initData.data);        // Add new data
-    console.log("Data initialized");
-}
+  // await Listing.deleteMany({});       // First delete previous data
+  initData.data = initData.data.map((obj) => ({
+    ...obj,
+    owner: "67fca0b80d629e439a8c2a78",
+    geometry: {
+      type: "Point",
+      coordinates: [77.5946, 12.9716], // dummy coordinates (Bangalore)
+    },
+  }));
+
+  await Listing.insertMany(initData.data);
+  console.log("Data initialized");
+};
 
 initDB();

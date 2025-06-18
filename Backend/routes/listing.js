@@ -5,10 +5,13 @@ const Listing = require("../models/listing.js");
 const {isLoggedIn, isOwner, validateListing} = require("../middleware.js")
 const multer  = require('multer')
 const { storage } = require('../cloudConfig.js');
-const upload = multer({ storage });
+const upload = multer({ storage }); 
+// const upload = multer({ dest: "uploads/" });
 
 //MVC controller
 const listingController = require('../controllers/listings');
+
+
 
 router
   .route("/")
@@ -16,9 +19,9 @@ router
   .get(wrapAsync(listingController.index))
   // Create Route
   .post(
-    isLoggedIn,
-    upload.single('listing[image]'),
-    validateListing,
+    // isLoggedIn,
+    upload.single('image'),
+    // validateListing,
     wrapAsync(listingController.createListing)
   );
 

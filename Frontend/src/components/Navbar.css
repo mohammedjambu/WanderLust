@@ -171,6 +171,7 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
   min-width: 200px;
   z-index: 1000;
+  background-color: #fff;
 }
 
 .dropdown-menu.show {
@@ -188,9 +189,10 @@
 }
 
 .dropdown-item:hover {
-  background-color: #f9fafb; /* Tailwind's bg-gray-50 */
+  background-color: #bcbcbc; /* Tailwind's bg-gray-50 */
   color: #fe424d;
 }
+
 
 /* Bold dropdown items (Sign up, Log in) */
 .bold {

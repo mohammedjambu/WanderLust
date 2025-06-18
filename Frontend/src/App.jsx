@@ -4,8 +4,7 @@ import Login from "./pages/users/Login"
 import Signup from "./pages/users/Signup"
 import CreateListing1 from "./pages/Listing/CreateListing1"
 import CreateListing2 from "./pages/Listing/CreateListing2"
-import ShowListing from "./pages/Listing/ShowListing"
-import ListingDetail from "./pages/Home/ListingDetail"
+import ShowListing from "./pages/Home/ShowListing"
 import EditListing from "./pages/Home/EditListing"
 
 
@@ -398,29 +397,18 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home allListings={sampleListings} />} />
+        <Route path="/listings/:id" element={<ShowListing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/createListing1" element={<CreateListing1 />} />
-        <Route path="/createListing2" element={<CreateListing2 />} />
-        <Route path="/showListing" element={<ShowListing />} />
-        <Route path="/listings/:id" element={<ListingDetailRoute listings={sampleListings} />} />
+        {/* <Route path="/createListing2" element={<CreateListing2 />} /> */}
         <Route path="/listings/:id/edit" element={<EditListingRoute listings={sampleListings} />} />
       </Routes>
     </>
   )
 }
 
-// Helper component to fetch the listing for the detail page
-const ListingDetailRoute = ({ listings }) => {
-  const { id } = useParams();
-  const listing = listings.find((listing) => listing.id === id);
 
-  if (!listing) {
-    return <div>Listing not found</div>;
-  }
-
-  return <ListingDetail listing={listing} />;
-};
 
 // Helper component to fetch the listing for the edit page
 const EditListingRoute = ({ listings }) => {

@@ -1,49 +1,59 @@
 const User = require("../models/user.js");
 
-// Creating user signup routes
-module.exports.renderSignupForm = (req, res) => {
-    res.render("users/signup.ejs")  
-}
+// Signup controller
+module.exports.signup = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+    const newUser = new User({ email, username });
 
-module.exports.signup = async(req, res) => {
-    try {
-        let { username, email, password } = req.body;
-        const newUser = new User({email, username});
-        const registeredUser = await User.register(newUser, password);
-        console.log(registeredUser)
-        req.login(registeredUser, (err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash("success", "Welcome to Wanderlust!")
-            res.redirect("/listings");
-        })
-    } catch(e) {
-        req.flash("error", e.message)
-        res.redirect("/signup");
-    }
-    
-}
+    const registeredUser = await User.register(newUser, password); // Passport-local-mongoose
+    req.login(registeredUser, (err) => {
+      if (err) return next(err);
 
-// Creating user login route
-module.exports.renderLoginForm = (req, res) => {
-    res.render("users/login.ejs")
+      res.status(201).json({
+        success: true,
+        message: "Signup successful",
+        user: {
+          id: registeredUser._id,
+          username: registeredUser.username,
+          email: registeredUser.email,
+        },
+      });
+    });
+  } catch (e) {
+    res.status(400).json({
+      success: false,
+      message: e.message,
+    });
+  }
 };
 
-module.exports.login = async(req, res) => {
-    req.flash("success", "Welcome to Wanderlust!");
-    let redirectUrl = res.locals.redirectUrl || "/listings"
-    res.redirect(redirectUrl);
-}
+// Login controller
+module.exports.login = async (req, res) => {
+  const user = req.user;
 
-// Creating user logout route
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
+};
+
+// Logout controller
 module.exports.logout = (req, res) => {
-    req.logout((err) => {       //req.logout is already a function in passport for user logout
-        if (err) { 
-            return next(err);
-        }
-        req.flash("success", "Logged out successfully");
-        res.redirect("/listings");
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "Lax", // or "None" if using cross-site cookies
+      secure: process.env.NODE_ENV === "production",
     });
-}
-
+    return res.status(200).json({ success: true, message: "Logged out" });
+  } catch (err) {
+    console.error("Logout Error:", err);
+    return res.status(500).json({ success: false, message: "Logout failed" });
+  }
+};

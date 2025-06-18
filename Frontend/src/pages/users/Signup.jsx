@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './Signup.css';
-import { IoMdEye } from "react-icons/io";
-import { IoMdEyeOff } from "react-icons/io";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { authDataContext } from '../../context/AuthContext';
 import axios from 'axios';
@@ -9,24 +8,27 @@ import axios from 'axios';
 function SignUp() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const { serverUrl } = useContext(authDataContext);
+  const { serverUrl, setCurrentUser } = useContext(authDataContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
     try {
-      const result = await axios.post(
+      const res = await axios.post(
         `${serverUrl}/api/auth/signup`,
         { username, email, password },
         { withCredentials: true }
       );
-      console.log(result.data);
-      // Navigate to login page on successful signup
-      navigate('/login');
-    } catch (error) {
-      console.error("Signup error:", error.response?.data || error.message);
+      console.log(res.data);
+      setCurrentUser && setCurrentUser(res.data.user); // optional
+      navigate('/'); // redirect to home page
+    } catch (err) {
+      console.error("Signup error:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "Signup failed");
     }
   };
 
@@ -43,9 +45,7 @@ function SignUp() {
       <div className="form-container">
         <form onSubmit={handleSubmit} className="signup-form" noValidate>
           <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
+            <label htmlFor="username" className="form-label">Username</label>
             <input
               name="username"
               id="username"
@@ -55,13 +55,10 @@ function SignUp() {
               value={username}
               required
             />
-            <div className="form-feedback hidden">Looks good!</div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
+            <label htmlFor="email" className="form-label">Email</label>
             <input
               name="email"
               id="email"
@@ -74,9 +71,7 @@ function SignUp() {
           </div>
 
           <div className="form-group password">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               name="password"
               id="password"
@@ -86,13 +81,17 @@ function SignUp() {
               value={password}
               required
             />
-            {!show && <IoMdEye className="eye" onClick={() => setShow(prev => !prev)} />}
-            {show && <IoMdEyeOff className="eyeoff" onClick={() => setShow(prev => !prev)} />}
+            {show ? (
+              <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
+            ) : (
+              <IoMdEye className="eye" onClick={() => setShow(true)} />
+            )}
           </div>
 
-          <button type="submit" className="submit-button">
-            SignUp
-          </button>
+          {error && <p className="error-text">{error}</p>}
+
+          <button type="submit" className="submit-button">SignUp</button>
+
           <p className="text-[18px]">
             Already have an account?{' '}
             <span

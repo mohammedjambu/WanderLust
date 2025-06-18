@@ -3,15 +3,15 @@ const Review = require("./models/review");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 
+
 module.exports.isLoggedIn = (req, res, next) => {
-    if(!req.isAuthenticated()){     //passport method used to authenticate if a user is logged in
-        //redirect url
-        req.session.redirectUrl = req.originalUrl;    // Original url is the url that the user is trying to access before logging in
-        req.flash("error", "You must be logged in to create a new listing");
-        return res.redirect("/login");
-    }
-    next();
-}
+  if (!req.isAuthenticated()) {         //passport method used to authenticate if a user is logged in
+    return res.status(401).json({ error: "You must be logged in" });
+  }
+  next();
+};
+
+
 
 module.exports.saveRedirectUrl = (req, res, next) => {
     if(req.session.redirectUrl) {
