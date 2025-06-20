@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CreateListing1.css";
 import { useNavigate } from "react-router-dom";
 
@@ -8,48 +8,39 @@ const CreateListing1 = () => {
   const [country, setCountry] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  // const category = localStorage.getItem("selectedCategory");
-  const [category, setCategory] = useState("Villa");
-  const categories = ["Villa", "Farm House", "Pool House", "Rooms", "Flat", "PG", "Cabins", "Shops", "Trending"];
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+  useEffect(() => {
+    fetch("http://localhost:5000/api/auth/check", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.loggedIn) {
+          navigate("/login");
+        }
+      })
+      .catch(() => navigate("/login"));
+  }, []);
 
-  const formData = new FormData();
-  formData.append("listing[title]", title);
-    formData.append("listing[location]", location);
-    formData.append("listing[country]", country);
-    formData.append("listing[price]", price);
-    formData.append("listing[description]", description);
-    formData.append("listing[category]", category);
-    if (image) {
-      formData.append("image", image); // Match Multer's field name
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!title || !description || !location || !country || !price) {
+      alert("Please fill in all the fields.");
+      return;
     }
 
-  try {
-    const res = await fetch("http://localhost:5000/api/listings", {
-      method: "POST",
-      body: formData,
-      credentials: "include",
-    });
+    const listingData = {
+      title,
+      description,
+      price,
+      location,
+      country,
+    };
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error("Failed to create listing\n" + errorText);
-    }
-
-    const data = await res.json();
-    console.log("✅ Listing created:", data);
-    navigate("/");
-
-  } catch (err) {
-    console.error("Error:", err.message);
-  }
-};
-
+    localStorage.setItem("createListingData", JSON.stringify(listingData));
+    navigate("/createListing2");
+  };
 
   return (
     <div className="listing-container">
@@ -57,90 +48,30 @@ const CreateListing1 = () => {
       <form className="listing-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Title</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Add a catchy title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <input type="text" className="form-input" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
 
         <div className="form-group">
           <label>Description</label>
-          <textarea
-            className="form-input form-textarea"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="image">Image</label>
-          <div className="file-input-wrapper">
-            <input
-              type="file"
-              id="image"
-              className="file-input"
-              onChange={(e) => setImage(e.target.files[0])}
-              accept="image/*"
-            />
-            <label htmlFor="image" className="file-label">
-              Browse... <span>{image ? image.name : "No file selected."}</span>
-            </label>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Category</label>
-          <select
-            className="form-input"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
+          <textarea className="form-input" value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
         </div>
 
         <div className="form-group">
           <label>Price</label>
-          <input
-            type="number"
-            className="form-input"
-            placeholder="1200"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
+          <input type="number" className="form-input" value={price} onChange={(e) => setPrice(e.target.value)} required />
         </div>
 
         <div className="form-group">
           <label>Country</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="India"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-          />
+          <input type="text" className="form-input" value={country} onChange={(e) => setCountry(e.target.value)} required />
         </div>
 
         <div className="form-group">
           <label>Location</label>
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Jaipur, Rajasthan"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
+          <input type="text" className="form-input" value={location} onChange={(e) => setLocation(e.target.value)} required />
         </div>
 
-        <button type="submit" className="next-button">
-          Submit
-        </button>
+        <button type="submit" className="next-button">Next</button>
       </form>
     </div>
   );

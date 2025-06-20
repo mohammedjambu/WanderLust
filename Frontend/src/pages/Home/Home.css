@@ -63,6 +63,20 @@
   font-weight: 700;
 }
 
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.2rem;
+  color: #2d3748;
+}
+
+.error-container {
+  color: #ff4d4f;
+}
 
 
 /* Responsive Design */

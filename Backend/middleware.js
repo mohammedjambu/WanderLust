@@ -11,6 +11,21 @@ module.exports.isLoggedIn = (req, res, next) => {
   next();
 };
 
+// Middleware to parse JSON fields from formData
+module.exports.parseFormDataFields = (req, res, next) => {
+  try {
+    if (typeof req.body.propertyDetails === "string") {
+      req.body.propertyDetails = JSON.parse(req.body.propertyDetails);
+    }
+    if (typeof req.body.amenities === "string") {
+      req.body.amenities = JSON.parse(req.body.amenities);
+    }
+  } catch (err) {
+    return res.status(400).json({ error: "Invalid JSON in form fields" });
+  }
+  next();
+}
+
 
 
 module.exports.saveRedirectUrl = (req, res, next) => {
@@ -23,9 +38,8 @@ module.exports.saveRedirectUrl = (req, res, next) => {
 module.exports.isOwner = async (req, res, next) => {
     let {id} = req.params;
     let listing = await Listing.findById(id);
-    if(!listing.owner._id.equals(res.locals.currUser._id)) {
-        req.flash("error", "You don't have permission to edit")
-        return  res.redirect(`/listings/${id}`);
+    if(!listing.owner._id.equals(req.user._id)) {
+        return res.status(403).json({ error: "You don't have permission to edit this listing." });
     }
     next();
 }

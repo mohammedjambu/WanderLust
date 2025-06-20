@@ -1,63 +1,113 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// ✅ EditListing.jsx — Now pre-fills all values directly instead of placeholders
+
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./EditListing.css";
 
-const EditListing = ({ listing }) => {
-  // State for text fields, initialized with the current listing data
-  const [formData, setFormData] = useState({
-    title: listing.title,
-    description: listing.description,
-    price: listing.price,
-    location: listing.location,
-    country: listing.country,
-  });
-
-  // State for the selected file
-  const [selectedFile, setSelectedFile] = useState(null);
-  // State for the file name display
-  const [fileName, setFileName] = useState("No file selected.");
-
+const EditListing = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // Handle text input changes
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    location: "",
+    country: "",
+    category: "",
+  });
+
+  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const categories = [
+    "Villa",
+    "Farm House",
+    "Pool House",
+    "Rooms",
+    "Flat",
+    "PG",
+    "Cabin",
+    "Shops"
+  ];
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/listings/${id}`);
+        const data = await res.json();
+
+        setFormData({
+          title: data.title || "",
+          description: data.description || "",
+          price: data.price || "",
+          location: data.location || "",
+          country: data.country || "",
+          category: data.category || "",
+        });
+        setExistingImages(data.images || []);
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch listing", err);
+        setLoading(false);
+      }
+    };
+
+    fetchListing();
+  }, [id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle file input changes
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      setFileName(file.name);
-    } else {
-      setSelectedFile(null);
-      setFileName("No file selected.");
+    setImages([...e.target.files]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("location", formData.location);
+    form.append("country", formData.country);
+    form.append("category", formData.category);
+
+    for (let i = 0; i < images.length; i++) {
+      form.append("images", images[i]);
+    }
+
+    form.append("propertyDetails", JSON.stringify({ guests: 2, bedrooms: 1, bathrooms: 1 }));
+    form.append("amenities", JSON.stringify([{ name: "Wi-Fi", icon: "🌐" }]));
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/listings/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        body: form,
+      });
+
+      if (!res.ok) {
+        const error = await res.text();
+        throw new Error(error);
+      }
+
+      const result = await res.json();
+      console.log("✅ Listing updated:", result);
+      navigate(`/listings/${id}`);
+    } catch (err) {
+      console.error("❌ Failed to update listing:", err);
+      alert("Update failed. Please try again.");
     }
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simulate saving the updated listing
-    const updatedListing = {
-      id: listing.id,
-      ...formData,
-      image: selectedFile
-        ? { filename: selectedFile.name, url: URL.createObjectURL(selectedFile) } // Simulate a URL for preview
-        : listing.image, // Keep the original image if no new file is selected
-    };
-    console.log("Updated listing:", updatedListing);
+  const handleCancel = () => navigate(`/listings/${id}`);
 
-    // Redirect back to the listing detail page
-    navigate(`/listings/${listing.id}`);
-  };
-
-  // Handle cancel action
-  const handleCancel = () => {
-    navigate(`/listings/${listing.id}`);
-  };
+  if (loading) return <p>Loading listing data...</p>;
 
   return (
     <div className="edit-listing-container">
@@ -67,82 +117,81 @@ const EditListing = ({ listing }) => {
           <label htmlFor="title">Title</label>
           <input
             type="text"
-            id="title"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
-            id="description"
             name="description"
             value={formData.description}
             onChange={handleChange}
             required
-          />
+          ></textarea>
         </div>
+
         <div className="form-group">
           <label htmlFor="price">Price (₹ per night)</label>
           <input
             type="number"
-            id="price"
             name="price"
             value={formData.price}
             onChange={handleChange}
-            required
             min="1"
+            required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="location">Location</label>
           <input
             type="text"
-            id="location"
             name="location"
             value={formData.location}
             onChange={handleChange}
             required
           />
         </div>
+
         <div className="form-group">
           <label htmlFor="country">Country</label>
           <input
             type="text"
-            id="country"
             name="country"
             value={formData.country}
             onChange={handleChange}
             required
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="image">Upload New Image</label>
+          <label htmlFor="category">Category</label>
+          <select name="category" value={formData.category} onChange={handleChange} required>
+            <option value="" disabled>Select category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="images">Upload New Images</label>
           <input
             type="file"
-            id="image"
-            name="image"
+            name="images"
             onChange={handleFileChange}
-            className="file-input"
-            accept="image/*" // Restrict to image files
+            accept="image/*"
+            multiple
           />
-          <label htmlFor="image" className="file-label">
-            Browse... <span>{fileName}</span>
-          </label>
         </div>
+
         <div className="form-buttons">
-          <button type="submit" className="btn btn-save">
-            Save Changes
-          </button>
-          <button
-            type="button"
-            className="btn btn-cancel"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
+          <button type="submit" className="btn btn-save">Save Changes</button>
+          <button type="button" className="btn btn-cancel" onClick={handleCancel}>Cancel</button>
         </div>
       </form>
     </div>

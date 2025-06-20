@@ -1,7 +1,9 @@
+/* --- Navbar.css --- */
+
 /* Navbar container */
 .navbar {
   background-color: #fff;
-  border-bottom: 1px solid #e5e7eb; /* Tailwind's border-gray-200 */
+  border-bottom: 1px solid #e5e7eb;
   width: 100%;
   position: fixed;
   top: 0;
@@ -16,70 +18,56 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding-bottom: 10px; /* Remove extra padding */
-  border-bottom: 1px solid #e5e7eb; /* Remove duplicate border */
+  /* ✅ CLEANUP: Removed redundant border and padding from here */
 }
 
 /* Navbar brand (Wanderlust text) */
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: red;
+  color: #fe424d; /* Airbnb red */
   text-decoration: none;
-}
-
-.navbar-brand:hover {
-  text-decoration: underline; /* Add underline on hover */
-  color: #fe424d; /* Red color */
   transition: color 0.2s ease;
 }
 
-/* Search container */
+/* Search container and form */
 .search-container {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  /* margin-top: 5rem; */
-  margin: 0 1rem; /* Add spacing on mobile */
+  margin: 0 1rem;
 }
 
-/* Search form */
 .search-form {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   width: 100%;
-  max-width: 500px; /* Limit search bar width on desktop */
+  max-width: 500px;
   position: relative;
   margin-top: 0.5rem;
 }
 
-/* Search input */
 .search-inp {
   border-radius: 25px;
-  padding: 0.7rem 3rem 0.7rem 1.5rem; /* Adjust padding for search icon */
+  padding: 0.7rem 3rem 0.7rem 1.5rem;
   font-size: 1rem;
-  border: 1px solid #d1d5db; /* Tailwind's border-gray-300 */
+  border: 1px solid #d1d5db;
   flex-grow: 1;
-  transition: border-color 0.2s ease;
-  background-color: #fff;
-  /* padding-bottom: 10px; */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-inp:focus {
   outline: none;
   border-color: #fe424d;
-  box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.1);
+  box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2);
 }
 
-/* Search button */
 .search-btn {
   background-color: #fe424d;
   color: #fff;
   border-radius: 50%;
   padding: 0.5rem;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -92,342 +80,175 @@
 }
 
 .search-btn:hover {
-  background-color: #e03b44; /* Slightly darker red */
+  background-color: #e03b44;
 }
 
 .search-icon {
   font-size: 1.25rem;
 }
 
-/* Navbar toggler (hamburger menu) */
-.navbar-toggler {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #1f2937; /* Tailwind's text-gray-800 */
-  cursor: pointer;
-  display: none; /* Hidden by default, shown on mobile */
-}
+/* --- ✅ STYLING REFACTOR FOR DROPDOWN BUTTON --- */
 
-/* Dropdown container */
-.dropdown {
-  position: relative;
-  z-index: 1000;
-}
-
-/* Dropdown header */
+/* Wrapper for the dropdown button */
 .dropdown-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
   cursor: pointer;
-  padding: 10px 10px;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(221, 221, 221, 0.5);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  overflow: hidden;
 }
 
-.dropdown-header:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border-color: rgba(255, 56, 92, 0.3);
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-/* Dropdown toggle button */
+/* This is the main button with the pill shape */
 .dropdown-toggle {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #1f2937; /* Tailwind's text-gray-800 */
-  padding: 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: color 0.2s ease;
+  gap: 12px; /* Space between hamburger icon and avatar */
+  padding: 6px 6px 6px 12px; /* T/R/B/L padding for compact look */
+  border-radius: 30px; /* Makes the pill shape */
+  border: 1px solid #DDDDDD;
+  background: none;
+  transition: box-shadow 0.2s ease;
 }
 
 .dropdown-toggle:hover {
-  color: #fe424d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* This targets the hamburger icon (FaBars) */
+.dropdown-toggle .fa-bars {
+  font-size: 16px; /* Smaller icon size */
+  color: #222222;
+}
+
+/* This targets the default profile icon (CgProfile) */
 .dropdown-icon {
-  font-size: 1.6rem;
+  font-size: 28px; /* Slightly larger than the avatar */
+  color: #717171;
 }
 
-/* Dropdown menu */
+/* This styles the user's image when logged in */
+.profile-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Makes it a perfect circle */
+  object-fit: cover; /* Prevents image distortion */
+}
+
+/* Dropdown menu that appears on click */
 .dropdown-menu {
   display: none;
-  margin-top: 1rem;
+  margin-top: 12px;
   position: absolute;
   top: 100%;
-  right: 20%;
-  border: 1px solid #e5e7eb; /* Tailwind's border-gray-200 */
-  border-radius: 0.25rem;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-  min-width: 200px;
-  z-index: 1000;
+  right: 0;
   background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px; /* Softer rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  z-index: 1000;
+  padding: 8px 0;
 }
 
 .dropdown-menu.show {
   display: block;
 }
 
-/* Dropdown items */
 .dropdown-item {
   display: block;
-  padding: 0.5rem 1rem;
-  color: #1f2937; /* Tailwind's text-gray-800 */
+  padding: 10px 16px;
+  color: #222222;
   text-decoration: none;
-  font-size: 1rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #bcbcbc; /* Tailwind's bg-gray-50 */
-  color: #fe424d;
+  background-color: #f7f7f7;
+}
+
+.dropdown-item.logout {
+  cursor: pointer;
+}
+
+.dropdown-item.bold {
+  font-weight: 600;
+}
+
+/* Separator line in the dropdown */
+.dropdown-menu hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
 }
 
 
-/* Bold dropdown items (Sign up, Log in) */
-.bold {
-  font-weight: 700;
-}
-
-/* Filters wrapper for horizontal scrolling on mobile */
+/* Filters Section */
 .filters-wrapper {
   width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  scrollbar-width: none; /* Hide scrollbar in Firefox */
-  -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-
 .filters-wrapper::-webkit-scrollbar {
-  display: none; /* Hide scrollbar in Chrome/Safari */
+  display: none;
 }
-
-/* Filters container */
 .filters {
   display: flex;
-  flex-wrap: nowrap; /* Prevent wrapping on mobile */
-  justify-content: flex-start; /* Align to start for scrolling */
-  align-items: center;
+  justify-content: center;
   gap: 1.5rem;
   padding: 1rem 0;
   margin-top: 1rem;
-  white-space: nowrap; /* Prevent filter items from wrapping */
 }
-
-/* Individual filter */
 .filter {
   text-align: center;
   opacity: 0.7;
   transition: opacity 0.2s ease, border-bottom 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   color: #000;
-  /* padding-top: 0.5rem; */
-  flex: 0 0 auto; /* Prevent shrinking on mobile */
+  padding-bottom: 4px;
 }
-
 .filter:hover {
   opacity: 1;
   cursor: pointer;
-  border-bottom: 2px solid #fe424d; /* Red underline on hover */
+  border-bottom: 2px solid #fe424d;
 }
-
-/* Filter icon */
 .filter-icon {
   font-size: 1.5rem;
-  color: #1f2937; /* Tailwind's text-gray-800 */
 }
-
-/* Filter label */
 .filter p {
   font-size: 0.8rem;
-  color: #1f2937; /* Tailwind's text-gray-800 */
-  margin: 0.25rem 0 0 0;
+  margin-top: 0.25rem;
 }
 
-/* Responsive design */
+
+/* --- ✅ RESPONSIVE DESIGN ADJUSTMENTS --- */
+.navbar-toggler {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0.5rem;
-  }
-
-  .container {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0;
-  }
-
-  .navbar-brand {
-    font-size: 1.25rem;
-    margin-left: 0.5rem;
-  }
-
   .search-container {
-    margin: 0 0.5rem;
-    order: 2; /* Ensure search bar stays in the middle */
-    flex-grow: 1;
+    display: none; /* Hide search bar on mobile for simplicity */
   }
-
-  .search-form {
-    max-width: 100%;
-  }
-
-  .search-inp {
-    padding: 0.5rem 2.5rem 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .search-btn {
-    right: 0.25rem;
-    width: 2rem;
-    height: 2rem;
-    padding: 0.4rem;
-  }
-
-  .search-icon {
-    font-size: 1rem;
-  }
-
   .navbar-toggler {
-    display: block; /* Show toggler on mobile */
-    order: 3; /* Ensure toggler is on the right */
-    margin-right: 0.5rem;
+    display: block; /* Show hamburger menu button */
   }
-
   .dropdown {
-    display: none; /* Hide dropdown by default on mobile */
-    order: 4; /* Place dropdown below on mobile */
-    width: 100%;
+    display: none; /* Hide the desktop dropdown button */
   }
-
+  /* Show dropdown menu full-width when mobile menu is open */
   .dropdown.mobile-show {
     display: block;
-    position: static;
+    width: 100%;
+    order: 3; /* Places it below other items */
   }
-
-  .dropdown-header {
-    padding: 0.25rem 0.5rem;
-    gap: 5px;
-  }
-
-  .dropdown-toggle {
-    gap: 0.25rem;
-  }
-
-  .dropdown-icon {
-    font-size: 1.25rem;
-  }
-
   .dropdown-menu {
     position: static;
     width: 100%;
-    border: none;
     box-shadow: none;
     border-radius: 0;
-    border-top: 1px solid #e5e7eb; /* Tailwind's border-gray-200 */
-    margin-top: 0;
-  }
-
-  .dropdown-item {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .filters-wrapper {
-    padding: 0;
-  }
-
-  .filters {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    padding: 0.5rem;
-  }
-
-  .filter {
-    margin: 0;
-    padding: 0.25rem 0.5rem;
-  }
-
-  .filter-icon {
-    font-size: 1.25rem;
-  }
-
-  .filter p {
-    font-size: 0.7rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar-brand {
-    font-size: 1.1rem;
-  }
-
-  .search-inp {
-    padding: 0.4rem 2rem 0.4rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
-  .search-btn {
-    width: 1.8rem;
-    height: 1.8rem;
-    padding: 0.3rem;
-  }
-
-  .search-icon {
-    font-size: 0.9rem;
-  }
-
-  .navbar-toggler {
-    font-size: 1.25rem;
-  }
-
-  .dropdown-icon {
-    font-size: 1.1rem;
-  }
-
-  .filter {
-    padding: 0.25rem 0.4rem;
-  }
-
-  .filter-icon {
-    font-size: 1.1rem;
-  }
-
-  .filter p {
-    font-size: 0.65rem;
-  }
-}
-
-@media (min-width: 769px) {
-  .dropdown {
-    display: block !important; /* Always visible on larger screens */
-  }
-
-  .navbar-toggler {
-    display: none; /* Hide toggler on larger screens */
-  }
-
-  .filters {
-    flex-wrap: wrap; /* Allow wrapping on desktop */
-    justify-content: center; /* Center filters on desktop */
-    gap: 1.5rem;
-  }
-
-  .filter {
-    margin-right: 1.5rem;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
   }
 }

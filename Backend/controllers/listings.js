@@ -1,117 +1,196 @@
+// controllers/listings.js
 const Listing = require("../models/listing.js");
-const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-const mapToken = process.env.MAP_TOKEN;
-const geocodingClient = mbxGeocoding({ accessToken: mapToken });
+const geocodingClient = require("../utils/mapbox");
 
 
 
 // Index Route
 module.exports.index = async (req, res) => {
-    const allListings = await Listing.find({});
-    res.json(allListings);
+  const allListings = await Listing.find({});
+  console.log("Fetched listings:", allListings.length);
+  res.json(allListings);
 };
 
-// New Route
-module.exports.renderNewForm = (req, res) => {
-    res.render("listings/new.ejs");
-};
-
-//Show Route
+// Show Route
 module.exports.showListing = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const listing = await Listing.findById(id)
-      .populate({
-        path: "reviews",
-        populate: {
-          path: "author",
-        },
-      })
-      .populate("owner");
+    try {
+        const { id } = req.params;
+        console.log("ID received:", id);
+        const listing = await Listing.findById(id)
+            .populate({
+                path: "reviews",
+                populate: {
+                    path: "author",
+                    select: "username avatar",
+                },
+            })
+            .populate("owner", "username avatar createdAt");
 
-    if (!listing) {
-      return res.status(404).json({ error: "Listing does not exist!" });
+        if (!listing) {
+            return res.status(404).json({ error: "Listing does not exist!" });
+        }
+
+        const avgRating =
+            listing.reviews.length > 0
+                ? (
+                      listing.reviews.reduce((sum, review) => sum + review.rating, 0) /
+                      listing.reviews.length
+                  ).toFixed(1)
+                : 0;
+
+        const listingData = {
+            title: listing.title,
+            description: listing.description,
+            image: {
+                url: listing.image.url,
+                filename: listing.image.filename,
+            },
+            images: listing.images || [],
+            category: listing.category,
+            price: listing.price,
+            location: listing.location,
+            country: listing.country,
+            reviews: listing.reviews.map((review) => ({
+                id: review._id,
+                name: review.author.username,
+                avatar: review.author.avatar,
+                rating: review.rating,
+                comment: review.comment,
+                date: review.createdAt.toLocaleDateString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                }),
+            })),
+            owner: {
+                name: listing.owner.username,
+                avatar: listing.owner.avatar,
+                joinedYear: listing.owner.createdAt
+                    ? new Date(listing.owner.createdAt).getFullYear()
+                    : new Date().getFullYear(),
+                rating: avgRating,
+                reviewCount: listing.reviews.length,
+            },
+            propertyDetails: listing.propertyDetails,
+            amenities: listing.amenities,
+        };
+
+        res.json(listingData);
+    } catch (err) {
+        console.error("Error in showListing:", err);
+        res.status(500).json({ error: "Something went wrong" });
     }
-
-    res.json(listing); // ✅ Send JSON to frontend
-  } catch (err) {
-    console.error("Error in showListing:", err);
-    res.status(500).json({ error: "Something went wrong" });
-  }
 };
 
-
-//Create Route
+// Create Route
 module.exports.createListing = async (req, res, next) => {
+    console.log("BODY:", req.body);
+    console.log("FILES:", req.files);
+
   try {
-    const geoResponse = await geocodingClient.forwardGeocode({
-      query: req.body.listing.location,
-      limit: 1,
-    }).send();
+    const geoResponse = await geocodingClient
+      .forwardGeocode({
+        query: req.body.location,
+        limit: 1,
+      })
+      .send();
 
-    const { title, description, price, location, country, category } = req.body.listing;
+    const {
+      title,
+      description,
+      price,
+      location,
+      country,
+      category,
+      propertyDetails,
+      amenities,
+    } = req.body;
 
-    const newListing = new Listing({
+    const images = req.files.map((file) => ({
+      url: file.path,
+      filename: file.filename,
+    }));
+
+    const listing = new Listing({
       title,
       description,
       price: parseFloat(price),
       location,
       country,
-      category, // <- Add category here explicitly
+      category,
       geometry: geoResponse.body.features[0].geometry,
       owner: req.user._id,
-      // owner: "test-user-id",
-      image: {
-        url: req.file.path,
-        filename: req.file.filename,
-      },
+      images, // store all image objects
+      image: images[0] || { url: "", filename: "" }, // main image for preview
+      propertyDetails: propertyDetails, // Use the object directly
+      amenities: amenities, 
     });
 
-    const savedListing = await newListing.save();
-    console.log(savedListing);
+    const savedListing = await listing.save();
 
-    res.status(201).json({ success: true, message: "Listing created", listing: savedListing });
-   
-
+    res.status(201).json({
+      success: true,
+      message: "Listing created",
+      listing: savedListing,
+    });
   } catch (err) {
-    next(err); // good practice to forward errors to error handler
+    console.error("❌ Error in createListing:", err);
+    next(err);
   }
 };
 
-
-
-module.exports.renderEditForm = async (req, res) => {
-    let {id} = req.params;
-    const listing = await Listing.findById(id);
-    if(!listing) {
-        req.flash("error", "Listing does not exist!");
-        res.redirect("/listings");
-    }
-
-    let originalImageUrl = listing.image.url;
-    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
-    res.render("listings/edit.ejs", {listing, originalImageUrl });
-}
-
-//Update Route
+// Update Route
 module.exports.updateListing = async (req, res) => {
-    let {id} = req.params;
-    let listing = await Listing.findByIdAndUpdate(id, {...req.body.listing});
+    try {
+        let { id } = req.params;
+        // Merge file data into req.body for validation
+        if (req.files && req.files.length > 0) {
+            req.body.image = { url: req.files[0].path, filename: req.files[0].filename };
+            req.body.images = req.files.map((file) => ({
+                url: file.path,
+                filename: file.filename,
+            }));
+        }
 
-    if (typeof req.file !== "undefined") {
-        let url = req.file.path;
-        let filename = req.file.filename;
-        listing.image = {url, filename};
+        const { propertyDetails, amenities, image, images } = req.body;
+        let listing = await Listing.findByIdAndUpdate(id, {
+            ...req.body,
+            propertyDetails: propertyDetails,
+            amenities: amenities,
+            image,
+            images,
+        });
+
         await listing.save();
+        res.status(200).json({
+            success: true,
+            message: "Listing updated",
+            listing,
+        });
+    } catch (err) {
+        console.error("Error in updateListing:", err);
+        res.status(500).json({ error: "Something went wrong" });
     }
-    req.flash("success", "Listing Updated!")
-    res.redirect(`/listings/${id}`);
 };
 
-//Delete Route
+// Delete Route
 module.exports.destroyListing = async (req, res) => {
-    let {id} = req.params;
+  try {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
+
+    // This check is important and correctly placed. req.user is added by Passport.
+    if (listing.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: "You are not authorized to delete this listing" });
+    }
+    
     await Listing.findByIdAndDelete(id);
-    req.flash("success", "Listing Deleted!")
-    res.redirect("/listings");
+    res.status(200).json({ success: true, message: "Listing deleted successfully" });
+  } catch (err) {
+    console.error("Error in destroyListing:", err);
+    res.status(500).json({ error: "Something went wrong while deleting the listing." });
+  }
 };

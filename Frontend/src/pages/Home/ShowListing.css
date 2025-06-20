@@ -4,7 +4,7 @@
   padding: 2rem;
 }
 
-.listing-detail-image-section {
+/* .listing-detail-image-section {
   margin-bottom: 2rem;
   display: flex;
   align-items: center;
@@ -17,7 +17,7 @@
   object-fit: cover;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .listing-detail-content {
   display: flex;
@@ -134,8 +134,6 @@
 .btn-reserve:hover {
   background-color: #dc2626;
 }
-
-/* Existing styles remain unchanged, add the following at the end */
 
 .btn-edit {
   display: inline-block;

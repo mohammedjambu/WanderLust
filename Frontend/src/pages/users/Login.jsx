@@ -11,12 +11,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { serverUrl, setCurrentUser } = useContext(authDataContext);
+  // ✅ FIX: Destructure the correct function from the context
+  const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error
+    setError("");
 
     try {
       const res = await axios.post(
@@ -24,8 +25,11 @@ const Login = () => {
         { username, password },
         { withCredentials: true }
       );
-      setCurrentUser(res.data.user); // Assuming this is the logged-in user
-      // setCurrentUser && setCurrentUser(res.data.user);
+      
+      // ✅ FIX: Call the correct function with the user data from the response.
+      // This will update the state and localStorage.
+      handleLoginSuccess(res.data.user);
+
       console.log("Login successful");
       navigate("/"); // Redirect on successful login
     } catch (err) {
