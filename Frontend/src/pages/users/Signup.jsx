@@ -4,6 +4,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { authDataContext } from '../../context/AuthContext';
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 function SignUp() {
   const [show, setShow] = useState(false);
@@ -25,6 +26,7 @@ function SignUp() {
       );
       console.log(res.data);
       setCurrentUser && setCurrentUser(res.data.user); // optional
+      toast.success("Signup Successful");
       navigate('/'); // redirect to home page
     } catch (err) {
       console.error("Signup error:", err.response?.data || err.message);

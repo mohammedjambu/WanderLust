@@ -6,21 +6,36 @@ export const authDataContext = createContext();
 
 function AuthContext({ children }) {
   const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
+
   const [authUser, setAuthUser] = useState(() => {
-    const storedUser = localStorage.getItem("authUser");
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      const storedUser = localStorage.getItem("authUser");
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (e) {
+      console.error("Failed to parse authUser from localStorage", e);
+      return null;
+    }
   });
+
+  const updateAuthUser = (updatedUser) => {
+    setAuthUser(updatedUser);
+    localStorage.setItem("authUser", JSON.stringify(updatedUser));
+  };
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   axios.defaults.withCredentials = true;
 
   const fetchCurrentUser = useCallback(async () => {
+    // Only set loading to true on the very first fetch
+    // Subsequent background fetches shouldn't show a loading screen
+    if (loading) setLoading(true); 
+    
     try {
-      setLoading(true);
-      setError(null);
       const response = await axios.get(`${serverUrl}/api/auth/current-user`);
       const user = response.data.user;
+
       if (user) {
         setAuthUser(user);
         localStorage.setItem("authUser", JSON.stringify(user));
@@ -28,17 +43,15 @@ function AuthContext({ children }) {
         setAuthUser(null);
         localStorage.removeItem("authUser");
       }
-      return user;
     } catch (err) {
       console.error("Auth fetch error:", err.message);
       setAuthUser(null);
       localStorage.removeItem("authUser");
       setError("Failed to fetch user data. Please check your connection or log in again.");
-      return null;
     } finally {
       setLoading(false);
     }
-  }, [serverUrl]);
+  }, [serverUrl, loading]); // Added loading to dependency array
 
   useEffect(() => {
     fetchCurrentUser();
@@ -46,28 +59,33 @@ function AuthContext({ children }) {
 
   const logout = useCallback(async () => {
     try {
-      await axios.post(`${serverUrl}/api/auth/logout`, {}, { withCredentials: true });
+      await axios.post(`${serverUrl}/api/auth/logout`);
+    } catch (err) {
+      console.error("Logout API call failed:", err.message);
+    } finally {
       setAuthUser(null);
       localStorage.removeItem("authUser");
       setError(null);
-    } catch (err) {
-      console.error("Logout error:", err.message);
-      setError("Failed to log out. Please try again.");
     }
   }, [serverUrl]);
 
-  // ✅ FIX: Create a single function to handle a successful login.
-  // This function updates both the React state and localStorage.
-  const handleLoginSuccess = (user) => {
-    setAuthUser(user);
-    localStorage.setItem("authUser", JSON.stringify(user));
-  };
+  // ✅ FIX: This function now ensures the user state is always set from the canonical server route.
+  const handleLoginSuccess = async (loginResponseUser) => {
+    // 1. Set the user immediately from the login response for a snappy UI.
+    setAuthUser(loginResponseUser);
+    localStorage.setItem("authUser", JSON.stringify(loginResponseUser));
 
+    // 2. Then, immediately fetch the "official" user data from the server
+    //    to ensure the state is consistent with what a page refresh would get.
+    //    This prevents the race condition.
+    await fetchCurrentUser();
+  };
 
   const retryFetchUser = useCallback(() => {
     setError(null);
     fetchCurrentUser();
   }, [fetchCurrentUser]);
+
 
   return (
     <authDataContext.Provider
@@ -79,8 +97,8 @@ function AuthContext({ children }) {
         fetchCurrentUser,
         logout,
         retryFetchUser,
-        // ✅ FIX: Provide the new login handler instead of the raw `setAuthUser`.
         handleLoginSuccess,
+        updateAuthUser,
       }}
     >
       {children}

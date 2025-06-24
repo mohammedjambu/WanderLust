@@ -1,0 +1,221 @@
+/* src/pages/Profile.css */
+
+.profile-container {
+  max-width: 1024px;
+  /* margin: 2rem auto 1rem 5rem; */
+  margin: 3rem auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 250px 1fr; /* Sidebar and main content */
+  gap: 3rem;
+}
+
+/* Sidebar Styling */
+.profile-sidebar {
+  border-right: 1px solid #e5e7eb;
+  padding-right: 2rem;
+}
+
+.profile-sidebar h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.profile-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.sidebar-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-button:hover {
+  background-color: #f3f4f6;
+}
+
+.sidebar-button.active {
+  background-color: #222222;
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Main Content Styling */
+.profile-content {
+  padding-left: 1rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.user-info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  width: 35%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.user-info-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.user-status {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+/* Profile completion card */
+.complete-profile-card {
+  max-width: 350px;
+}
+.complete-profile-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.complete-profile-card p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+.get-started-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: #e51d53;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.get-started-btn:hover {
+  background-color: #c81a49;
+}
+
+
+/* Tab Content Styling */
+.tab-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.data-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* space-y: 1rem; */
+}
+
+.data-list-item {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.data-list-item-title {
+  font-weight: 600;
+  color: #111827;
+}
+
+.data-list-item-subtitle {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-top: 0.25rem;
+}
+
+.data-list-item-details {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-top: 0.5rem;
+}
+
+.form-input-style {
+   margin-top: 4px;
+   display: block;
+   width: 100%;
+   border: 1px solid #d1d5db;
+   border-radius: 8px;
+   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+   padding: 8px 12px;
+   font-size: 1rem;
+ }
+ .form-input-style:focus {
+   outline: none;
+   border-color: #fe424d;
+   box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2);
+ }
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-container {
+    grid-template-columns: 1fr; /* Stack sidebar and content */
+    gap: 1.5rem;
+  }
+  .profile-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding-right: 0;
+    padding-bottom: 1.5rem;
+  }
+  .profile-sidebar-nav {
+    flex-direction: row; /* Make tabs horizontal on mobile */
+    overflow-x: auto;
+  }
+  .sidebar-button {
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+  }
+  .profile-content {
+    padding-left: 0;
+  }
+  .profile-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

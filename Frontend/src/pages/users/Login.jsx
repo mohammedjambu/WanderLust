@@ -4,6 +4,8 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { authDataContext } from "../../context/AuthContext";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -26,15 +28,15 @@ const Login = () => {
         { withCredentials: true }
       );
       
-      // ✅ FIX: Call the correct function with the user data from the response.
       // This will update the state and localStorage.
       handleLoginSuccess(res.data.user);
 
       console.log("Login successful");
+      toast.success("Login Successfully");
       navigate("/"); // Redirect on successful login
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.error || "Login failed. Please try again.");
+      setError(err.response?.data?.error || "Login failed. User does not exist or password is incorrect.");
     }
   };
 
@@ -78,7 +80,7 @@ const Login = () => {
             )}
           </div>
 
-          {error && <p className="error-text">{error}</p>}
+          {error && <p className="error-text text-red-500">{error}</p>}
 
           <button type="submit" className="submit-button">
             Login

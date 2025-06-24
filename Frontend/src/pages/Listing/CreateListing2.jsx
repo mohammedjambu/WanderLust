@@ -8,6 +8,7 @@ import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { FaTreeCity } from "react-icons/fa6";
 import { BiBuildingHouse } from "react-icons/bi";
 import { IoBedOutline } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 const CreateListing2 = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -76,6 +77,7 @@ const CreateListing2 = () => {
 
       const result = await res.json();
       console.log("✅ Listing created:", result);
+      toast.success("Listing created successfully!");
       localStorage.removeItem("createListingData");
       navigate("/");
     } catch (err) {

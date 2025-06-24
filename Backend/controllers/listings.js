@@ -5,80 +5,102 @@ const geocodingClient = require("../utils/mapbox");
 
 
 // Index Route
+// Index Route with Search + Filter Support
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
-  console.log("Fetched listings:", allListings.length);
-  res.json(allListings);
+  try {
+    const { search, category } = req.query;
+
+    let query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
+        { country: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (category) {
+      query.category = new RegExp(`^${category}$`, "i"); // case-insensitive match
+    }
+
+    console.log("Query params:", { search, category });
+    console.log("Mongo query object:", query);
+
+    const listings = await Listing.find(query);
+    console.log("Filtered listings:", listings.length);
+
+    res.json(listings);
+  } catch (err) {
+    console.error("Error in index:", err);
+    res.status(500).json({ error: "Failed to fetch listings" });
+  }
 };
+
+
 
 // Show Route
 module.exports.showListing = async (req, res) => {
-    try {
-        const { id } = req.params;
-        console.log("ID received:", id);
-        const listing = await Listing.findById(id)
-            .populate({
-                path: "reviews",
-                populate: {
-                    path: "author",
-                    select: "username avatar",
-                },
-            })
-            .populate("owner", "username avatar createdAt");
+  try {
+    const { id } = req.params;
+    const listing = await Listing.findById(id)
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+          // This ensures the author's ID is available on the frontend
+          select: "username avatar _id",
+        },
+      })
+      .populate("owner", "username avatar createdAt _id");
 
-        if (!listing) {
-            return res.status(404).json({ error: "Listing does not exist!" });
-        }
-
-        const avgRating =
-            listing.reviews.length > 0
-                ? (
-                      listing.reviews.reduce((sum, review) => sum + review.rating, 0) /
-                      listing.reviews.length
-                  ).toFixed(1)
-                : 0;
-
-        const listingData = {
-            title: listing.title,
-            description: listing.description,
-            image: {
-                url: listing.image.url,
-                filename: listing.image.filename,
-            },
-            images: listing.images || [],
-            category: listing.category,
-            price: listing.price,
-            location: listing.location,
-            country: listing.country,
-            reviews: listing.reviews.map((review) => ({
-                id: review._id,
-                name: review.author.username,
-                avatar: review.author.avatar,
-                rating: review.rating,
-                comment: review.comment,
-                date: review.createdAt.toLocaleDateString("en-US", {
-                    month: "long",
-                    year: "numeric",
-                }),
-            })),
-            owner: {
-                name: listing.owner.username,
-                avatar: listing.owner.avatar,
-                joinedYear: listing.owner.createdAt
-                    ? new Date(listing.owner.createdAt).getFullYear()
-                    : new Date().getFullYear(),
-                rating: avgRating,
-                reviewCount: listing.reviews.length,
-            },
-            propertyDetails: listing.propertyDetails,
-            amenities: listing.amenities,
-        };
-
-        res.json(listingData);
-    } catch (err) {
-        console.error("Error in showListing:", err);
-        res.status(500).json({ error: "Something went wrong" });
+    if (!listing) {
+      return res.status(404).json({ error: "Listing does not exist!" });
     }
+
+    const avgRating =
+      listing.reviews.length > 0
+        ? (
+            listing.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            listing.reviews.length
+          ).toFixed(1)
+        : 0;
+
+    // This is the final data object sent to the frontend
+    const listingData = {
+      _id: listing._id,
+      title: listing.title,
+      description: listing.description,
+      image: listing.image,
+      images: listing.images || [],
+      category: listing.category,
+      price: listing.price,
+      location: listing.location,
+      country: listing.country,
+      propertyDetails: listing.propertyDetails,
+      amenities: listing.amenities,
+      
+      // ✅ FIX: The populated reviews array was missing from the response.
+      // We are adding it back here.
+      reviews: listing.reviews, 
+
+      owner: {
+        _id: listing.owner._id,
+        name: listing.owner.username,
+        avatar: listing.owner.avatar,
+        joinedYear: listing.owner.createdAt
+          ? new Date(listing.owner.createdAt).getFullYear()
+          : new Date().getFullYear(),
+        rating: avgRating,
+        reviewCount: listing.reviews.length,
+      },
+    };
+
+    res.json(listingData);
+  } catch (err) {
+    console.error("Error in showListing:", err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
 };
 
 // Create Route
@@ -171,6 +193,21 @@ module.exports.updateListing = async (req, res) => {
         res.status(500).json({ error: "Something went wrong" });
     }
 };
+
+// Get My Listings Route
+module.exports.getMyListings = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const myListings = await Listing.find({ owner: userId });
+
+    res.status(200).json(myListings);
+  } catch (err) {
+    console.error("Error in getMyListings:", err);
+    res.status(500).json({ error: "Failed to fetch your listings" });
+  }
+};
+
+
 
 // Delete Route
 module.exports.destroyListing = async (req, res) => {

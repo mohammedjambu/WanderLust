@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./EditListing.css";
+import { toast } from "react-toastify";
 
 const EditListing = () => {
   const { id } = useParams();
@@ -29,7 +30,8 @@ const EditListing = () => {
     "Flat",
     "PG",
     "Cabin",
-    "Shops"
+    "Shops",
+    "Rooms"
   ];
 
   useEffect(() => {
@@ -98,6 +100,7 @@ const EditListing = () => {
 
       const result = await res.json();
       console.log("✅ Listing updated:", result);
+      toast.success("Listing updated successfully!");
       navigate(`/listings/${id}`);
     } catch (err) {
       console.error("❌ Failed to update listing:", err);

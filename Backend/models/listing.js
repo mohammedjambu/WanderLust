@@ -10,7 +10,7 @@ const validCategories = [
   "Rooms",
   "Flat",
   "PG",
-  "Cabins",
+  "Cabin",
   "Shops",
   "Trending",
 ];

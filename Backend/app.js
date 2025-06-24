@@ -16,12 +16,16 @@ const cookieParser = require("cookie-parser");
 
 const ExpressError = require("./utils/ExpressError.js");
 const User = require("./models/user.js");
+const { isLoggedIn } = require("./middleware.js");
+const reviewController = require("./controllers/reviews.js");
+const userController = require("./controllers/users.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const bookingRoutes = require("./routes/booking.js");
 const coordinateRoutes = require('./routes/coordinates');
+const wishlistRoutes = require("./routes/wishlist");
 
 // MongoDB connection
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -81,6 +85,11 @@ app.use("/api/listings/:id/reviews", reviewRouter);
 app.use("/api/auth", userRouter); // Updated route for user login/signup/logout
 app.use("/api/bookings", bookingRoutes); // Booking routes
 app.use('/api', coordinateRoutes); // So this will handle: /api/get-coordinates
+app.use("/api/wishlist", wishlistRoutes); // Wishlist routes
+
+app.get("/api/reviews/mine", isLoggedIn, reviewController.getMyReviews);
+// User profile
+// app.put("/profile", isLoggedIn, userController.updateProfile);
 
 
 // 404 handler

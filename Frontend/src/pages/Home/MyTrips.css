@@ -1,0 +1,76 @@
+.my-trips-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.my-trips-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #222;
+}
+
+.no-trips-text {
+  text-align: center;
+  font-style: italic;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+.trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.trip-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.trip-info {
+  padding: 0.75rem 1rem;
+  color: #333;
+}
+
+.trip-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #111;
+}
+
+.cancel-btn {
+  margin-top: 10px;
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #dc2626;
+}

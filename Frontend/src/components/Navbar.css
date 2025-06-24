@@ -1,14 +1,22 @@
 /* --- Navbar.css --- */
 
-/* Navbar container */
-.navbar {
-  background-color: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  width: 100%;
+/* Fixed top navbar */
+.navbar-top {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
+  background-color: #fff;
   padding: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  width: 100%;
+}
+
+/* Add padding to body content to prevent overlap with fixed navbars */
+body {
+  padding-top: 110px; /* navbar + filter height */
 }
 
 /* Container for layout */
@@ -18,14 +26,13 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* ✅ CLEANUP: Removed redundant border and padding from here */
 }
 
-/* Navbar brand (Wanderlust text) */
+/* Navbar brand */
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fe424d; /* Airbnb red */
+  color: #fe424d;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -87,115 +94,34 @@
   font-size: 1.25rem;
 }
 
-/* --- ✅ STYLING REFACTOR FOR DROPDOWN BUTTON --- */
-
-/* Wrapper for the dropdown button */
-.dropdown-header {
-  cursor: pointer;
-}
-
-/* This is the main button with the pill shape */
-.dropdown-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px; /* Space between hamburger icon and avatar */
-  padding: 6px 6px 6px 12px; /* T/R/B/L padding for compact look */
-  border-radius: 30px; /* Makes the pill shape */
-  border: 1px solid #DDDDDD;
-  background: none;
-  transition: box-shadow 0.2s ease;
-}
-
-.dropdown-toggle:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* This targets the hamburger icon (FaBars) */
-.dropdown-toggle .fa-bars {
-  font-size: 16px; /* Smaller icon size */
-  color: #222222;
-}
-
-/* This targets the default profile icon (CgProfile) */
-.dropdown-icon {
-  font-size: 28px; /* Slightly larger than the avatar */
-  color: #717171;
-}
-
-/* This styles the user's image when logged in */
-.profile-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%; /* Makes it a perfect circle */
-  object-fit: cover; /* Prevents image distortion */
-}
-
-/* Dropdown menu that appears on click */
-.dropdown-menu {
-  display: none;
-  margin-top: 12px;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px; /* Softer rounded corners */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 220px;
-  z-index: 1000;
-  padding: 8px 0;
-}
-
-.dropdown-menu.show {
-  display: block;
-}
-
-.dropdown-item {
-  display: block;
-  padding: 10px 16px;
-  color: #222222;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-}
-
-.dropdown-item:hover {
-  background-color: #f7f7f7;
-}
-
-.dropdown-item.logout {
-  cursor: pointer;
-}
-
-.dropdown-item.bold {
-  font-weight: 600;
-}
-
-/* Separator line in the dropdown */
-.dropdown-menu hr {
-  border: none;
-  border-top: 1px solid #e5e7eb;
-  margin: 8px 0;
-}
-
-
 /* Filters Section */
 .filters-wrapper {
-  width: 100%;
+  position: sticky;
+  top: 72px;
+  background-color: #fff;
+  z-index: 999;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* padding: 0.5rem 1rem 0; Only small top padding */
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
 }
+
+
 .filters-wrapper::-webkit-scrollbar {
   display: none;
 }
+
 .filters {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  padding: 1rem 0;
-  margin-top: 1rem;
+  gap: 3rem;
+  /* padding: 0.5rem 0; */
+  margin: 0; /* remove unnecessary top margin */
 }
+
+
 .filter {
   text-align: center;
   opacity: 0.7;
@@ -216,31 +142,104 @@
   margin-top: 0.25rem;
 }
 
+.filter.active {
+  opacity: 1;
+  border-bottom: 2px solid #fe424d;
+}
 
-/* --- ✅ RESPONSIVE DESIGN ADJUSTMENTS --- */
+
+/* Dropdown */
+.dropdown-header {
+  cursor: pointer;
+}
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 6px 6px 12px;
+  border-radius: 30px;
+  border: 1px solid #DDDDDD;
+  background: none;
+  transition: box-shadow 0.2s ease;
+}
+.dropdown-toggle:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.dropdown-toggle .fa-bars {
+  font-size: 16px;
+  color: #222222;
+}
+.dropdown-icon {
+  font-size: 28px;
+  color: #717171;
+}
+.profile-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.dropdown-menu {
+  display: none;
+  margin-top: 12px;
+  position: absolute;
+  right: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  z-index: 1000;
+  padding: 4px 0;
+}
+.dropdown-menu.show {
+  display: block;
+}
+.dropdown-item {
+  display: block;
+  padding: 10px 16px;
+  color: #222222;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+.dropdown-item:hover {
+  background-color: #c2c2c2;
+}
+.dropdown-item.logout {
+  cursor: pointer;
+}
+.dropdown-item.bold {
+  font-weight: 600;
+}
+.dropdown-menu hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+/* Responsive */
 .navbar-toggler {
-  display: none; /* Hidden on desktop */
+  display: none;
   background: none;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
 }
-
 @media (max-width: 768px) {
   .search-container {
-    display: none; /* Hide search bar on mobile for simplicity */
+    display: none;
   }
   .navbar-toggler {
-    display: block; /* Show hamburger menu button */
+    display: block;
   }
   .dropdown {
-    display: none; /* Hide the desktop dropdown button */
+    display: none;
   }
-  /* Show dropdown menu full-width when mobile menu is open */
   .dropdown.mobile-show {
     display: block;
     width: 100%;
-    order: 3; /* Places it below other items */
+    order: 3;
   }
   .dropdown-menu {
     position: static;

@@ -70,11 +70,18 @@ module.exports.validateReview = (req, res, next) => {
 
 
 module.exports.isReviewAuthor = async (req, res, next) => {
-    let {reviewId, id} = req.params;
-    let review = await Review.findById(reviewId);
-    if(!review.author.equals(res.locals.currUser._id)) {
-        req.flash("error", "You are not the author of this review")
-        return  res.redirect(`/listings/${id}`);
-    }
-    next();
-}
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+
+  if (!review) {
+    return res.status(404).json({ error: "Review not found." });
+  }
+
+  // Use req.user (from Passport) instead of res.locals
+  if (!review.author.equals(req.user._id)) {
+    // Send a JSON error instead of flashing and redirecting
+    return res.status(403).json({ error: "You are not the author of this review." });
+  }
+  
+  next();
+};

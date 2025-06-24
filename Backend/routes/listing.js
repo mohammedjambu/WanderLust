@@ -9,6 +9,10 @@ const upload = multer({ storage });
 
 const listingController = require("../controllers/listings");
 
+// routes for my listings
+router.get("/mine", isLoggedIn, wrapAsync(listingController.getMyListings));
+
+
 router
   .route("/")
   // Index Route

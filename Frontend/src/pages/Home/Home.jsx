@@ -1,86 +1,84 @@
 // Home.jsx
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import './Home.css';
-import Navbar from '../../components/Navbar';
 import axios from 'axios';
 import { authDataContext } from '../../context/AuthContext';
+import { MapPin } from 'lucide-react';
 
 const Home = () => {
-  // Get serverUrl from context. It's the single source of truth for the backend address.
   const { serverUrl } = useContext(authDataContext); 
   const [listings, setListings] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // The useEffect hook will now re-run if serverUrl changes from undefined to its actual value.
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search");
+  const category = searchParams.get("category");
+
   useEffect(() => {
-    // DO NOT run the fetch function if the serverUrl is not yet defined.
-    if (!serverUrl) {
-      return; 
-    }
+    if (!serverUrl) return;
 
     const fetchListings = async () => {
       try {
         setLoading(true);
-        // We no longer need a fallback here because we wait for serverUrl.
-        const response = await axios.get(`${serverUrl}/api/listings`, {
-          timeout: 15000, // A more generous timeout of 15 seconds.
-        });
+        let url = `${serverUrl}/api/listings`;
+        const query = [];
+        if (search) query.push(`search=${encodeURIComponent(search)}`);
+        if (category) query.push(`category=${encodeURIComponent(category)}`);
+        if (query.length > 0) url += `?${query.join("&")}`;
+
+        const response = await axios.get(url, { timeout: 15000 });
         setListings(response.data);
         setError(null);
       } catch (err) {
         console.error("Error fetching listings:", err);
-        // Provide a more specific error message based on the error type.
-        if (err.code === 'ERR_NETWORK') {
-          setError("Connection failed. Please ensure the backend server is running.");
-        } else if (err.code === 'ECONNABORTED') {
-          setError("The request timed out. The server might be too slow.");
-        } else {
-          setError("An unexpected error occurred while fetching listings.");
-        }
+        setError("An unexpected error occurred while fetching listings.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchListings();
-  }, [serverUrl]); // Dependency array ensures this runs when serverUrl is available.
+  }, [serverUrl, search, category]);
+
+  if (loading) return <div className="loading-container"><p>Loading listings...</p></div>;
+  if (error) return <div className="error-container"><p>{error}</p></div>;
+  if (listings.length === 0) return <div className="loading-container"><p>No listings found.</p></div>;
 
   return (
-    <>
-      <Navbar />
-      <div className="listings-grid">
-        {loading && <p>Loading listings...</p>}
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-        {!loading && !error && listings.length === 0 && <p>No listings available.</p>}
-        {listings.map((listing) => (
-          <Link
-            key={listing._id}
-            to={`/listings/${listing._id}`}
-            className="listing-link"
-          >
-            <div className="listing-card">
+    <div className="listings-grid">
+      {listings.map((listing) => (
+        <Link
+          key={listing._id}
+          to={`/listings/${listing._id}`}
+          className="listing-link"
+        >
+          <div className="listing-card">
+            <div className="listing-image-container">
               <img
-                src={listing.image?.url}
+                src={listing.image?.url || '/default-image.jpg'}
                 alt={listing.title}
                 className="listing-img"
               />
-              <div className="listing-overlay"></div>
-              <div className="listing-body">
-                <p className="listing-text">
-                  <b>{listing.title}</b>
-                  <br />
-                  {listing.location.toUpperCase()}, {listing.country.toUpperCase()}
-                  <br />
-                  ₹ {listing.price.toLocaleString('en-IN')} / night
-                </p>
-              </div>
             </div>
-          </Link>
-        ))}
-      </div>
-    </>
+            <div className="listing-body">
+              <h3 className="listing-title">{listing.title}</h3>
+              <p className="listing-location">
+                <MapPin size={14} className="location-icon" />
+                {listing.location}, {listing.country}
+              </p>
+              <p className="listing-price">
+                <b>₹{listing.price.toLocaleString('en-IN')}</b>
+                <span> / night per night</span>
+              </p>
+              <p className="listing-reviews">
+                <span>★</span> {listing.reviews?.length || 0} reviews
+              </p>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
   );
 };
 
