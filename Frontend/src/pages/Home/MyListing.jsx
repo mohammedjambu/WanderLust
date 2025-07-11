@@ -1,9 +1,48 @@
-// pages/MyListings/MyListings.jsx
+// src/pages/MyListings/MyListings.jsx
+
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './MyListing.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Edit, Trash2 } from 'lucide-react';
 import { authDataContext } from '../../context/AuthContext';
+import './MyListing.css'; // Import the new, dedicated CSS file
+
+// ✅ A dedicated card component just for this page to prevent conflicts.
+const MyListingCard = ({ listing, onDelete }) => {
+  return (
+    <div className="my-listing-card">
+      <Link to={`/listings/${listing._id}`}>
+        <div className="my-listing-image-container">
+          <img
+            src={listing.image?.url || '/default-image.jpg'}
+            alt={listing.title}
+            className="my-listing-image"
+          />
+        </div>
+      </Link>
+      
+      {/* This is the row that holds text and buttons */}
+      <div className="my-listing-info-row">
+        <div className="my-listing-body">
+          <p className="my-listing-title" title={listing.title}>{listing.title}</p>
+          <p className="my-listing-price">
+            <b>₹{listing.price.toLocaleString('en-IN')}</b> / night
+          </p>
+        </div>
+        
+        <div className="my-listing-actions">
+          <Link to={`/listings/${listing._id}/edit`} className="action-btn edit">
+            <Edit size={14} />
+          </Link>
+          <button onClick={() => onDelete(listing._id)} className="action-btn delete">
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const MyListings = () => {
   const { authUser, serverUrl } = useContext(authDataContext);
@@ -22,13 +61,11 @@ const MyListings = () => {
     const fetchMyListings = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${serverUrl}/api/listings/mine`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(`${serverUrl}/api/listings/mine`, { withCredentials: true });
         setListings(res.data);
       } catch (err) {
         console.error("Error fetching your listings:", err);
-        setError("Could not load your listings. Try again later.");
+        setError("Could not load your listings. Try refreshing the page.");
       } finally {
         setLoading(false);
       }
@@ -37,44 +74,60 @@ const MyListings = () => {
     fetchMyListings();
   }, [authUser, serverUrl, navigate]);
 
-  return (
-    <div className="my-listings-wrapper">
-      <h2 className="my-listings-title">My Listings</h2>
+  const handleDelete = async (listingId) => {
+    if (window.confirm("Are you sure you want to permanently delete this listing?")) {
+      try {
+        await axios.delete(`${serverUrl}/api/listings/${listingId}`, { withCredentials: true });
+        setListings(prevListings => prevListings.filter(l => l._id !== listingId));
+        toast.success("Listing deleted successfully!");
+      } catch (err) {
+        console.error("Deletion failed:", err);
+        toast.error(err.response?.data?.error || "Failed to delete listing.");
+      }
+    }
+  };
 
-      {loading && <p>Loading your listings...</p>}
-      {error && <p className="error-text">{error}</p>}
-      {!loading && listings.length === 0 && (
-        <p className="no-listings-text">You haven't posted any listings yet.</p>
-      )}
-
-      <div className="my-listings-grid">
-        {listings.map((listing) => (
-          <Link
-            key={listing._id}
-            to={`/listings/${listing._id}`}
-            className="listing-link"
-          >
-            <div className="listing-card">
-              <img
-                src={listing.image?.url}
-                alt={listing.title}
-                className="listing-img"
-              />
-              <div className="listing-overlay"></div>
-              <div className="listing-body">
-                <p className="listing-text">
-                  <b>{listing.title}</b>
-                  <br />
-                  {listing.location.toUpperCase()}, {listing.country.toUpperCase()}
-                  <br />
-                  ₹ {listing.price.toLocaleString('en-IN')} / night
-                </p>
-              </div>
-            </div>
+  const renderContent = () => {
+    if (loading) {
+      // For simplicity, we can use a simple loading text here.
+      // Or you can create a dedicated SkeletonMyListingCard component.
+      return <div className="status-container"><p>Loading your listings...</p></div>;
+    }
+    
+    if (error) {
+      return <div className="status-container" role="alert">{error}</div>;
+    }
+    
+    if (listings.length === 0) {
+      return (
+        <div className="status-container">
+          <p>You haven't created any listings yet.</p>
+          <Link to="/createListing1" className="action-btn edit" style={{maxWidth: '200px', margin: '1rem auto'}}>
+             Create a Listing
           </Link>
-        ))}
+        </div>
+      );
+    }
+
+    return listings.map((listing) => (
+      <MyListingCard
+        key={listing._id}
+        listing={listing}
+        onDelete={handleDelete}
+      />
+    ));
+  };
+
+  return (
+    <main className="my-listings-container">
+      <div className="page-header">
+        <h1 className="page-title">My Listings</h1>
+        <Link to="/createListing1" className="action-btn-new">Create New Listing</Link>
       </div>
-    </div>
+      <div className="my-listings-grid">
+        {renderContent()}
+      </div>
+    </main>
   );
 };
 

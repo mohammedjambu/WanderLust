@@ -1,70 +1,103 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './CreateListing2.css';
-import { GiFamilyHouse } from "react-icons/gi";
-import { MdBedroomParent, MdOutlinePool } from "react-icons/md";
-import { GiWoodCabin } from "react-icons/gi";
-import { SiHomeassistantcommunitystore } from "react-icons/si";
+import React, { useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useCreateListing } from "../../context/CreateListingContext";
+import "./CreateListing.css";
+import ProgressTracker from "./ProgressTracker";
+import ImageUpload from "./ImageUpload";
+
+// Import icons
+import {
+  GiFamilyHouse,
+  GiWoodCabin,
+  GiCampingTent,
+  GiCastle,
+} from "react-icons/gi";
 import { FaTreeCity } from "react-icons/fa6";
+import { FaUmbrellaBeach } from "react-icons/fa";
 import { BiBuildingHouse } from "react-icons/bi";
-import { IoBedOutline } from 'react-icons/io5';
-import { toast } from 'react-toastify';
+import { IoBedOutline } from "react-icons/io5";
+import { MdBedroomParent, MdOutlinePool } from "react-icons/md";
+import { SiHomeassistantcommunitystore } from "react-icons/si";
+import { useEffect } from "react";
+
+const categoryOptions = [
+  { name: "Villa", icon: <GiFamilyHouse /> },
+  { name: "Farm House", icon: <FaTreeCity /> },
+  { name: "Pool House", icon: <MdOutlinePool /> },
+  { name: "Rooms", icon: <MdBedroomParent /> },
+  { name: "Flat", icon: <BiBuildingHouse /> },
+  { name: "PG", icon: <IoBedOutline /> },
+  { name: "Cabin", icon: <GiWoodCabin /> },
+  { name: "Shops", icon: <SiHomeassistantcommunitystore /> },
+  { name: "Beach", icon: <FaUmbrellaBeach /> },
+  { name: "Camping", icon: <GiCampingTent /> },
+  { name: "Castles", icon: <GiCastle /> },
+];
 
 const CreateListing2 = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [images, setImages] = useState([]);
   const navigate = useNavigate();
+  const { listingData, resetListingData } = useCreateListing();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/auth/check", { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.loggedIn) {
-          navigate("/login");
-        }
-      })
-      .catch(() => navigate("/login"));
-  }, []);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      category: listingData.category || null,
+      images: listingData.images || [],
+    },
+  });
 
-  const options = [
-    { name: 'Villa', icon: <GiFamilyHouse /> },
-    { name: 'Farm House', icon: <FaTreeCity /> },
-    { name: 'Pool House', icon: <MdOutlinePool /> },
-    { name: 'Rooms', icon: <MdBedroomParent /> },
-    { name: 'Flat', icon: <BiBuildingHouse /> },
-    { name: 'PG', icon: <IoBedOutline /> },
-    { name: 'Cabin', icon: <GiWoodCabin /> },
-    { name: 'Shops', icon: <SiHomeassistantcommunitystore /> },
-  ];
+  const selectedCategory = watch("category");
+  const uploadedImages = watch("images");
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-  };
+  const handleFilesChange = useCallback(
+    (files) => {
+      setValue("images", files, { shouldValidate: true });
+    },
+    [setValue]
+  );
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // useEffect(() => {
+  //   if (!listingData.title) {
+  //     toast.error("Please start from step 1.");
+  //     navigate("/createListing1");
+  //   }
+  // }, [listingData, navigate]);
 
-    const stored = JSON.parse(localStorage.getItem("createListingData"));
-    if (!stored || images.length === 0 || !selectedOption) {
-      alert("Please select category and upload images.");
-      return;
-    }
-
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
     const formData = new FormData();
-    formData.append("title", stored.title);
-    formData.append("description", stored.description);
-    formData.append("price", stored.price);
-    formData.append("location", stored.location);
-    formData.append("country", stored.country);
-    formData.append("category", selectedOption);
 
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images", images[i]);
+    formData.append('title', listingData.title);
+    formData.append('description', listingData.description);
+    formData.append('price', listingData.price);
+    formData.append('country', listingData.country);
+    formData.append('location', listingData.location);
+
+    if (data.category) {
+      formData.append("category", data.category);
     }
 
-    // ✅ Correctly stringify to avoid "[object Object] is not valid JSON"
-    formData.append("propertyDetails", JSON.stringify({ guests: 2, bedrooms: 1, bathrooms: 1 }));
-    formData.append("amenities", JSON.stringify([{ name: "Wi-Fi", icon: "🌐" }]));
+    if (data.images && data.images.length > 0) {
+      data.images.forEach((image) => {
+        formData.append("images", image);
+      });
+    }
+
+    // You can append other static details here
+    formData.append(
+      "propertyDetails",
+      JSON.stringify({ guests: 4, bedrooms: 2, bathrooms: 2 })
+    );
+
+    formData.append("amenities", JSON.stringify([]));
 
     try {
       const res = await fetch("http://localhost:5000/api/listings", {
@@ -73,55 +106,97 @@ const CreateListing2 = () => {
         body: formData,
       });
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || errorData.error || "Failed to create listing");
+      }
 
-      const result = await res.json();
-      console.log("✅ Listing created:", result);
-      toast.success("Listing created successfully!");
-      localStorage.removeItem("createListingData");
+      toast.success( "Listing created successfully!");
+      resetListingData();
       navigate("/");
     } catch (err) {
       console.error("Submission error:", err);
-      alert("Failed to create listing");
+      toast.error(err.message || "An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="listing-container">
-      <form className="listing-form" onSubmit={handleSubmit}>
-        <h2 className="listing-title">Select the type of place:</h2>
+    <main className="create-listing-container">
+      <div className="form-wrapper">
+        <ProgressTracker currentStep={2} />
+        <h1 className="form-title">Finish up & publish</h1>
 
-        <div className="options-grid">
-          {options.map((option) => (
-            <div
-              key={option.name}
-              className={`option-card ${selectedOption === option.name ? 'selected' : ''}`}
-              onClick={() => handleOptionClick(option.name)}
-            >
-              <span className="option-icon">{option.icon}</span>
-              <span className="option-name">{option.name}</span>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="form-fields">
+              <label className="text-[20px]">Select the type of place</label>
+            <div className="form-group">
+              <input
+                type="hidden"
+                {...register("category", {
+                  required: "Please select a category",
+                })}
+              />
+              <div className="options-grid">
+                {categoryOptions.map((option) => (
+                  <div
+                    key={option.name}
+                    className={`option-card ${
+                      selectedCategory === option.name ? "selected" : ""
+                    }`}
+                    onClick={() =>
+                      setValue("category", option.name, {
+                        shouldValidate: true,
+                      })
+                    }
+                  >
+                    <span className="option-icon">{option.icon}</span>
+                    <span className="option-name">{option.name}</span>
+                  </div>
+                ))}
+              </div>
+              {errors.category && (
+                <p className="error-message">{errors.category.message}</p>
+              )}
             </div>
-          ))}
-        </div>
+            <hr className="bg-gray-200"></hr>
 
-        <div className="form-group">
-          <label htmlFor="images">Upload Images</label>
-          <input
-            type="file"
-            className="form-input"
-            id="images"
-            accept="image/*"
-            multiple
-            onChange={(e) => setImages([...e.target.files])}
-            required
-          />
-        </div>
+            <label className="text-[18px] font-[400]">Upload Images</label>
+            <ImageUpload
+                value={uploadedImages} 
+                onFilesChange={handleFilesChange}
+                error={errors.images}
+            />
+            <input
+              type="file"
+              style={{ display: "none" }}
+              {...register("images", {
+                validate: (value) =>
+                  value.length > 0 || "Please upload at least one image",
+              })}
+            />
+          </div>
 
-        <button type="submit" className="next-button" disabled={!selectedOption}>
-          Submit
-        </button>
-      </form>
-    </div>
+          <div className="form-navigation">
+            <button
+              type="button"
+              className="nav-button secondary"
+              onClick={() => navigate("/createListing1")}
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className="nav-button primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Listing"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
   );
 };
 

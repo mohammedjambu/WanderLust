@@ -1,48 +1,77 @@
-/* --- Navbar.css --- */
+/* --- Navbar.css (Refactored) --- */
 
-/* Fixed top navbar */
+:root {
+  --primary-color: #fe424d;
+  --primary-color-hover: #e03b44;
+  --border-color-light: #e5e7eb;
+  --border-color-medium: #dddddd;
+  --text-color-dark: #222222;
+  --text-color-light: #717171;
+  --background-color-light: #fff;
+  --background-color-dropdown: #f8f8f8;
+  --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Dynamic height variable set by JavaScript */
+  --navbar-height: 72px;
+  --filters-height: 50px;
+  --total-fixed-height: 122px;
+  /* Default fallback */
+}
+
+
+/* --- Base & Layout --- */
+/* Add padding to body content to prevent overlap with fixed navbars */
+body {
+  /* This padding is now set dynamically by the Navbar.jsx component */
+  padding-top: 6rem;
+}
+
 .navbar-top {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: #fff;
+  background-color: var(--background-color-light);
   padding: 0.5rem 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color-light);
   width: 100%;
 }
 
-/* Add padding to body content to prevent overlap with fixed navbars */
-body {
-  padding-top: 110px; /* navbar + filter height */
-}
-
-/* Container for layout */
 .container {
-  margin: 0 auto;
+  max-width: 1280px;
+  /* Added max-width for large screens */
+  /* margin: 0 auto; */
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  /* Important for responsive behavior */
+  gap: 3rem;
+  /* Adds space between items when they wrap */
 }
 
-/* Navbar brand */
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fe424d;
+  color: var(--primary-color);
   text-decoration: none;
   transition: color 0.2s ease;
+  flex-shrink: 0;
+  /* Prevents brand from shrinking */
+  margin-left: 1rem;
 }
 
-/* Search container and form */
+/* --- Search --- */
 .search-container {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  margin: 0 1rem;
+  min-width: 200px;
+  margin-top: 0.5rem;
+  /* Prevents search from being too squished */
 }
 
 .search-form {
@@ -51,27 +80,27 @@ body {
   width: 100%;
   max-width: 500px;
   position: relative;
-  margin-top: 0.5rem;
 }
 
 .search-inp {
   border-radius: 25px;
   padding: 0.7rem 3rem 0.7rem 1.5rem;
   font-size: 1rem;
-  border: 1px solid #d1d5db;
-  flex-grow: 1;
+  border: 1px solid var(--border-color-medium);
+  width: 100%;
+  /* Changed from flex-grow for better control */
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-inp:focus {
   outline: none;
-  border-color: #fe424d;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2);
 }
 
 .search-btn {
-  background-color: #fe424d;
-  color: #fff;
+  background-color: var(--primary-color);
+  color: var(--background-color-light);
   border-radius: 50%;
   padding: 0.5rem;
   border: none;
@@ -87,27 +116,27 @@ body {
 }
 
 .search-btn:hover {
-  background-color: #e03b44;
+  background-color: var(--primary-color-hover);
 }
 
 .search-icon {
   font-size: 1.25rem;
 }
 
-/* Filters Section */
+/* --- Filters Section --- */
 .filters-wrapper {
   position: sticky;
-  top: 72px;
-  background-color: #fff;
+  /* top is now set by a CSS variable from JS */
+  top: 0;
+  background-color: var(--background-color-light);
   z-index: 999;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  /* padding: 0.5rem 1rem 0; Only small top padding */
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 0.25rem 0;
+  /* Adjusted padding */
+  border-bottom: 1px solid var(--border-color-light);
 }
-
 
 .filters-wrapper::-webkit-scrollbar {
   display: none;
@@ -116,138 +145,237 @@ body {
 .filters {
   display: flex;
   justify-content: center;
-  gap: 3rem;
-  /* padding: 0.5rem 0; */
-  margin: 0; /* remove unnecessary top margin */
+  gap: 2rem;
+  /* Adjusted gap */
+  padding: 0 1rem;
+  /* Add horizontal padding for small screens */
+  width: max-content;
+  /* Allows container to be scrollable */
+  margin: 0 auto;
+  /* Center the filters if they don't fill the width */
 }
-
 
 .filter {
   text-align: center;
   opacity: 0.7;
-  transition: opacity 0.2s ease, border-bottom 0.2s ease;
-  color: #000;
-  padding-bottom: 4px;
+  transition: opacity 0.2s ease, border-bottom 0.2s ease, color 0.2s ease;
+  color: var(--text-color-dark);
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  /* Reserve space for the border */
+  cursor: pointer;
+  flex-shrink: 0;
+  /* Prevent items from shrinking */
 }
+
 .filter:hover {
   opacity: 1;
-  cursor: pointer;
-  border-bottom: 2px solid #fe424d;
-}
-.filter-icon {
-  font-size: 1.5rem;
-}
-.filter p {
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
+  border-bottom-color: var(--border-color-medium);
 }
 
 .filter.active {
   opacity: 1;
-  border-bottom: 2px solid #fe424d;
+  border-bottom-color: var(--primary-color);
+}
+
+.filter-icon {
+  font-size: 1.5rem;
+}
+
+.filter p {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+  /* Prevent text from wrapping */
+}
+
+/* --- Dropdown Menu --- */
+.user-menu-container {
+  position: absolute;
+  right: 1rem;
 }
 
 
-/* Dropdown */
-.dropdown-header {
-  cursor: pointer;
-}
+
 .dropdown-toggle {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 6px 6px 6px 12px;
   border-radius: 30px;
-  border: 1px solid #DDDDDD;
+  border: 1px solid var(--border-color-medium);
   background: none;
+  cursor: pointer;
   transition: box-shadow 0.2s ease;
 }
+
 .dropdown-toggle:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--primary-color);                /* highlight icon color */
+  box-shadow: 0 3px 10px rgba(255,0,0,0.3);
+  transform: scale(1.2);
 }
+
+.user-menu-container:hover .dropdown-toggle {
+  transform: scale(1.1);
+  background-color: rgba(255,56,92,0.1);
+  color: #ff385c;
+  box-shadow: 
+    0 0 0 2px rgba(255,56,92,0.2),
+    inset 0 0 0 1px rgba(255,56,92,0.1);
+}
+
 .dropdown-toggle .fa-bars {
   font-size: 16px;
-  color: #222222;
+  color: var(--text-color-dark);
 }
+
 .dropdown-icon {
   font-size: 28px;
-  color: #717171;
+  color: var(--text-color-light);
 }
+
 .profile-avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
 }
+
+/* Base dropdown menu styles */
 .dropdown-menu {
   display: none;
-  margin-top: 12px;
   position: absolute;
-  right: 10px;
-  background-color: #f8f8f8;
-  border: 1px solid #e5e7eb;
+  top: calc(100% + 12px);
+  /* Position below the toggle */
+  right: 0;
+  background-color: var(--background-color-dropdown);
+  border: 1px solid var(--border-color-light);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 220px;
-  z-index: 1000;
-  padding: 4px 0;
+  box-shadow: var(--shadow-medium);
+  min-width: 240px;
+  z-index: 1001;
+  padding: 8px 0;
+  overflow: hidden;
+  /* Ensures border-radius is respected by children */
 }
+
 .dropdown-menu.show {
   display: block;
 }
+
 .dropdown-item {
   display: block;
-  padding: 10px 16px;
-  color: #222222;
+  width: 100%;
+  padding: 12px 16px;
+  color: var(--text-color-dark);
   text-decoration: none;
   font-size: 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
 .dropdown-item:hover {
-  background-color: #c2c2c2;
+  background-color: #eee;
 }
-.dropdown-item.logout {
-  cursor: pointer;
-}
+
 .dropdown-item.bold {
   font-weight: 600;
 }
+
 .dropdown-menu hr {
   border: none;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color-light);
   margin: 8px 0;
 }
 
-/* Responsive */
+
+/* --- Responsive Design --- */
 .navbar-toggler {
   display: none;
+  /* Hidden by default */
   background: none;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 0.5rem;
+  color: var(--text-color-dark);
 }
+
 @media (max-width: 768px) {
   .search-container {
-    display: none;
+    /* On mobile, search appears below the main nav items */
+    order: 3;
+    /* Places it at the end of the flex container */
+    width: 100%;
+    /* padding: 0.5rem 0; */
+    margin: 0;
+    min-width: unset;
   }
+
+  .user-menu-container {
+    display: none;
+    /* Hide desktop dropdown */
+  }
+
   .navbar-toggler {
     display: block;
+    /* Show hamburger menu button */
   }
-  .dropdown {
+
+  body {
+    padding-top: 11rem;
+    border-bottom: 1px solid var(--border-color-light);
+  }
+
+  .filters {
+    justify-content: flex-start;
+    /* Align filters to the left on mobile */
+    gap: 1.5rem;
+  }
+
+  /* --- Mobile Menu Styles --- */
+  .mobile-menu {
     display: none;
-  }
-  .dropdown.mobile-show {
-    display: block;
+    /* Hidden by default */
     width: 100%;
-    order: 3;
+    order: 4;
+    /* Place it last */
+    background-color: var(--background-color-light);
   }
-  .dropdown-menu {
+
+  /* When the mobile menu is open, show the menu */
+  .navbar-top.mobile-menu-open .mobile-menu {
+    display: block;
+  }
+
+  /* Use the same dropdown-menu styles but adjust for mobile context */
+  .navbar-top.mobile-menu-open .dropdown-menu {
+    display: block;
     position: static;
+    /* Override absolute positioning */
     width: 100%;
     box-shadow: none;
     border-radius: 0;
     border-right: none;
     border-left: none;
     border-bottom: none;
+    min-width: unset;
+    margin-top: 0;
+    padding-top: 0;
+    background-color: var(--background-color-light);
+  }
+}
+
+/* For very small screens, hide the brand name to save space */
+@media (max-width: 360px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .filters {
+    gap: 1rem;
   }
 }

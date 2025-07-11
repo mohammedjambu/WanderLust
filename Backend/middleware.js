@@ -12,19 +12,45 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 // Middleware to parse JSON fields from formData
+
+const fieldsToParse = ['propertyDetails', 'amenities', 'deletedImages'];
+
 module.exports.parseFormDataFields = (req, res, next) => {
-  try {
-    if (typeof req.body.propertyDetails === "string") {
-      req.body.propertyDetails = JSON.parse(req.body.propertyDetails);
-    }
-    if (typeof req.body.amenities === "string") {
-      req.body.amenities = JSON.parse(req.body.amenities);
-    }
-  } catch (err) {
-    return res.status(400).json({ error: "Invalid JSON in form fields" });
+  if (req.body) {
+    // Fields that are sent as stringified JSON
+    const jsonFields = ['propertyDetails', 'amenities', 'deletedImages'];
+    // Fields that are sent as strings but should be numbers
+    const numberFields = ['price']; // Add other number fields here in the future if needed
+
+    jsonFields.forEach(field => {
+      if (req.body[field]) {
+        try {
+          req.body[field] = JSON.parse(req.body[field]);
+        } catch (e) {
+          console.error(`Failed to parse JSON field "${field}":`, e);
+          return res.status(400).json({ error: `Invalid format for field: ${field}` });
+        }
+      }
+    });
+
+    // ✅ THE FIX: Loop through number fields and parse them
+    numberFields.forEach(field => {
+      if (req.body[field]) {
+        const parsedValue = parseFloat(req.body[field]);
+        // Check if parsing was successful (returns a number, not NaN)
+        if (!isNaN(parsedValue)) {
+          req.body[field] = parsedValue;
+        } else {
+          // If parsing fails, you can either ignore or return an error
+          console.error(`Failed to parse number field "${field}". Value:`, req.body[field]);
+          // Optional: return res.status(400).json({ error: `Invalid number format for field: ${field}` });
+        }
+      }
+    });
   }
   next();
-}
+};
+
 
 
 

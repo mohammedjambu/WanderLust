@@ -14,6 +14,8 @@ import MyListings from "./pages/Home/MyListing"
 import MyWishlist from './pages/Wishlist/MyWishlist';
 import MyTrips from "./pages/Home/MyTrips"
 import Profile from "./pages/Profile/Profile"
+import { CreateListingProvider } from "./context/CreateListingContext"
+// import { CreateListingProvider } from './context/CreateListingContext';
 
 
 
@@ -22,7 +24,8 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar />  
+      <CreateListingProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/listings/:id" element={<ShowListing />} />
@@ -37,6 +40,7 @@ function App() {
         <Route path="/mytrips" element={<MyTrips />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
+      </CreateListingProvider>
         <ToastContainer position="top-right" autoClose={3000} toastClassName="custom-toast" />
     </>
   )

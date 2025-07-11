@@ -1,214 +1,537 @@
-.listing-detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+/* =================================================================
+   ShowListing.css - Modern, Responsive, and Professional Styles
+   ================================================================= */
+
+/* --- Base Variables & Layout --- */
+:root {
+    --brand-color: #fe424d;
+    --brand-color-hover: #e03b44;
+    --border-color: #dddddd;
+    --text-dark: #222222;
+    --text-light: #717171;
+    --bg-light-gray: #f7f7f7;
 }
 
-/* .listing-detail-image-section {
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.listing-page-container {
+    max-width: 1120px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-.listing-detail-image {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-} */
-
-.listing-detail-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.listing-detail-header {
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 1rem;
-}
-
-.listing-detail-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
-.listing-detail-location {
-  font-size: 1.25rem;
-  color: #6b7280;
-}
-
-.listing-detail-description h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 1rem;
-}
-
-.listing-detail-description p {
-  font-size: 1.1rem;
-  color: #4b5563;
-  line-height: 1.6;
-}
-
-.listing-detail-booking {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 2rem;
-}
-
-.listing-detail-price h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
-.tax-info {
-  font-size: 0.875rem;
-  color: #6b7280;
-}
-
-.booking-form {
-  flex: 1;
-  max-width: 400px;
-  padding: 1.5rem;
-  background-color: #f9fafb;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.booking-form h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-}
-
-.btn-reserve {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #ef4444;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn-reserve:hover {
-  background-color: #dc2626;
-}
-
-.btn-edit {
-  display: inline-block;
-  padding: 8px 16px;
-  font-size: 1rem;
-  color: white;
-  background-color: #ef4444;
-  border-radius: 5px;
-  text-decoration: none;
-  margin-bottom: 10px;
-  transition: background-color 0.3s;
-}
-
-.btn-edit:hover {
-  background-color: #dc2626;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .listing-detail-container {
-    padding: 1rem;
-  }
-
-  .listing-detail-image {
-    height: 300px;
-  }
-
-  .listing-detail-title {
-    font-size: 2rem;
-  }
-
-  .listing-detail-location {
-    font-size: 1rem;
-  }
-
-  .listing-detail-description h2 {
-    font-size: 1.5rem;
-  }
-
-  .listing-detail-description p {
-    font-size: 1rem;
-  }
-
-  .listing-detail-booking {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .listing-detail-price h2 {
-    font-size: 1.5rem;
-  }
-
-  .booking-form {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .listing-detail-image {
-    height: 200px;
-  }
-
-  .listing-detail-title {
+/* --- Header Section --- */
+.listing-header .title {
     font-size: 1.75rem;
-  }
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
 
-  .listing-detail-location {
-    font-size: 0.875rem;
-  }
+.listing-header .subtitle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
 
-  .listing-detail-description h2 {
+.listing-header .details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.listing-header .details>* {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.listing-header .details a {
+    text-decoration: underline;
+    color: var(--text-light);
+}
+
+.listing-header .actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.listing-header .actions button:hover {
+    background-color: var(--bg-light-gray);
+}
+
+/* --- Image Gallery --- */
+.image-gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 0.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 400px;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.gallery-item:first-child {
+    grid-row: 1 / span 2;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-image {
+    transform: scale(1.05);
+}
+
+/* --- Main Content Grid --- */
+.listing-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 4rem;
+    margin-top: 2.5rem;
+}
+
+.listing-info .section {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.listing-info .section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.listing-info .host-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.listing-info .host-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* --- Booking Widget --- */
+.booking-widget-container {
+    position: sticky;
+    top: 2.5rem;
+}
+
+.booking-widget {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.booking-widget .price-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.booking-widget .price-header .price {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* --- Date & Guest Picker --- */
+.picker-container {
+    border: 1px solid #b0b0b0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.date-picker-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.date-picker-inputs>div {
+    padding: 0.75rem;
+}
+
+.date-picker-inputs>div:first-child {
+    border-right: 1px solid #b0b0b0;
+}
+
+.picker-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.1rem;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.date-picker-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.guest-input-container {
+    border-top: 1px solid #b0b0b0;
+    padding: 0.75rem;
+}
+
+.guest-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.reserve-button {
+    width: 100%;
+    padding: 0.875rem;
+    background: var(--brand-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.reserve-button:hover:not(:disabled) {
+    background: var(--brand-color-hover);
+}
+
+.reserve-button:disabled {
+    background: #dddddd;
+    cursor: not-allowed;
+}
+
+.price-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    font-size: 1rem;
+}
+
+.price-detail-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.price-detail-row .label {
+    text-decoration: underline;
+    color: var(--text-dark);
+}
+
+.total-row {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+/* --- Reviews & Map --- */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.review-card {
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.map-container {
+    height: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--bg-light-gray);
+}
+
+
+/* --- Host Section --- */
+.host-profile-section-new {
+    padding: 3rem 0;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Header with avatar and title */
+.host-profile-header-new {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.host-avatar-new {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+
+/* ✅ UPDATED: Avatar with the new purple background */
+.host-avatar-fallback-new {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #6366f1;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 500;
+    display: grid;
+    place-items: center;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.host-title-new {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ✅ UPDATED: Style for the host's name to be in the brand color */
+.host-title-new span {
+    color: var(--brand-color);
+}
+
+.host-meta-new {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.host-meta-new li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* ✅ NEW: Specific icon colors to match the image */
+.host-meta-new .meta-joined .icon {
+    color: var(--brand-color);
+}
+
+.host-meta-new .meta-verified .icon {
+    color: #2ecc71;
+}
+
+/* Green */
+.host-meta-new .meta-responds .icon {
+    color: #3498db;
+}
+
+/* Blue */
+.host-meta-new .meta-new .icon {
+    color: #9b59b6;
+}
+
+/* Location */
+.host-stats-grid-new .map .icon {
+    color: #fe424d;
+}
+
+
+.host-stats-grid-new .lang .icon {
+    color: blue;
+}
+
+.host-stats-grid-new .msg .icon {
+    color: green;
+}
+
+.host-stats-grid-new .user .icon {
+    color: orange;
+}
+
+/* Purple */
+
+/* The 4 stat cards below the header */
+.host-stats-grid-new {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card-new {
+    background-color: white;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-card-new .icon {
+    color: var(--text-light);
+}
+
+.stat-card-new .label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.stat-card-new .value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* About section */
+.about-host-new {
+    background-color: var(--bg-light-gray);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.about-host-new h3 {
     font-size: 1.25rem;
-  }
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
 
-  .listing-detail-price h2 {
-    font-size: 1.25rem;
-  }
+.about-host-new p {
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+/* Contact and Save buttons */
+.host-actions-new {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.host-actions-new .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--text-dark);
+    transition: all 0.2s ease;
+    flex-grow: 1;
+    /* max-width: 320px; */
+}
+
+/* ✅ UPDATED: Solid red button style */
+.host-actions-new .btn.primary {
+    background-color: var(--brand-color);
+    color: white;
+    border-color: var(--brand-color);
+}
+
+.host-actions-new .btn.primary:hover {
+    background-color: var(--brand-color-hover);
+    border-color: var(--brand-color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ UPDATED: Outlined button style */
+.host-actions-new .btn.secondary {
+    background-color: white;
+    color: var(--text-dark);
+}
+
+.host-actions-new .btn.secondary:hover {
+    background-color: var(--bg-light-gray);
+}
+
+
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+    .listing-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .booking-widget-container {
+        position: static;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .listing-page-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .listing-header .title {
+        font-size: 1.5rem;
+    }
+
+    .image-gallery {
+        grid-template-columns: repeat(5, 80vw);
+        /* Create a scrollable "filmstrip" */
+        grid-template-rows: 1fr;
+        height: 70vw;
+        /* Make height responsive */
+        max-height: 350px;
+        scroll-snap-type: x mandatory;
+        overflow-x: auto;
+    }
+
+    .gallery-item {
+        scroll-snap-align: center;
+    }
+
+    .gallery-item:first-child {
+        grid-row: auto;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
 }

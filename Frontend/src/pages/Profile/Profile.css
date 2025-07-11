@@ -1,25 +1,35 @@
-/* src/pages/Profile.css */
 
+:root {
+  --brand-color: #fe424d;
+  --brand-color-active: #222222;
+  --border-color: #e5e7eb;
+  --bg-light-gray: #f7f7f7;
+  --text-dark: #222222;
+  --text-light: #717171;
+}
+
+/* --- Main Layout --- */
 .profile-container {
-  max-width: 1024px;
-  /* margin: 2rem auto 1rem 5rem; */
+  max-width: 1120px;
   margin: 3rem auto;
-  padding: 1rem;
+  padding: 1.5rem;
   display: grid;
-  grid-template-columns: 250px 1fr; /* Sidebar and main content */
+  grid-template-columns: 280px 1fr;
+  /* Fixed-width sidebar */
   gap: 3rem;
 }
 
-/* Sidebar Styling */
+/* --- Sidebar --- */
 .profile-sidebar {
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid var(--border-color);
   padding-right: 2rem;
 }
 
 .profile-sidebar h2 {
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
 }
 
 .profile-sidebar-nav {
@@ -31,8 +41,8 @@
 .sidebar-button {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: 0.875rem;
+  padding: 0.8rem 1rem;
   border-radius: 8px;
   border: none;
   background-color: transparent;
@@ -44,178 +54,341 @@
   transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
-.sidebar-button svg {
-  width: 20px;
-  height: 20px;
-}
-
 .sidebar-button:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-light-gray);
 }
 
 .sidebar-button.active {
-  background-color: #222222;
-  color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Main Content Styling */
-.profile-content {
-  padding-left: 1rem;
-}
-
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.user-info-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2rem;
-  width: 35%;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.user-info-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.user-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.user-name {
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-.user-status {
-  font-size: 1rem;
-  color: #6b7280;
-}
-
-/* Profile completion card */
-.complete-profile-card {
-  max-width: 350px;
-}
-.complete-profile-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.complete-profile-card p {
-  font-size: 0.9rem;
-  color: #4b5563;
-  margin-bottom: 1rem;
-}
-.get-started-btn {
-  padding: 0.75rem 1.5rem;
-  background-color: #e51d53;
+  background-color: var(--brand-color-active);
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.get-started-btn:hover {
-  background-color: #c81a49;
 }
 
+/* --- Main Content Area --- */
+/* .profile-content {
+  padding-left: 1rem;
+} */
 
-/* Tab Content Styling */
+
+/* --- Tab Content --- */
 .tab-content h3 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.data-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  /* space-y: 1rem; */
+.tab-content .empty-state {
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--bg-light-gray);
+  border-radius: 12px;
 }
 
-.data-list-item {
-  padding: 1rem;
-  border: 1px solid #e5e7eb;
+.tab-content .empty-state p {
+  margin-bottom: 1rem;
+  color: var(--text-light);
+}
+
+.tab-content .empty-state .action-link {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--brand-color);
+  color: white;
   border-radius: 8px;
-}
-
-.data-list-item-title {
   font-weight: 600;
-  color: #111827;
 }
 
-.data-list-item-subtitle {
+/* --- About Tab Specifics --- */
+.about-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.user-info-display {
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  flex-grow: 1;
+}
+
+.user-info-display .info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-info-display .info-row:last-child {
+  border-bottom: none;
+}
+
+.user-info-display .info-label {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.user-info-display .info-value {
+  color: var(--text-light);
+}
+
+.user-info-display .edit-btn {
+  padding: 0.25rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: var(--brand-color);
+  color: white;
+}
+
+.user-info-display .edit-btn:hover {
+  background-color: var(--brand-color-hover);
+}
+
+/* --- Data Card (for Bookings, Reviews, Listings) --- */
+.data-card-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.data-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.data-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.data-card-image {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.data-card-content {
+  flex-grow: 1;
+}
+
+.data-card-title {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.data-card-subtitle {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-light);
   margin-top: 0.25rem;
 }
 
-.data-list-item-details {
+.data-card-details {
   font-size: 0.9rem;
-  color: #374151;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: #4b5563;
 }
 
-.form-input-style {
-   margin-top: 4px;
-   display: block;
-   width: 100%;
-   border: 1px solid #d1d5db;
-   border-radius: 8px;
-   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-   padding: 8px 12px;
-   font-size: 1rem;
- }
- .form-input-style:focus {
-   outline: none;
-   border-color: #fe424d;
-   box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2);
- }
+.data-card-rating {
+  display: flex;
+  gap: 0.25rem;
+  color: #f59e0b;
+  /* Amber/Yellow color */
+}
 
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* The form container inside the modal */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A single row in the modal form (e.g., "Full Name" + input) */
+.modal-form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 0;
+  /* Increased padding for more space */
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-form-row:last-of-type {
+  border-bottom: none;
+  /* No border for the last item */
+}
+
+/* Modifier for sections like "About Me" where the label is on top */
+.modal-form-row.vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.modal-form-label {
+  font-size: 1rem;
+  color: var(--text-dark);
+  flex-shrink: 0;
+  /* Prevents the label from shrinking */
+}
+
+/* The "invisible" input style */
+.modal-input {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0;
+  text-align: right;
+  font-size: 1rem;
+  color: var(--text-light);
+  width: 100%;
+  flex-grow: 1;
+  box-shadow: none;
+  border-radius: 0;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.modal-input:focus {
+  outline: none;
+  color: var(--text-dark);
+  box-shadow: 0 1px 0 0 var(--text-dark);
+  /* Add bottom border on focus */
+}
+
+/* Textarea styling */
+.modal-textarea {
+  width: 100%;
+  border: none;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--text-light);
+  resize: none;
+  background: transparent;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.modal-textarea:focus {
+  outline: none;
+  color: var(--text-dark);
+  box-shadow: 0 1px 0 0 var(--text-dark);
+}
+
+/* Phone Input Customization for the Modal */
+.modal-phone-input .PhoneInputInput {
+  border: none !important;
+  text-align: right !important;
+  /* Align phone number to the right */
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: var(--text-light) !important;
+  flex-grow: 1;
+}
+
+/* .modal-phone-input .PhoneInput  {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: start;
+} */
+
+.modal-phone-input .PhoneInputInput:focus {
+  box-shadow: 0 1px 0 0 var(--text-dark) !important;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+.modal-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-btn.secondary {
+  background-color: #e5e7eb;
+  color: var(--text-dark);
+}
+
+.modal-btn.secondary:hover {
+  background-color: #d1d5db;
+}
+
+.modal-btn.primary {
+  background-color: var(--brand-color);
+  color: white;
+}
+
+.modal-btn.primary:hover {
+  background-color: var(--brand-color-hover);
+}
+
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) {
   .profile-container {
-    grid-template-columns: 1fr; /* Stack sidebar and content */
+    grid-template-columns: 220px 1fr;
+    /* Slimmer sidebar */
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  body {
+    padding-top: 7rem;
+  }
+
+  .profile-container {
+    grid-template-columns: 1fr;
+    /* Stack sidebar and content */
     gap: 1.5rem;
   }
+
   .profile-sidebar {
     border-right: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     padding-right: 0;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
   }
+
   .profile-sidebar-nav {
-    flex-direction: row; /* Make tabs horizontal on mobile */
+    flex-direction: column;
+    display: flex;
     overflow-x: auto;
+    padding-bottom: 0.5rem;
+    /* Space for scrollbar */
   }
+
   .sidebar-button {
-    flex-shrink: 0; /* Prevent buttons from shrinking */
+    flex-shrink: 0;
+    /* Prevent buttons from shrinking */
+    white-space: nowrap;
   }
+
   .profile-content {
     padding-left: 0;
   }
-  .profile-header {
+
+  .about-tab-header {
     flex-direction: column;
-    gap: 1.5rem;
   }
 }

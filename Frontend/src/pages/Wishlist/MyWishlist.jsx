@@ -1,8 +1,14 @@
+// src/pages/MyWishlist/MyWishlist.jsx
+
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './MyWishlist.css';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { authDataContext } from '../../context/AuthContext';
+
+// ✅ We import the components and styles from the Home page for consistency!
+import { ListingCard, SkeletonCard } from '../Home/Home'; 
+import '../Home/Home.css'; 
 
 const MyWishlist = () => {
   const { authUser, serverUrl } = useContext(authDataContext);
@@ -20,59 +26,75 @@ const MyWishlist = () => {
 
     const fetchWishlist = async () => {
       try {
-        const res = await axios.get(`${serverUrl}/api/wishlist`, {
-          withCredentials: true,
-        });
+        setLoading(true);
+        const res = await axios.get(`${serverUrl}/api/wishlist`, { withCredentials: true });
         setWishlist(res.data);
       } catch (err) {
         console.error("Error fetching wishlist:", err);
-        setError("Could not load wishlist. Try again later.");
+        setError("Could not load your wishlist. Try again later.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchWishlist();
   }, [authUser, serverUrl, navigate]);
 
-  return (
-    <div className="wishlist-wrapper">
-      <h2 className="wishlist-title">My Wishlist ❤️</h2>
+  // ✅ NEW: Function to handle removing an item from the wishlist
+  const handleRemoveFromWishlist = async (listingId) => {
+    // Optimistic UI update: remove the item instantly from the view
+    const originalWishlist = [...wishlist];
+    setWishlist(prev => prev.filter(item => item._id !== listingId));
 
-      {loading && <p>Loading wishlist...</p>}
-      {error && <p className="error-text">{error}</p>}
-      {!loading && wishlist.length === 0 && (
-        <p className="no-wishlist-text">You haven’t favorited any listings yet.</p>
-      )}
+    try {
+      await axios.post(`${serverUrl}/api/wishlist/toggle/${listingId}`, {}, { withCredentials: true });
+      toast.info("Removed from wishlist");
+    } catch (err) {
+      // If the API call fails, revert the change and show an error
+      toast.error("Failed to update wishlist. Please try again.");
+      setWishlist(originalWishlist);
+      console.error("Error toggling wishlist:", err);
+    }
+  };
 
-      <div className="wishlist-grid">
-        {wishlist.map((listing) => (
-          <Link
-            key={listing._id}
-            to={`/listings/${listing._id}`}
-            className="listing-link"
-          >
-            <div className="listing-card">
-              <img
-                src={listing.image?.url}
-                alt={listing.title}
-                className="listing-img"
-              />
-              <div className="listing-overlay"></div>
-              <div className="listing-body">
-                <p className="listing-text">
-                  <b>{listing.title}</b>
-                  <br />
-                  {listing.location.toUpperCase()}, {listing.country.toUpperCase()}
-                  <br />
-                  ₹ {listing.price.toLocaleString('en-IN')} / night
-                </p>
-              </div>
-            </div>
+  const renderContent = () => {
+    if (loading) {
+      return Array.from({ length: 8 }).map((_, index) => <SkeletonCard key={index} />);
+    }
+    
+    if (error) {
+      return <div className="status-container" role="alert">{error}</div>;
+    }
+    
+    if (wishlist.length === 0) {
+      return (
+        <div className="status-container">
+          <p>Your wishlist is empty. Start exploring to find places you love!</p>
+          <Link to="/" className="action-btn edit" style={{maxWidth: '200px', margin: '1rem auto'}}>
+             Explore Listings
           </Link>
-        ))}
+        </div>
+      );
+    }
+
+    return wishlist.map((listing) => (
+      <ListingCard
+        key={listing._id}
+        listing={listing}
+        isWishlisted={true} // All items on this page are wishlisted
+        onToggleWishlist={handleRemoveFromWishlist}
+      />
+    ));
+  };
+
+  return (
+    <main className="listings-container">
+      <div className="page-header">
+        <h1 className="page-title">My Wishlist ❤️</h1>
       </div>
-    </div>
+      <div className="listings-grid">
+        {renderContent()}
+      </div>
+    </main>
   );
 };
 

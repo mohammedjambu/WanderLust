@@ -15,7 +15,22 @@ import {
   Bed,
   Bath,
   Edit,
-  Trash2
+  Trash2,
+  Calendar,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  Languages,
+  MessageSquare,
+  Briefcase,      
+  CalendarCheck,  
+  XCircle,
+  Tv,             
+  WashingMachine, 
+  ThermometerSun, 
+  Flame,          
+  HeartPulse,    
+  Check,
 } from "lucide-react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -28,6 +43,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { eachDayOfInterval, parseISO } from "date-fns";
 import { Dialog } from "@headlessui/react"; // Modal UI
 import { differenceInCalendarDays } from "date-fns";
+import "./ShowListing.css";
 
 const ShowListing = () => {
   const { id } = useParams();
@@ -41,6 +57,7 @@ const ShowListing = () => {
   const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
   const [listingData, setListingData] = useState(null);
+  const [isAmenitiesModalOpen, setIsAmenitiesModalOpen] = useState(false);
   const [coordinates, setCoordinates] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -79,8 +96,8 @@ const ShowListing = () => {
   };
 
   // Fetch listing data and wishlist status
-     const fetchListingData = useCallback(async () => {
-    setLoading(true); 
+  const fetchListingData = useCallback(async () => {
+    setLoading(true);
     try {
       // Fetch the main listing data from the backend
       const response = await axios.get(`${serverUrl}/api/listings/${id}`, {
@@ -90,22 +107,42 @@ const ShowListing = () => {
       setListingData(data); // Update the state with the fetched data
 
       // Set up fallback images
-      const fallback = [
-        data.image?.url || "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80",
-      ];
-      setAdditionalImages(
-        data.images?.length > 0 ? data.images.map((i) => i.url) : fallback
-      );
+      const fallbackImage =
+        data.image?.url ||
+        "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
+      const allImages =
+        data.images?.length > 0
+          ? data.images.map((i) => i.url)
+          : [fallbackImage];
 
+      const displayImages = [
+        ...allImages,
+        fallbackImage,
+        fallbackImage,
+        fallbackImage,
+        fallbackImage,
+        fallbackImage,
+      ].slice(0, 5);
+
+      setAdditionalImages(displayImages);
       // If the user is logged in, perform additional checks
       if (authUser && data._id) {
         // Check if the listing is in the user's wishlist
-        const wishlistRes = await axios.get(`${serverUrl}/api/wishlist`, { withCredentials: true });
-        setIsFavorited(wishlistRes.data.some((listing) => listing._id === data._id));
-        
+        const wishlistRes = await axios.get(`${serverUrl}/api/wishlist`, {
+          withCredentials: true,
+        });
+        setIsFavorited(
+          wishlistRes.data.some((listing) => listing._id === data._id)
+        );
+
         // Check if the user has booked this listing before
-        const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, { withCredentials: true });
-        setHasBooked(bookingRes.data.some((b) => b.listing._id === data._id));
+        const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, {
+          withCredentials: true,
+        });
+
+        setHasBooked(
+          bookingRes.data.some((b) => b.listing && b.listing._id === data._id)
+        );
       } else {
         // If no user, reset these states
         setIsFavorited(false);
@@ -117,19 +154,15 @@ const ShowListing = () => {
       setIsFavorited(false);
       setHasBooked(false);
     } finally {
-
       setLoading(false);
     }
   }, [serverUrl, id, authUser]);
-    
 
   useEffect(() => {
     if (serverUrl && id) {
       fetchListingData();
     }
   }, [serverUrl, id, fetchListingData]);
-
-
 
   useEffect(() => {
     const fetchUnavailableDates = async () => {
@@ -155,22 +188,7 @@ const ShowListing = () => {
     if (id) fetchUnavailableDates();
   }, [id, serverUrl]);
 
-  // // Check if user has booked this listing before
-  // const checkIfUserBooked = async (listingId) => {
-  //   try {
-  //     const res = await axios.get(`${serverUrl}/api/bookings/mine`, {
-  //       withCredentials: true,
-  //     });
-  //     const booked = res.data.some((b) => b.listing._id === listingId);
-  //     setHasBooked(booked);
-  //   } catch (err) {
-  //     console.error("Booking check failed:", err);
-  //   }
-  // };
 
-  // Fetch coordinates after listing data loads
-  
-  
   useEffect(() => {
     if (!listingData?.location || !listingData?.country) return;
 
@@ -232,40 +250,52 @@ const ShowListing = () => {
   };
 
   // Function to get amenity icon based on name
-  const getAmenityIcon = (name) => {
-    switch (name) {
-      case "Free WiFi":
-        return <Wifi className="w-6 h-6" />;
-      case "Full Kitchen":
-        return <ChefHat className="w-6 h-6" />;
-      case "Private Pool":
-        return <Waves className="w-6 h-6" />;
-      case "Free Parking":
-        return <Car className="w-6 h-6" />;
-      case "Air Conditioning":
-        return <Snowflake className="w-6 h-6" />;
-      case "Pet Friendly":
-        return <PawPrint className="w-6 h-6" />;
+   const getAmenityIcon = (name) => {
+    const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
+    // Use .toLowerCase() to make matching case-insensitive
+    switch (name.toLowerCase()) {
+      case "free wifi":
+      case "wi-fi":
+        return <Wifi size={24} className={iconClass} />;
+      case "full kitchen":
+        return <ChefHat size={24} className={iconClass} />;
+      case "private pool":
+        return <Waves size={24} className={iconClass} />;
+      case "free parking":
+        return <Car size={24} className={iconClass} />;
+      case "air conditioning":
+        return <Snowflake size={24} className={iconClass} />;
+      case "pet friendly":
+        return <PawPrint size={24} className={iconClass} />;
+      case "tv":
+        return <Tv size={24} className={iconClass} />;
+      case "washer":
+        return <WashingMachine size={24} className={iconClass} />;
+      case "heating":
+        return <ThermometerSun size={24} className={iconClass} />;
+      case "fireplace":
+        return <Flame size={24} className={iconClass} />;
+      case "first aid kit":
+        return <HeartPulse size={24} className={iconClass} />;
       default:
-        return <Star className="w-6 h-6" />;
+        return <Check size={24} className={iconClass} />;
     }
   };
-
   const defaultOfferings = [
     {
       title: "Dedicated workspace",
       description: "Private room with fast wifi for focused work",
-      icon: <Wifi className="w-6 h-6" />,
+      icon: <Briefcase size={28} className="text-red-500 flex-shrink-0" />,
     },
     {
       title: "Self check-in",
       description: "Easy access with smart lock entry",
-      icon: <Star className="w-6 h-6" />,
+      icon: <CalendarCheck size={28} className="text-red-500 flex-shrink-0" />,
     },
     {
       title: "Free cancellation",
       description: "Full refund if canceled at least 5 days before check-in",
-      icon: <Star className="w-6 h-6" />,
+      icon: <XCircle size={28} className="text-red-500 flex-shrink-0"/>,
     },
   ];
 
@@ -336,7 +366,7 @@ const ShowListing = () => {
     navigate(`/listings/${id}/edit`);
   };
 
-// Price calculation 
+  // Price calculation
   const nightsCount =
     checkIn && checkOut ? differenceInCalendarDays(checkOut, checkIn) : 0;
 
@@ -347,17 +377,7 @@ const ShowListing = () => {
   const subtotal = listingPrice * nightsCount;
   const total = nightsCount > 0 ? subtotal + cleaningFee + serviceFee : 0;
 
-
-  // const calculateTotal = () => {
-  //   if (!listingData || !checkIn || !checkOut) return 0;
-  //   const nights = Math.ceil(
-  //     (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
-  //   );
-  //   return nights > 0 ? listingData.price * nights + 75 + 89 : 0;
-  // };
-
   const isOwner = authUser && listingData.owner?._id === authUser._id;
-
 
   const handleReviewSubmit = async () => {
     const url = editingReviewId
@@ -377,7 +397,6 @@ const ShowListing = () => {
       closeReviewModal();
 
       fetchListingData(); // Re-fetch data to show the new/updated review
-
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to submit review");
       console.error(err);
@@ -392,9 +411,8 @@ const ShowListing = () => {
         { withCredentials: true }
       );
       toast.success("Review deleted!");
-      
-      fetchListingData();
 
+      fetchListingData();
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to delete review");
       console.error(err);
@@ -430,7 +448,7 @@ const ShowListing = () => {
       className="min-h-screen bg-white"
     >
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
+        {/* Header Top section */}
         <motion.div variants={itemVariants}>
           <div className="mb-6">
             <div className="flex justify-between items-start mb-4">
@@ -466,6 +484,16 @@ const ShowListing = () => {
                     {isFavorited ? "Saved" : "Save"}
                   </span>
                 </motion.button>
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="flex items-center gap-4 text-sm mt-4">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4 text-gray-500" />
+                <span className="text-gray-600">
+                  {listingData.location}, {listingData.country}
+                </span>
               </div>
             </div>
           </div>
@@ -534,30 +562,6 @@ const ShowListing = () => {
                   onClick={() => setSelectedImageIndex(4)}
                 />
                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-200" />
-                <div className="absolute bottom-4 right-4">
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-900 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors shadow-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log("Show all photos clicked");
-                    }}
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                      />
-                    </svg>
-                    <span>Show all photos</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -593,18 +597,17 @@ const ShowListing = () => {
                   </div>
                   <div className="flex items-center gap-4 text-sm mt-4">
                     <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-red-500 text-red-500" />
-                      <span className="font-medium">
-                        {listingData.owner?.rating || "N/A"}
-                      </span>
-                      <span className="text-gray-600">
-                        ({listingData.reviews?.length || 0} reviews)
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-600">
-                        {listingData.location}, {listingData.country}
+                      <Star className="w-5 h-5 fill-red-500 text-red-500" />
+                      <span className="font-medium text-lg">
+                        {listingData.reviews &&
+                        listingData.reviews.length > 0 ? (
+                          <>
+                            {listingData.owner?.rating} ·{" "}
+                            {listingData.reviews.length} reviews
+                          </>
+                        ) : (
+                          <>New</>
+                        )}
                       </span>
                     </div>
                   </div>
@@ -618,58 +621,154 @@ const ShowListing = () => {
               <hr className="border-gray-200" />
             </motion.div>
 
-            <motion.div variants={itemVariants} className="mb-8">
+            {/* Listing Description */}
+            <motion.div variants={itemVariants} className="mb-1">
               <p className="text-gray-700 leading-relaxed">
                 {listingData.description || "No description available."}
               </p>
+              <hr className="border-gray-200 mt-5" />
             </motion.div>
 
-            <motion.div variants={itemVariants} className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">
+            {/* What places offer */}
+            {/* <motion.div
+              variants={itemVariants}
+              className="py-10 border-b border-gray-200"
+            >
+              <h3 className="text-2xl font-semibold mb-6">
                 What this place offers
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {defaultOfferings.map((offering, index) => (
-                  <motion.div
+                  // ✅ THE FIX: Changed to `flex-row` and `items-start` for side-by-side layout
+                  <div
                     key={index}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-start gap-3 p-2"
+                    className="flex flex-row items-start gap-4 bg-gray-100 p-6 rounded-xl"
                   >
                     {offering.icon}
+
                     <div>
-                      <h4 className="text-gray-900 font-medium">
+                      <h4 className="font-semibold text-base text-gray-900">
                         {offering.title}
                       </h4>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-500 text-sm leading-snug mt-1">
                         {offering.description}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
+                ))}
+              </div>
+            </motion.div> */}
+
+            {/* ✅ SECTION 1: "What this place offers" (Static Section) */}
+            <motion.div
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+              className="py-10 border-b border-gray-200"
+            >
+              <h3 className="text-2xl font-semibold mb-6">
+                What this place offers
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {defaultOfferings.map((offering, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row items-start gap-4 bg-gray-50 p-5 rounded-xl"
+                  >
+                    {offering.icon}
+                    <div>
+                      <h4 className="font-semibold text-base text-gray-900">
+                        {offering.title}
+                      </h4>
+                      <p className="text-gray-500 text-sm leading-snug mt-1">
+                        {offering.description}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Amenities</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {listingData.amenities?.map((amenity, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-3 p-2"
-                  >
-                    {getAmenityIcon(amenity.name)}
-                    <span className="text-gray-700">{amenity.name}</span>
-                  </motion.div>
-                )) || <p>No amenities listed.</p>}
+            {/* ✅ SECTION 2: "Amenities" (Dynamic Data from Backend) */}
+            <motion.div
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+              // className="py-10 border-b border-gray-200"
+            >
+              <h3 className="text-2xl font-semibold mb-6 mt-6">Amenities</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                {listingData.amenities && listingData.amenities.length > 0 ? (
+                  listingData.amenities.slice(0, 6).map((amenity) => (
+                    <div key={amenity.name} className="flex items-center gap-4">
+                      {getAmenityIcon(amenity.name)}
+                      <span className="text-gray-700">{amenity.name}</span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 col-span-full">
+                    The host hasn't listed any specific amenities for this
+                    property.
+                  </p>
+                )}
               </div>
+
+              {listingData.amenities && listingData.amenities.length > 6 && (
+                <div className="mt-8">
+                  <button
+                    onClick={() => setIsAmenitiesModalOpen(true)}
+                    className="px-6 py-3 border border-gray-800 rounded-lg font-semibold text-gray-800 hover:bg-gray-100 transition-colors"
+                  >
+                    Show all {listingData.amenities.length} amenities
+                  </button>
+                </div>
+              )}
             </motion.div>
+
+            {/* MODAL for All Amenities */}
+            <Dialog
+              open={isAmenitiesModalOpen}
+              onClose={() => setIsAmenitiesModalOpen(false)}
+              className="relative z-50"
+            >
+              <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
+              <div className="fixed inset-0 flex items-center justify-center p-4">
+                <Dialog.Panel className="bg-white rounded-xl p-6 max-w-lg w-full max-h-[80vh] flex flex-col shadow-xl">
+                  <Dialog.Title className="text-xl font-semibold mb-4 flex-shrink-0">
+                    All Amenities
+                  </Dialog.Title>
+                  <div className="overflow-y-auto flex-grow pr-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+                      {listingData.amenities?.map((amenity) => (
+                        <div
+                          key={amenity.name}
+                          className="flex items-center gap-4"
+                        >
+                          {getAmenityIcon(amenity.name)}
+                          <span className="text-gray-800">{amenity.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 pt-4 mt-4 border-t">
+                    <button
+                      onClick={() => setIsAmenitiesModalOpen(false)}
+                      className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-black"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </div>
+            </Dialog>
           </div>
 
+          {/* Reserve Box Section */}
           <div className="lg:col-span-1">
-            <motion.div variants={itemVariants} className="sticky top-8">
+            <motion.div variants={itemVariants} className="sticky top-24">
               <div className="border border-gray-200 rounded-xl p-6 shadow-lg">
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-2xl font-semibold">
@@ -776,7 +875,6 @@ const ShowListing = () => {
                   </div>
                 )}
 
-                <hr className="border-gray-200 mb-4" />
 
                 <div className="flex justify-between font-semibold">
                   <span>Total</span>
@@ -786,6 +884,7 @@ const ShowListing = () => {
             </motion.div>
           </div>
         </div>
+          <hr className="border-gray-200 mb-4" />
 
         {/* Reviews Section */}
         <motion.div variants={itemVariants} className="mb-8">
@@ -793,8 +892,15 @@ const ShowListing = () => {
             <div className="flex items-center gap-2">
               <Star className="w-6 h-6 fill-red-500 text-red-500" />
               <h3 className="text-xl font-semibold">
-                {listingData.owner?.rating || "New"} ·{" "}
-                {listingData.reviews?.length || 0} reviews
+                {/* ✅ CORRECTED LOGIC: Check for reviews first */}
+                {listingData.reviews && listingData.reviews.length > 0 ? (
+                  <>
+                    {listingData.owner?.rating} · {listingData.reviews.length}{" "}
+                    reviews
+                  </>
+                ) : (
+                  <>New · 0 reviews</>
+                )}
               </h3>
             </div>
             {/* ✅ Show "Leave a Review" button only if user has booked and is NOT the owner */}
@@ -978,6 +1084,123 @@ const ShowListing = () => {
             {listingData.location}, {listingData.country}
           </p>
         </motion.div>
+
+        {/* Host Details Section */}
+        <div className="host-profile-section-new">
+          <div className="host-profile-header-new">
+            {listingData.owner?.avatar ? (
+              <img
+                src={listingData.owner.avatar}
+                alt={listingData.owner.name}
+                className="host-avatar-new"
+              />
+            ) : (
+              <div className="host-avatar-fallback-new">
+                {listingData.owner?.name?.charAt(0).toUpperCase() || "H"}
+              </div>
+            )}
+            <div>
+              <h2 className="host-title-new">
+                {/* ✅ UPDATED: Host name is wrapped in a span to apply the brand color */}
+                Hosted by{" "}
+                <span>{listingData.owner?.username || "our Host"}</span>
+              </h2>
+              <ul className="host-meta-new">
+                {/* ✅ UPDATED: Using specific icons and classes for targeted coloring */}
+                <li className="meta-joined">
+                  <Calendar size={14} className="icon" /> Joined:{" "}
+                  {new Date(listingData.owner?.createdAt).toLocaleDateString(
+                    "en-US",
+                    { month: "long", year: "numeric" }
+                  )}
+                </li>
+                <li className="meta-verified">
+                  <ShieldCheck size={14} className="icon" /> Verified Host
+                </li>
+                <li className="meta-responds">
+                  <Clock size={14} className="icon" /> Responds within an hour
+                </li>
+                <li className="meta-new">
+                  <Sparkles size={14} className="icon" /> New host
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="host-stats-grid-new">
+            <div className="stat-card-new map">
+              <MapPin size={24} className="icon " />
+              <div>
+                <p className="label">Location</p>
+                <p className="value">{listingData.owner?.hometown}</p>
+              </div>
+            </div>
+            <div className="stat-card-new lang">
+              <Languages size={24} className="icon" />
+              <div>
+                <p className="label">Languages</p>
+                <p className="value">
+                  {listingData.owner?.languages?.join(", ") ||
+                    "English, Spanish"}
+                </p>
+              </div>
+            </div>
+            <div className="stat-card-new msg">
+              <MessageSquare size={24} className="icon" />
+              <div>
+                <p className="label">Response Rate</p>
+                <p className="value">
+                  {listingData.owner?.responseRate || "95%"}
+                </p>
+              </div>
+            </div>
+            <div className="stat-card-new user">
+              <Users size={24} className="icon" />
+              <div>
+                <p className="label">Total Guests Hosted</p>
+                <p className="value">
+                  {listingData.owner?.totalGuests?.toLocaleString() || "120+"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="about-host-new">
+            <h3>About {listingData.owner?.name || "your host"}</h3>
+            <p>
+              {/* ✅ THE FIX: Dynamically display the bio from the API, with a fallback. */}
+              {listingData.owner?.bio ||
+                "This host prefers to keep an air of mystery, but they promise you a great stay!"}
+            </p>
+          </div>
+
+          <div className="host-actions-new">
+            {/* ✅ UPDATED: Button classes and icons match the new design */}
+            <button className="btn primary text-[1.2rem]">
+              <MessageSquare size={18} /> Contact Host
+            </button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleWishlist}
+              disabled={loading} // Disable while any data is loading
+              className={`btn secondary ${
+                isFavorited
+                  ? "border-red-500 bg-red-50 text-red-600"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <Heart
+                className={`w-4 h-4 transition-all ${
+                  isFavorited ? "fill-current" : ""
+                }`}
+              />
+              <span className="text-[1.2rem] font-medium">
+                {isFavorited ? "Saved" : "Save"}
+              </span>
+            </motion.button>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

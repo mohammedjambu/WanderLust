@@ -1,81 +1,221 @@
-/* MyListings.css */
+/* =================================================================
+   MyListing.css - With Added Responsive Design
+   ================================================================= */
 
-.my-listings-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  /* padding: 1.5rem 1rem; */
+/* --- Variables --- */
+:root {
+  --primary-color: #fe424d;
+  --error-color: #dc2626;
+  --border-color-light: #e0e0e0;
+  --text-color-dark: #222;
+  --text-color-light: #717171;
 }
 
-.my-listings-title {
+/* --- Page Layout --- */
+.my-listings-container {
+  max-width: 1280px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.page-title {
+  flex: 1;
+  margin-left: 6rem; /* This margin is for desktop only */
+  text-align: center;
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: #222;
-  text-align: center;
+  color: var(--text-color-dark);
 }
 
+/* --- Listings Grid --- */
+/* This is already responsive thanks to auto-fit! No changes needed here. */
 .my-listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
-  padding-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
-.listing-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.listing-card:hover {
-  transform: translateY(-5px);
-}
-
-.listing-img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.listing-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
-  z-index: 1;
-}
-
-
-.listing-body {
-  position: absolute;
-  bottom: 0;
-  padding: 0.75rem;
-  width: 100%;
-  z-index: 2;
-}
-
-
-.listing-text {
-  color: white;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
-}
-
-
-.error-text {
-  color: red;
+/* --- Status & Empty State --- */
+.status-container {
+  grid-column: 1 / -1;
   text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-color-light);
+}
+
+.status-container .action-btn-new {
+  text-decoration: none;
+  display: inline-block;
   margin-top: 1rem;
 }
 
-.no-listings-text {
+/* --- MyListing Card --- */
+.my-listing-card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-listing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.my-listing-image-container {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  position: relative;
+}
+
+.my-listing-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.my-listing-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-color-light);
+}
+
+.my-listing-body {
+  flex-grow: 1;
+  min-width: 0; /* Fix for text overflow in flexbox */
+}
+
+.my-listing-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-color-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-listing-price {
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+}
+
+.my-listing-price b {
+  color: var(--text-color-dark);
+}
+
+.my-listing-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.5rem;
+}
+
+/* --- Action Buttons --- */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
   text-align: center;
-  font-style: italic;
-  margin-top: 2rem;
-  font-size: 1.1rem;
+  text-decoration: none;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.action-btn-new {
+  padding: 0.75rem 1.25rem; /* Adjusted for better text fit */
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s;
+  white-space: nowrap; /* Prevent button text from wrapping */
+}
+
+.action-btn-new:hover {
+  background-color: #dc2626;
+  transform: scale(1.05);
+}
+
+.action-btn.edit { /* Corrected from your provided code */
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.action-btn.edit:hover {
+  background-color: #e0e0e0;
+}
+
+.action-btn.delete {
+  background-color: #fff0f0;
+  color: var(--error-color);
+}
+
+.action-btn.delete:hover {
+  background-color: var(--error-color);
+  color: #fff;
+}
+
+
+
+
+/* Responsive Design - Rules for smaller screens */
+
+@media (max-width: 768px) {
+  
+  .my-listings-container {
+    padding: 0 1rem;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; 
+  }
+
+  .page-title {
+    margin-left: 0; 
+    font-size: 1.75rem;
+  }
+
+  .my-listings-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  
+  .page-header {
+    align-items: stretch; 
+    text-align: center;
+  }
+
+  /* Ensure the grid columns can get smaller than 300px if needed */
+  .my-listings-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
 }

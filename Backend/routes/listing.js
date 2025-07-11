@@ -41,6 +41,8 @@ router
   )
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
+// Add this new route definition
+router.post("/add-all-amenities", listingController.addAllAmenities);
 
 
 module.exports = router;

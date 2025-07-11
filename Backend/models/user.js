@@ -36,12 +36,13 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  wishlist: [ 
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Listing",
-    }
-  ],
+  wishlist: {
+    type: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Listing'
+    }],
+    default: [] // This prevents crashes on users with no wishlist yet.
+  }
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -1,81 +1,81 @@
-// index.js
+// init/index.js
 const mongoose = require("mongoose");
-const initData = require("./data.js");
+const { data } = require("./data.js");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
+// IMPORTANT: Find a real user ID from your MongoDB 'users' collection and paste it here.
+const DEFAULT_OWNER_ID = "67fca0b80d629e439a8c2a78";
+
 async function main() {
   try {
     await mongoose.connect(MONGO_URL);
-    console.log("Database connection successful");
+    console.log("Connected to DB for seeding.");
+    await initDB();
   } catch (err) {
-    console.error("Database connection failed:", err);
-    process.exit(1);
+    console.error("Database initialization error:", err);
+  } finally {
+    await mongoose.disconnect();
+    console.log("Database connection closed.");
   }
 }
 
 const initDB = async () => {
-  try {
-    // Clear existing listings and reviews
-    // await Listing.deleteMany({});
-    // await Review.deleteMany({});
-    // console.log("Cleared existing listings and reviews");
+  if (!DEFAULT_OWNER_ID.match(/^[0-9a-fA-F]{24}$/)) {
+    console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.error("!!! FATAL ERROR: The DEFAULT_OWNER_ID is not a valid ID. !!!");
+    console.error("!!! Please paste a real user ID from your database.      !!!");
+    console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    return; // Stop the script
+  }
+  
+  console.log("Clearing existing listings and reviews...");
+  await Listing.deleteMany({});
+  await Review.deleteMany({});
 
-    const ownerId = "67fca0b80d629e439a8c2a78"; // Ensure this User exists
-
-    // Prepare and insert listings with reviews
-    const seededData = await Promise.all(
-      initData.data.map(async (obj) => {
-        // Create listing without reviews first
-        const listing = await Listing.create({
-          ...obj,
-          reviews: [], // Temporarily empty
-          owner: ownerId,
-          hostDetails: obj.owner, // Store data.js owner details
-        });
-
-        // Create Review documents with listing ID
+  console.log("Starting to seed new data...");
+  // ✅ THE FIX: Use a for...of loop and explicitly map each field to ensure
+  // nothing is missed, especially nested objects like `image` and `geometry`.
+  for (const listingData of data) {
+    const newListing = new Listing({
+      title: listingData.title,
+      description: listingData.description,
+      price: listingData.price,
+      location: listingData.location,
+      country: listingData.country,
+      geometry: listingData.geometry, // This will now be saved correctly
+      category: listingData.category,
+      propertyDetails: listingData.propertyDetails,
+      amenities: listingData.amenities,
+      image: listingData.image, // This will now be saved correctly
+      images: listingData.images,
+      owner: DEFAULT_OWNER_ID,
+      reviews: [],
+    });
+    
+    // Create associated reviews
+    if (listingData.reviews && listingData.reviews.length > 0) {
         const reviewIds = await Promise.all(
-          (obj.reviews || []).map(async (review) => {
-            const savedReview = await Review.create({
-              comment: review.comment,
-              rating: review.rating,
-              date: review.date,
-              name: review.name,
-              avatar: review.avatar,
-              author: ownerId, // Use listing owner as review author
-              listing: listing._id, // Set listing ID
+          listingData.reviews.map(async (reviewData) => {
+            const newReview = new Review({
+              comment: reviewData.comment,
+              rating: reviewData.rating,
+              author: DEFAULT_OWNER_ID,
+              listing: newListing._id,
             });
-            return savedReview._id;
+            await newReview.save();
+            return newReview._id;
           })
         );
+        newListing.reviews = reviewIds;
+    }
+    
+    await newListing.save();
+  }
 
-        // Update listing with review IDs
-        if (reviewIds.length > 0) {
-          listing.reviews = reviewIds;
-          await listing.save();
-        }
-
-        return listing;
-      })
-    );
-
-    console.log("Data initialized successfully with", seededData.length, "listings");
-  } catch (err) {
-    console.error("Error initializing data:", err);
-  } 
-  // finally {
-  //   await mongoose.disconnect();
-  //   console.log("Database connection closed");
-  //   process.exit(0);
-  // }
+  console.log("Data was successfully initialized!");
 };
 
-main()
-  .then(() => initDB())
-  .catch((err) => {
-    console.error("Initialization failed:", err);
-    process.exit(1);
-  });
+main();

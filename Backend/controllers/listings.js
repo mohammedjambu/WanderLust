@@ -2,8 +2,6 @@
 const Listing = require("../models/listing.js");
 const geocodingClient = require("../utils/mapbox");
 
-
-
 // Index Route
 // Index Route with Search + Filter Support
 module.exports.index = async (req, res) => {
@@ -37,8 +35,6 @@ module.exports.index = async (req, res) => {
   }
 };
 
-
-
 // Show Route
 module.exports.showListing = async (req, res) => {
   try {
@@ -52,7 +48,7 @@ module.exports.showListing = async (req, res) => {
           select: "username avatar _id",
         },
       })
-      .populate("owner", "username avatar createdAt _id");
+      .populate("owner");
 
     if (!listing) {
       return res.status(404).json({ error: "Listing does not exist!" });
@@ -66,6 +62,11 @@ module.exports.showListing = async (req, res) => {
           ).toFixed(1)
         : 0;
 
+    const ownerObject = listing.owner ? listing.owner.toObject() : null;
+    if (ownerObject) {
+      ownerObject.rating = avgRating;
+    }
+
     // This is the final data object sent to the frontend
     const listingData = {
       _id: listing._id,
@@ -77,23 +78,11 @@ module.exports.showListing = async (req, res) => {
       price: listing.price,
       location: listing.location,
       country: listing.country,
+      geometry: listing.geometry,
       propertyDetails: listing.propertyDetails,
       amenities: listing.amenities,
-      
-      // ✅ FIX: The populated reviews array was missing from the response.
-      // We are adding it back here.
-      reviews: listing.reviews, 
-
-      owner: {
-        _id: listing.owner._id,
-        name: listing.owner.username,
-        avatar: listing.owner.avatar,
-        joinedYear: listing.owner.createdAt
-          ? new Date(listing.owner.createdAt).getFullYear()
-          : new Date().getFullYear(),
-        rating: avgRating,
-        reviewCount: listing.reviews.length,
-      },
+      reviews: listing.reviews,
+      owner: ownerObject,
     };
 
     res.json(listingData);
@@ -105,94 +94,113 @@ module.exports.showListing = async (req, res) => {
 
 // Create Route
 module.exports.createListing = async (req, res, next) => {
-    console.log("BODY:", req.body);
-    console.log("FILES:", req.files);
-
   try {
     const geoResponse = await geocodingClient
-      .forwardGeocode({
-        query: req.body.location,
-        limit: 1,
-      })
+      .forwardGeocode({ query: req.body.location, limit: 1 })
       .send();
 
+    if (!geoResponse.body.features.length) {
+      return res.status(400).json({ message: "Invalid location. Please enter a valid city or address." });
+    }
+    const geoData = geoResponse.body.features[0];
+
     const {
-      title,
-      description,
-      price,
-      location,
-      country,
-      category,
-      propertyDetails,
-      amenities,
+      title, description, price, location, country,
+      category, propertyDetails, amenities, 
     } = req.body;
 
-    const images = req.files.map((file) => ({
+    const mappedImages = req.files.map((file) => ({
       url: file.path,
       filename: file.filename,
     }));
 
-    const listing = new Listing({
-      title,
-      description,
-      price: parseFloat(price),
-      location,
-      country,
-      category,
-      geometry: geoResponse.body.features[0].geometry,
+    const newListing = new Listing({
+      title, description, price: parseFloat(price), location, country, category,
+      geometry: geoData.geometry,
       owner: req.user._id,
-      images, // store all image objects
-      image: images[0] || { url: "", filename: "" }, // main image for preview
-      propertyDetails: propertyDetails, // Use the object directly
-      amenities: amenities, 
+      images: mappedImages,
+      image: mappedImages[0] || undefined,
+      propertyDetails,
+      amenities,
     });
 
-    const savedListing = await listing.save();
+    const savedListing = await newListing.save();
+
+    // ✅ THE FIX: After saving, re-fetch the listing with populated owner details
+    // This ensures the data sent to the frontend has the correct shape.
+    const populatedListing = await Listing.findById(savedListing._id).populate('owner');
 
     res.status(201).json({
       success: true,
-      message: "Listing created",
-      listing: savedListing,
+      message: "Listing created successfully!",
+      listing: populatedListing, // Send the fully populated listing
     });
+
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "A listing with this title already exists." });
+    }
     console.error("❌ Error in createListing:", err);
     next(err);
   }
 };
 
 // Update Route
-module.exports.updateListing = async (req, res) => {
-    try {
-        let { id } = req.params;
-        // Merge file data into req.body for validation
-        if (req.files && req.files.length > 0) {
-            req.body.image = { url: req.files[0].path, filename: req.files[0].filename };
-            req.body.images = req.files.map((file) => ({
-                url: file.path,
-                filename: file.filename,
-            }));
-        }
+module.exports.updateListing = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // 1. Find the document first
+    const listing = await Listing.findById(id);
 
-        const { propertyDetails, amenities, image, images } = req.body;
-        let listing = await Listing.findByIdAndUpdate(id, {
-            ...req.body,
-            propertyDetails: propertyDetails,
-            amenities: amenities,
-            image,
-            images,
-        });
-
-        await listing.save();
-        res.status(200).json({
-            success: true,
-            message: "Listing updated",
-            listing,
-        });
-    } catch (err) {
-        console.error("Error in updateListing:", err);
-        res.status(500).json({ error: "Something went wrong" });
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
     }
+
+    // 2. Update all simple text fields from the request body
+    // The `parseFormDataFields` middleware has already processed this
+    listing.title = req.body.title;
+    listing.description = req.body.description;
+    listing.price = req.body.price;
+    listing.location = req.body.location;
+    listing.country = req.body.country;
+    listing.category = req.body.category;
+    listing.propertyDetails = req.body.propertyDetails;
+    listing.amenities = req.body.amenities;
+
+    // 3. Handle image manipulations
+    let finalImages = [...listing.images];
+
+    // Handle deletions
+    if (req.body.deletedImages && Array.isArray(req.body.deletedImages)) {
+      finalImages = finalImages.filter(
+        (img) => !req.body.deletedImages.includes(img.filename)
+      );
+    }
+
+    // Handle additions
+    if (req.files && req.files.length > 0) {
+      const newImages = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+      finalImages.push(...newImages);
+    }
+
+    // 4. Assign the final image arrays back to the document
+    listing.images = finalImages;
+    listing.image = finalImages.length > 0 ? finalImages[0] : { url: "", filename: "" };
+
+    // 5. Save the fully modified document
+    const updatedListing = await listing.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Listing updated successfully!",
+      listing: updatedListing,
+    });
+  } catch (err) {
+    console.error("❌ Error in updateListing:", err);
+    next(err);
+  }
 };
+
 
 // Get My Listings Route
 module.exports.getMyListings = async (req, res) => {
@@ -207,8 +215,6 @@ module.exports.getMyListings = async (req, res) => {
   }
 };
 
-
-
 // Delete Route
 module.exports.destroyListing = async (req, res) => {
   try {
@@ -221,13 +227,50 @@ module.exports.destroyListing = async (req, res) => {
 
     // This check is important and correctly placed. req.user is added by Passport.
     if (listing.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ error: "You are not authorized to delete this listing" });
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to delete this listing" });
     }
-    
+
     await Listing.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Listing deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Listing deleted successfully" });
   } catch (err) {
     console.error("Error in destroyListing:", err);
-    res.status(500).json({ error: "Something went wrong while deleting the listing." });
+    res
+      .status(500)
+      .json({ error: "Something went wrong while deleting the listing." });
+  }
+};
+
+// Amenities Section
+module.exports.addAllAmenities = async (req, res) => {
+  try {
+    const predefinedAmenities = [
+      { name: "Free WiFi", icon: "🌐" },
+      { name: "Air Conditioning", icon: "❄️" },
+      { name: "Free Parking", icon: "🅿️" },
+      { name: "Full Kitchen", icon: "🍳" },
+      { name: "Private Pool", icon: "🏊" },
+      { name: "Pet Friendly", icon: "🐾" },
+      { name: "TV", icon: "📺" },
+      { name: "Washer", icon: "🧺" },
+      { name: "Heating", icon: "🔥" },
+      { name: "First Aid Kit", icon: "⛑️" },
+    ];
+
+    const result = await Listing.updateMany(
+      {}, // An empty filter object {} means "update all documents"
+      { $set: { amenities: predefinedAmenities } }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully updated ${result.modifiedCount} listings.`,
+    });
+  } catch (err) {
+    console.error("Error adding amenities to all listings:", err);
+    res.status(500).json({ error: "Failed to update listings." });
   }
 };

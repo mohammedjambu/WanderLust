@@ -10,9 +10,12 @@ const validCategories = [
   "Rooms",
   "Flat",
   "PG",
-  "Cabin",
+  "Cabins",
   "Shops",
   "Trending",
+  "Beach",
+  "Camping",
+  "Castles",
 ];
 
 const listingSchema = new Schema({
