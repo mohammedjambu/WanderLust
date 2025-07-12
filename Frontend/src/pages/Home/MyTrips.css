@@ -1,7 +1,3 @@
-/* =================================================================
-   MyTrips.css - Dedicated Styles for the My Trips Page
-   ================================================================= */
-
 /* --- Variables --- */
 :root {
     --primary-color: #fe424d;
@@ -16,8 +12,9 @@
 /* --- Page Layout --- */
 .my-trips-container {
     max-width: 1280px;
-    margin: 1.5rem auto;
+    margin: auto;
     padding: 0 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .page-header {
@@ -39,7 +36,7 @@
 /* --- Trips Grid --- */
 .trips-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
 }
 
@@ -50,9 +47,11 @@
     padding: 4rem 1rem;
     color: var(--text-color-light);
 }
+
 .status-container p {
     font-size: 1.1rem;
 }
+
 .status-container a {
     text-decoration: none;
     display: inline-block;
@@ -74,6 +73,7 @@
     display: flex;
     flex-direction: column;
 }
+
 .trip-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
@@ -85,6 +85,7 @@
     overflow: hidden;
     position: relative;
 }
+
 .trip-image {
     width: 100%;
     height: 100%;
@@ -103,14 +104,17 @@
     text-decoration: none;
     color: var(--text-color-dark);
 }
+
 .trip-title {
-    font-size: 1.1rem;
+    font-size: 1.35rem;
+    text-align: start;
     font-weight: 600;
     margin-bottom: 0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .trip-location {
     font-size: 0.9rem;
     color: var(--text-color-light);
@@ -122,6 +126,7 @@
     font-size: 0.9rem;
     color: #444;
 }
+
 .trip-details b {
     font-weight: 600;
 }
@@ -134,6 +139,7 @@
     align-items: center;
     background-color: #fcfcfc;
 }
+
 .trip-total {
     font-weight: 600;
 }
@@ -149,9 +155,11 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 .cancel-btn:hover:not(:disabled) {
     background-color: #b91c1c;
 }
+
 .cancel-btn:disabled {
     background-color: #e0e0e0;
     color: #aaa;
@@ -162,36 +170,70 @@
 .trip-card.is-past .trip-image {
     filter: grayscale(80%);
 }
+
 .trip-card.is-past {
     background-color: var(--background-color-disabled);
 }
 
+.skeleton-text {
+    font-size: medium;
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
-  .my-trips-container {
-    padding: 0 1rem;
-  }
-  .page-title {
-    font-size: 1.5rem;
-  }
-  .trips-grid {
-    gap: 1.5rem;
-  }
+    .my-trips-container {
+        padding: 0 1rem;
+        margin-top: 4rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .trips-grid {
+        gap: 1.5rem;
+    }
 }
+
 @media (max-width: 480px) {
-  .trips-grid {
-    grid-template-columns: 1fr; /* Stack cards on very small screens */
-  }
+    .trips-grid {
+        grid-template-columns: 1fr;
+        /* Stack cards on very small screens */
+    }
 }
 
 /* --- Skeleton Loader --- */
-.skeleton-trip-card .trip-image-container { background-color: #e0e0e0; }
-.skeleton-text { height: 1em; background-color: #e0e0e0; border-radius: 4px; margin-bottom: 0.75rem; }
-.skeleton-trip-card .skeleton-text.long { width: 90%; }
-.skeleton-trip-card .skeleton-text.short { width: 60%; }
-.skeleton-trip-card .skeleton-text {
-  background-image: linear-gradient(90deg, #e0e0e0 0px, #f5f5f5 40px, #e0e0e0 80px);
-  background-size: 200%;
-  animation: skeleton-shine 1.5s infinite linear;
+.skeleton-trip-card .trip-image-container {
+    background-color: #e0e0e0;
 }
-@keyframes skeleton-shine { 0% { background-position: 100% 50%; } 100% { background-position: -100% 50%; } }
+
+.skeleton-text {
+    height: 1em;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-trip-card .skeleton-text.long {
+    width: 90%;
+}
+
+.skeleton-trip-card .skeleton-text.short {
+    width: 60%;
+}
+
+.skeleton-trip-card .skeleton-text {
+    background-image: linear-gradient(90deg, #e0e0e0 0px, #f5f5f5 40px, #e0e0e0 80px);
+    background-size: 200%;
+    animation: skeleton-shine 1.5s infinite linear;
+}
+
+@keyframes skeleton-shine {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: -100% 50%;
+    }
+}

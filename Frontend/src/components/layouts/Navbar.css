@@ -20,12 +20,13 @@
 }
 
 
-/* --- Base & Layout --- */
-/* Add padding to body content to prevent overlap with fixed navbars */
 body {
-  /* This padding is now set dynamically by the Navbar.jsx component */
   padding-top: 6rem;
 }
+
+/* .navbar-header {
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.9)
+} */
 
 .navbar-top {
   position: fixed;
@@ -305,6 +306,9 @@ body {
 }
 
 @media (max-width: 768px) {
+  .navbar-header {
+    margin-top: 4rem;
+  }
   .search-container {
     /* On mobile, search appears below the main nav items */
     order: 3;

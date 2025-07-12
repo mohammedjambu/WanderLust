@@ -18,6 +18,12 @@ const formatDate = (dateString) => {
 
 // A dedicated card component for trips
 const TripCard = ({ booking, onCancel }) => {
+ 
+  if (!booking?.listing) {
+    return null;
+  }
+  // --- FIX ENDS HERE ---
+
   const checkIn = new Date(booking.checkIn);
   const checkOut = new Date(booking.checkOut);
   
@@ -32,7 +38,7 @@ const TripCard = ({ booking, onCancel }) => {
       <Link to={`/listings/${booking.listing._id}`}>
         <div className="trip-image-container">
           <img
-            src={booking.listing.image?.url || '/default-image.jpg'}
+            src={booking.listing.images[0].url || '/default-image.jpg'}
             alt={booking.listing.title}
             className="trip-image"
           />
@@ -85,7 +91,7 @@ const SkeletonTripCard = () => (
 
 const MyTrips = () => {
   const { authUser, serverUrl } = useContext(authDataContext);
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] =  useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -125,7 +131,7 @@ const MyTrips = () => {
     if (loading) {
       return Array.from({ length: 3 }).map((_, i) => <SkeletonTripCard key={i} />);
     }
-    if (bookings.length === 0) {
+    if (bookings.filter(b => b.listing).length === 0) { // Also check for valid listings here for the message
       return (
         <div className="status-container">
           <p>You have no trips booked. Let's find your next adventure!</p>

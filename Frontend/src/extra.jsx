@@ -31,7 +31,7 @@ function App() {
         >
 
           <Navbar />
-          <Box sx={{ flexGrow: 1}}>
+          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
 
           <CreateListingProvider>
             <Routes>

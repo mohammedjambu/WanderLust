@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { authDataContext } from '../../context/AuthContext';
 
-// ✅ We import the components and styles from the Home page for consistency!
+
 import { ListingCard, SkeletonCard } from '../Home/Home'; 
 import '../Home/Home.css'; 
 
@@ -69,9 +69,7 @@ const MyWishlist = () => {
       return (
         <div className="status-container">
           <p>Your wishlist is empty. Start exploring to find places you love!</p>
-          <Link to="/" className="action-btn edit" style={{maxWidth: '200px', margin: '1rem auto'}}>
-             Explore Listings
-          </Link>
+          <Link to="/">Explore Listings</Link>
         </div>
       );
     }

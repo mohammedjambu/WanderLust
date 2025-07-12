@@ -16,10 +16,6 @@ import { toast } from "react-toastify";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
-// =================================================================
-// Reusable Child Components for Each Tab
-// This makes the main component much cleaner and easier to manage.
-// =================================================================
 
 const AboutTab = ({ authUser, onEditClick }) => (
   <div className="tab-content">
@@ -68,46 +64,52 @@ const AboutTab = ({ authUser, onEditClick }) => (
   </div>
 );
 
-const BookingsTab = ({ bookings }) => (
-  <div className="tab-content">
-    <h3>My Trips</h3>
-    {bookings.length === 0 ? (
-      <div className="empty-state">
-        <p>You haven’t booked any trips yet. Time for a new adventure?</p>
-        <Link to="/" className="action-link">
-          Explore Listings
-        </Link>
-      </div>
-    ) : (
-      <div className="data-card-list">
-        {bookings.map((b) => (
-          <Link
-            to={`/listings/${b.listing._id}`}
-            key={b._id}
-            className="data-card"
-            style={{ textDecoration: "none" }}
-          >
-            <img
-              src={b.listing.image?.url || "/default-image.jpg"}
-              alt={b.listing.title}
-              className="data-card-image"
-            />
-            <div className="data-card-content">
-              <p className="data-card-title">{b.listing.title}</p>
-              <p className="data-card-subtitle">
-                {new Date(b.checkIn).toLocaleDateString()} →{" "}
-                {new Date(b.checkOut).toLocaleDateString()}
-              </p>
-              <p className="data-card-details">
-                Total Paid: ₹{b.totalPrice.toLocaleString("en-IN")}
-              </p>
-            </div>
+const BookingsTab = ({ bookings }) => {
+  const validBookings = bookings.filter(b => b && b.listing);
+
+  return (
+    <div className="tab-content">
+      <h3>My Trips</h3>
+      {/* Use the new, filtered list to check if we should show the empty state. */}
+      {validBookings.length === 0 ? (
+        <div className="empty-state">
+          <p>You haven't booked any trips yet. Time for a new adventure?</p>
+          <Link to="/" className="action-link">
+            Explore Listings
           </Link>
-        ))}
-      </div>
-    )}
-  </div>
-);
+        </div>
+      ) : (
+        <div className="data-card-list">
+          {/* Map over the filtered list to ensure every item is safe to render. */}
+          {validBookings.map((b) => (
+            <Link
+              to={`/listings/${b.listing._id}`}
+              key={b._id}
+              className="data-card"
+              style={{ textDecoration: "none" }}
+            >
+              <img
+                src={b.listing.images[0].url || "/default-image.jpg"}
+                alt={b.listing.title}
+                className="data-card-image"
+              />
+              <div className="data-card-content">
+                <p className="data-card-title">{b.listing.title}</p>
+                <p className="data-card-subtitle">
+                  {new Date(b.checkIn).toLocaleDateString()} →{" "}
+                  {new Date(b.checkOut).toLocaleDateString()}
+                </p>
+                <p className="data-card-details">
+                  Total Paid: ₹{b.totalPrice.toLocaleString("en-IN")}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ReviewsTab = ({ reviews }) => (
   <div className="tab-content">
@@ -140,6 +142,7 @@ const ReviewsTab = ({ reviews }) => (
           </div>
         ))}
       </div>
+      
     )}
   </div>
 );
@@ -164,7 +167,7 @@ const ListingsTab = ({ listings }) => (
             style={{ textDecoration: "none" }}
           >
             <img
-              src={l.image?.url || "/default-image.jpg"}
+              src={l.images[0].url || "/default-image.jpg"}
               alt={l.title}
               className="data-card-image"
             />

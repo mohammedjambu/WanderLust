@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { motion } from "framer-motion";
+import { FaPeopleRoof } from "react-icons/fa6";
+import { MdBalcony } from "react-icons/md";
+import { TbBeach } from "react-icons/tb";
 import {
+  // Main Icons
   Heart,
   Share2,
   MapPin,
-  Wifi,
-  Car,
-  ChefHat,
-  Waves,
-  PawPrint,
-  Snowflake,
   Star,
   Users,
   Bed,
@@ -22,16 +20,49 @@ import {
   Sparkles,
   Languages,
   MessageSquare,
-  Briefcase,      
-  CalendarCheck,  
+  Briefcase,
+  CalendarCheck,
   XCircle,
-  Tv,             
-  WashingMachine, 
-  ThermometerSun, 
-  Flame,          
-  HeartPulse,    
-  Check,
+  HelpCircle, // Added HelpCircle for debugging
+
+  // Amenity Icons
+  Wifi,
+  ChefHat,
+  Waves,
+  PawPrint,
+  Snowflake,
+  WashingMachine,
+  ThermometerSun,
+  Flame,
+  AirVent,
+  Bike,
+  Binoculars,
+  FlameKindling,
+  Castle,
+  DoorOpen,
+  Fence,
+  Globe2,
+  Backpack,
+  Home,
+  Landmark,
+  Leaf,
+  Mountain,
+  ParkingCircle,
+  Soup,
+  Sprout,
+  Store,
+  Sun,
+  Tent,
+  Trees,
+  Tv2,
+  View,
+  Wine,
+  WavesLadder,
+  Mail,
+  Phone,
+  Copy,
 } from "lucide-react";
+
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Map, { Marker } from "react-map-gl"; // Corrected import
@@ -76,6 +107,7 @@ const ShowListing = () => {
   const [reviewRating, setReviewRating] = useState(0);
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [hasBooked, setHasBooked] = useState(false);
+  const [isHostContactModalOpen, setIsHostContactModalOpen] = useState(false);
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -250,37 +282,264 @@ const ShowListing = () => {
   };
 
   // Function to get amenity icon based on name
-   const getAmenityIcon = (name) => {
-    const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
-    // Use .toLowerCase() to make matching case-insensitive
-    switch (name.toLowerCase()) {
-      case "free wifi":
-      case "wi-fi":
-        return <Wifi size={24} className={iconClass} />;
-      case "full kitchen":
-        return <ChefHat size={24} className={iconClass} />;
-      case "private pool":
-        return <Waves size={24} className={iconClass} />;
-      case "free parking":
-        return <Car size={24} className={iconClass} />;
-      case "air conditioning":
-        return <Snowflake size={24} className={iconClass} />;
-      case "pet friendly":
-        return <PawPrint size={24} className={iconClass} />;
-      case "tv":
-        return <Tv size={24} className={iconClass} />;
-      case "washer":
-        return <WashingMachine size={24} className={iconClass} />;
-      case "heating":
-        return <ThermometerSun size={24} className={iconClass} />;
-      case "fireplace":
-        return <Flame size={24} className={iconClass} />;
-      case "first aid kit":
-        return <HeartPulse size={24} className={iconClass} />;
-      default:
-        return <Check size={24} className={iconClass} />;
-    }
-  };
+  // Helper function to make amenity names consistent
+const normalizeAmenityName = (name) => {
+  if (!name) return "";
+  return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
+};
+
+const getAmenityIcon = (name) => {
+  const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
+  const normalizedName = normalizeAmenityName(name);
+
+  switch (normalizedName) {
+    // === Basic & Room Amenities ===
+    case "free-wifi":
+      return <Wifi className={iconClass} />;
+    case "free-parking":
+      return <ParkingCircle className={iconClass} />;
+    case "air-conditioning":
+      return <AirVent className={iconClass} />;
+    case "heating":
+      return <ThermometerSun className={iconClass} />;
+    case "pet-friendly":
+      return <PawPrint className={iconClass} />;
+    case "fireplace":
+      return <Flame className={iconClass} />;
+    case "washer":
+    case "laundry-service":
+      return <WashingMachine className={iconClass} />;
+    case "tv":
+    case "smart-tv":
+      return <Tv2 className={iconClass} />;
+    case "security":
+    case "24/7-security":
+      return <ShieldCheck className={iconClass} />;
+    case "tatami-mats":
+      return <Home className={iconClass} />;
+
+    // === Kitchen & Dining ===
+    case "full-kitchen":
+    case "shared-kitchen":
+    // case "chef's-kitchen":
+      return <ChefHat className={iconClass} />;
+    case "wine-tasting":
+      return <Wine className={iconClass} />;
+    case "home-cooked-meals":
+      return <Soup className={iconClass} />;
+    case "outdoor-dining":
+      return <Sun className={iconClass} />;
+    case "bbq-grill":
+      return <Flame className={iconClass} />;
+
+    // === Views & Outdoor Spaces ===
+    case "private-pool":
+    case "infinity-pool":
+      return <WavesLadder className={iconClass} />;
+    case "sea-view":
+    case "lake-view":
+    case "backwater-view":
+    case "ganges-view":
+    case "canal-view":
+    case "ocean-view":
+    case "private-lake":
+      return <Waves className={iconClass} />;
+    case "rooftop-deck":
+    case "rooftop-terrace":
+    case "rooftop-view":
+      return <FaPeopleRoof className={iconClass} />
+    case "private-patio":
+    case "balcony":
+      return <MdBalcony className={iconClass} />;
+    case "city-view":
+      return <View className={iconClass} />;
+    case "garden":
+    case "tropical-garden":
+    case "organic-garden":
+    case "manicured-gardens":
+    case "private-grounds":
+      return <Trees className={iconClass} />;
+    case "garden-view":
+      return <Leaf className={iconClass} />;
+    case "private-courtyard":
+    case "shared-courtyard":
+      return <Fence className={iconClass} />;
+    case "mountain-views":
+      return <Mountain className={iconClass} />;
+    case "organic-farm":
+      return <Sprout className={iconClass} />;
+
+    // === Activities & Experiences ===
+    case "beach-access":
+      return <TbBeach className={iconClass} />;
+    case "hiking-trails":
+      return <Backpack className={iconClass} />;
+    case "camping-tent": // Generic term
+    case "riverside-tent":
+    case "luxury-tent":
+      return <Tent className={iconClass} />;
+    case "campfire":
+    case "private-fire-pit":
+      return <FlameKindling className={iconClass} />;
+    // case "yoga-classes":
+    case "wildlife-viewing":
+    case "guided-safari":
+      return <Binoculars className={iconClass} />;
+    case "stargazing":
+      return <Star className={iconClass} />;
+    case "bicycle-rental":
+      return <Bike className={iconClass} />;
+    case "cultural-immersion":
+      return <Globe2 className={iconClass} />;
+    case "ski-storage":
+      return <Snowflake className={iconClass} />;
+
+    // === Unique Properties & Access ===
+    case "entire-castle":
+      return <Castle className={iconClass} />;
+    case "entire-palace":
+      return <Castle className={iconClass} />;
+    case "heritage-decor":
+      return <Landmark className={iconClass} />;
+    case "ballroom":
+    case "great-hall":
+      return <DoorOpen className={iconClass} />;
+    case "market-access":
+    case "city-access":
+      return <Store className={iconClass} />;
+
+    // === Fallback for Debugging ===
+    // This is the most important part! If an icon is missing,
+    // it will show a question mark and log a warning in the console.
+    default:
+      console.warn(`No icon found for amenity: "${name}" (normalized to "${normalizedName}")`);
+      return <HelpCircle className={iconClass} />;
+  }
+};
+
+
+  //  const getAmenityIcon = (name) => {
+  //   const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
+  //   switch (name.toLowerCase()) {
+  //     case "free wifi":
+  //     case "wi-fi":
+  //       return <Wifi size={24} className={iconClass} />;
+  //     case "full kitchen":
+  //       return <ChefHat size={24} className={iconClass} />;
+  //     case "private pool":
+  //       return <Waves size={24} className={iconClass} />;
+  //     case "free parking":
+  //       return <Car size={24} className={iconClass} />;
+  //     case "air conditioning":
+  //       return <Snowflake size={24} className={iconClass} />;
+  //     case "pet friendly":
+  //       return <PawPrint size={24} className={iconClass} />;
+  //     case "tv":
+  //       return <Tv size={24} className={iconClass} />;
+  //     case "washer":
+  //       return <WashingMachine size={24} className={iconClass} />;
+  //     case "heating":
+  //       return <ThermometerSun size={24} className={iconClass} />;
+  //     case "fireplace":
+  //       return <Flame size={24} className={iconClass} />;
+  //     case "first aid kit":
+  //       return <HeartPulse size={24} className={iconClass} />;
+
+  //     case "air conditioning":
+  //       return <AirVent size={24} className={iconClass} />;
+  //     case "entire castle":
+  //       return <Castle size={24} className={iconClass} />;
+  //     case "entire palace":
+  //       return <Palace size={24} className={iconClass} />;
+  //     case "heritage decor":
+  //     case "landmark": // Generic case
+  //       return <Landmark size={24} className={iconClass} />;
+  //     case "fireplace":
+  //       return <Home size={24} className={iconClass} />; // Using Home as a proxy for hearth/fireplace
+  //     case "smart-tv":
+  //       return <Tv2 size={24} className={iconClass} />;
+  //     case "security":
+  //       return <Lock size={24} className={iconClass} />;
+  //     case "tatami-mats": // Using Home as a generic interior icon
+  //       return <Home size={24} className={iconClass} />;
+
+  //     // --- Kitchen & Dining ---
+  //     case "full-kitchen":
+  //     case "shared kitchen":
+  //       return <CookingPot size={24} className={iconClass} />;
+  //     case "home cooked meals":
+  //       return <Soup size={24} className={iconClass} />; // Or <HandPlatter />
+  //     case "outdoor dining":
+  //       return <Sun size={24} className={iconClass} />; // Using Sun as a proxy for 'outdoor'
+  //     case "wine tasting":
+  //       return <Wine size={24} className={iconClass} />;
+
+  //     // --- Outdoor & Views ---
+  //     case "city view":
+  //     case "rooftop deck":
+  //     case "rooftop terrace":
+  //     case "rooftop view":
+  //     case "private patio":
+  //       return <View size={24} className={iconClass} />;
+  //     case "garden":
+  //     case "tropical-garden":
+  //       return <Trees size={24} className={iconClass} />;
+  //     case "garden view":
+  //     case "organic garden":
+  //       return <Leaf size={24} className={iconClass} />;
+  //     case "private courtyard":
+  //     case "shared courtyard":
+  //       return <Fence size={24} className={iconClass} />;
+  //     case "mountain views":
+  //       return <Mountain size={24} className={iconClass} />;
+  //     case "organic farm":
+  //       return <Sprout size={24} className={iconClass} />;
+  //     case "balcony":
+  //     case "city access":
+  //       return <Building2 size={24} className={iconClass} />;
+
+  //     // --- Activities & Experiences ---
+  //     case "bicycle rental":
+  //       return <Bike size={24} className={iconClass} />;
+  //     case "wildlife-viewing":
+  //     case "guided-safari":
+  //       return <Binoculars size={24} className={iconClass} />;
+  //     case "campfire":
+  //     case "private-fire-pit":
+  //       return <Campfire size={24} className={iconClass} />;
+  //     case "camping tent": // Generic for Riverside/Luxury Tent
+  //       return <Tent size={24} className={iconClass} />;
+  //     case "cultural immersion":
+  //       return <Globe2 size={24} className={iconClass} />;
+  //     case "hiking trails":
+  //       return <Hiking size={24} className={iconClass} />;
+  //     case "horse riding":
+  //       return <Horse size={24} className={iconClass} />;
+  //     case "yoga-classes":
+  //     case "yoga-deck":
+  //       return <Lotus size={24} className={iconClass} />; // Or <PersonStanding />
+  //     case "stargazing": // This was missing from your list, but is a logical addition
+  //       return <Star size={24} className={iconClass} />;
+
+  //     // --- Unique & Specific Amenities ---
+  //     case "ballroom":
+  //     case "greathall":
+  //       return <DoorOpen size={24} className={iconClass} />;
+  //     case "beach access":
+  //       return <Umbrella size={24} className={iconClass} />;
+  //     case "helipad":
+  //       return <Helicopter size={24} className={iconClass} />;
+  //     case "market access":
+  //       return <Store size={24} className={iconClass} />;
+  //     case "pet friendly":
+  //       return <Dog size={24} className={iconClass} />; // Or <Cat />
+  //     case "free parking":
+  //       return <ParkingCircle size={24} className={iconClass} />;
+  //     default:
+  //       return <Check size={24} className={iconClass} />;
+  //   }
+  // };
+
   const defaultOfferings = [
     {
       title: "Dedicated workspace",
@@ -440,6 +699,9 @@ const ShowListing = () => {
     setReviewRating(0);
   };
 
+  const openHostContactModal = () => setIsHostContactModalOpen(true);
+  const closeHostContactModal = () => setIsHostContactModalOpen(false);
+
   return (
     <motion.div
       variants={containerVariants}
@@ -447,14 +709,24 @@ const ShowListing = () => {
       animate="visible"
       className="min-h-screen bg-white"
     >
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 mt-6">
         {/* Header Top section */}
         <motion.div variants={itemVariants}>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex justify-between items-start mb-4">
               <h1 className="text-3xl font-semibold text-gray-900">
                 {listingData.title}
               </h1>
+            </div>
+
+            {/* Location */}
+            <div className="flex justify-between items-start ">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4 text-gray-500" />
+                <span className="text-gray-600">
+                  {listingData.location}, {listingData.country}
+                </span>
+              </div>
               <div className="flex gap-3">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -484,16 +756,6 @@ const ShowListing = () => {
                     {isFavorited ? "Saved" : "Save"}
                   </span>
                 </motion.button>
-              </div>
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center gap-4 text-sm mt-4">
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="text-gray-600">
-                  {listingData.location}, {listingData.country}
-                </span>
               </div>
             </div>
           </div>
@@ -875,7 +1137,6 @@ const ShowListing = () => {
                   </div>
                 )}
 
-
                 <div className="flex justify-between font-semibold">
                   <span>Total</span>
                   <span>₹{total.toLocaleString("en-IN")}</span>
@@ -884,7 +1145,7 @@ const ShowListing = () => {
             </motion.div>
           </div>
         </div>
-          <hr className="border-gray-200 mb-4" />
+        <hr className="border-gray-200 mb-4" />
 
         {/* Reviews Section */}
         <motion.div variants={itemVariants} className="mb-8">
@@ -903,7 +1164,6 @@ const ShowListing = () => {
                 )}
               </h3>
             </div>
-            {/* ✅ Show "Leave a Review" button only if user has booked and is NOT the owner */}
             {authUser && hasBooked && !isOwner && (
               <button
                 onClick={openReviewModalForCreate}
@@ -916,8 +1176,6 @@ const ShowListing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {listingData.reviews?.map((review) => {
-              // ✅ FIX: Defensive check. If a review or its author is null (due to deleted user),
-              // skip rendering this review to prevent a crash.
               if (!review || !review.author) {
                 return null;
               }
@@ -930,7 +1188,6 @@ const ShowListing = () => {
                   className="relative border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    {/* Now these lines are safe to access */}
                     <img
                       src={review.author.avatar || "/default-avatar.png"}
                       alt={review.author.username}
@@ -1092,7 +1349,8 @@ const ShowListing = () => {
               <img
                 src={listingData.owner.avatar}
                 alt={listingData.owner.name}
-                className="host-avatar-new"
+                className="host-avatar-new cursor-pointer"
+                onClick={openHostContactModal}
               />
             ) : (
               <div className="host-avatar-fallback-new">
@@ -1100,8 +1358,10 @@ const ShowListing = () => {
               </div>
             )}
             <div>
-              <h2 className="host-title-new">
-                {/* ✅ UPDATED: Host name is wrapped in a span to apply the brand color */}
+              <h2
+                className="host-title-new cursor-pointer transition-all duration-300 group-hover:w-full"
+                onClick={openHostContactModal}
+              >
                 Hosted by{" "}
                 <span>{listingData.owner?.username || "our Host"}</span>
               </h2>
@@ -1140,8 +1400,7 @@ const ShowListing = () => {
               <div>
                 <p className="label">Languages</p>
                 <p className="value">
-                  {listingData.owner?.languages?.join(", ") ||
-                    "English, Spanish"}
+                  {listingData.owner?.languages?.join(", ") || "English"}
                 </p>
               </div>
             </div>
@@ -1175,8 +1434,10 @@ const ShowListing = () => {
           </div>
 
           <div className="host-actions-new">
-            {/* ✅ UPDATED: Button classes and icons match the new design */}
-            <button className="btn primary text-[1.2rem]">
+            <button
+              className="btn primary text-[1.2rem]"
+              onClick={openHostContactModal}
+            >
               <MessageSquare size={18} /> Contact Host
             </button>
             <motion.button
@@ -1201,6 +1462,119 @@ const ShowListing = () => {
             </motion.button>
           </div>
         </div>
+
+        {/* ======================= HOST CONTACT MODAL ======================= */}
+        <Dialog
+          open={isHostContactModalOpen}
+          onClose={closeHostContactModal}
+          className="relative z-50"
+        >
+          {/* The backdrop, rendered as a fixed sibling to the panel container */}
+          <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
+
+          {/* Full-screen container to center the panel */}
+          <div className="fixed inset-0 flex items-center justify-center p-4 mt-10">
+            <Dialog.Panel className="mx-auto max-w-md w-full rounded-2xl bg-white p-6 shadow-xl">
+              <div className="flex justify-between items-start">
+                <Dialog.Title className="text-xl font-bold">
+                  Contact Host
+                </Dialog.Title>
+                <button
+                  onClick={closeHostContactModal}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <XCircle size={24} />
+                </button>
+              </div>
+
+              {/* Modal Header */}
+              <div className="flex items-center gap-4 mt-4">
+                <img
+                  src={listingData.owner?.avatar}
+                  alt={listingData.owner?.username}
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <div>
+                  <p className="text-2xl font-semibold">
+                    {listingData.owner?.username}
+                  </p>
+                  <p className="text-sm text-gray-500">{listingData.owner?.hometown}</p>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="mt-6 space-y-4">
+                {/* Email */}
+                <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3">
+                  <div className="flex items-center gap-3">
+                    <Mail className="text-gray-600" size={20} />
+                    <div>
+                      <p className="text-xs text-gray-500">Email</p>
+                      <p className="font-medium text-gray-800">
+                        {listingData.owner?.email}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() =>
+                      navigator.clipboard.writeText(listingData.owner?.email)
+                    }
+                    className="p-2 text-gray-500 hover:text-black"
+                  >
+                    <Copy size={18} />
+                  </button>
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-center justify-between rounded-lg border border-gray-200 p-3">
+                  <div className="flex items-center gap-3">
+                    <Phone className="text-gray-600" size={20} />
+                    <div>
+                      <p className="text-xs text-gray-500">Phone</p>
+                      {/* IMPORTANT: Use your actual phone number field, or a placeholder */}
+                      <p className="font-medium text-gray-800">
+                        {listingData.owner?.phone || "+1 (555) 123-4567"}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        listingData.owner?.phone || "+1 (555) 123-4567"
+                      )
+                    }
+                    className="p-2 text-gray-500 hover:text-black"
+                  >
+                    <Copy size={18} />
+                  </button>
+                </div>
+
+                {/* Banners */}
+                <div className="flex items-center gap-3 rounded-lg bg-red-50 p-3 text-sm text-red-800">
+                  <MessageSquare size={20} />
+                  <p>
+                    <b>{listingData.owner?.username}</b> prefers to be contacted
+                    via <b>Email</b>
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 rounded-lg bg-blue-50 p-3 text-sm text-blue-800">
+                  <Clock size={20} />
+                  <p>Usually responds within an hour</p>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="mt-6">
+                <button
+                  onClick={closeHostContactModal}
+                  className="w-full rounded-lg bg-red-500 py-3 font-semibold text-white hover:bg-red-600 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
       </div>
     </motion.div>
   );

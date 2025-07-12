@@ -405,6 +405,11 @@
     gap: 1rem;
 }
 
+.stat-card-new:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
 .stat-card-new .icon {
     color: var(--text-light);
 }
@@ -419,6 +424,31 @@
     font-weight: 600;
     color: var(--text-dark);
 }
+
+.host-avatar-new:hover {
+    box-shadow: 0 4px 10px rgba(255, 159, 159, 0.6);
+    transform: scale(1.05);
+}
+
+/* .host-title-new:hover {
+    text-decoration: underline rgb(234, 56, 56);
+    transition: all 0.3s;
+} */
+
+/* .host-title-new::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: red;
+  transition: width 0.3s ease-in-out;
+}
+
+.host-title-new:hover::after {
+  width: 100%;
+} */
 
 /* About section */
 .about-host-new {

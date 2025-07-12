@@ -6,14 +6,12 @@ import { authDataContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-
 const Login = () => {
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // ✅ FIX: Destructure the correct function from the context
   const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
   const navigate = useNavigate();
 
@@ -27,21 +25,26 @@ const Login = () => {
         { username, password },
         { withCredentials: true }
       );
-      
-      // This will update the state and localStorage.
+
       handleLoginSuccess(res.data.user);
 
       console.log("Login successful");
       toast.success("Login Successfully");
-      navigate("/"); // Redirect on successful login
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.error || "Login failed. User does not exist or password is incorrect.");
+      setError(
+        err.response?.data?.error ||
+          "Login failed. User does not exist or password is incorrect."
+      );
     }
   };
 
   return (
-    <div className="login-container">
+    // --- FIX IS HERE: Added style prop ---
+    <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,_#fdfcfb,_#e2d1c3)]">
+    
+    <div className="login-container" style={{ flexGrow: 1,  }}>
       <h1 className="login-title">Login</h1>
       <div className="form-container">
         <form onSubmit={handleSubmit} className="login-form" noValidate>
@@ -97,6 +100,7 @@ const Login = () => {
           </p>
         </form>
       </div>
+    </div>
     </div>
   );
 };

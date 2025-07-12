@@ -28,6 +28,10 @@ const sampleListings = [
       { name: "Lake View" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
+      { name: "Smart TV" },
+      { name: "Washer" },
+      { name: "Security" },
     ],
     reviews: [
       {
@@ -69,6 +73,10 @@ const sampleListings = [
       { name: "Sea View" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
+      { name: "Private Patio" },
+      { name: "Smart TV" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -110,6 +118,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Wine Tasting" },
       { name: "Free Parking" },
+      { name: "Full Kitchen" },
+      { name: "BBQ Grill" },
+      { name: "Garden" },
     ],
     reviews: [
       {
@@ -153,6 +164,10 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Outdoor Dining" },
       { name: "Pet Friendly" },
+      { name: "Shared Kitchen" },
+      { name: "Garden" },
+      { name: "Free Parking" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -164,7 +179,7 @@ const sampleListings = [
         comment: "Cozy and authentic. Perfect for a quiet escape.",
       },
     ],
-    geometry: { type: "Point", coordinates: [74.8723, 31.6340] },
+    geometry: { type: "Point", coordinates: [74.8723, 31.634] },
   },
   {
     title: "Cotswolds Stone Farmhouse",
@@ -194,6 +209,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Garden" },
       { name: "Pet Friendly" },
+      { name: "Full Kitchen" },
+      { name: "Washer" },
+      { name: "TV" },
     ],
     reviews: [
       {
@@ -235,6 +253,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Free Parking" },
       { name: "Fireplace" },
+      { name: "Hiking Trails" },
+      { name: "Pet Friendly" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -278,6 +299,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Tropical Garden" },
       { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
+      { name: "Beach Access" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -319,6 +343,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Yoga Deck" },
+      { name: "Full Kitchen" },
+      { name: "Garden View" },
+      { name: "Private Patio" },
     ],
     reviews: [
       {
@@ -360,6 +387,9 @@ const sampleListings = [
       { name: "BBQ Grill" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
+      { name: "Smart TV" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -403,6 +433,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Shared Courtyard" },
       { name: "Air Conditioning" },
+      { name: "Heating" },
+      { name: "TV" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -444,6 +477,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Shared Kitchen" },
       { name: "Bicycle Rental" },
+      { name: "Heating" },
+      { name: "TV" },
+      { name: "Washer" },
     ],
     reviews: [
       {
@@ -485,6 +521,9 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Shared Kitchen" },
       { name: "City Access" },
+      { name: "Heating" },
+      { name: "TV" },
+      { name: "Washer" },
     ],
     reviews: [
       {
@@ -496,7 +535,7 @@ const sampleListings = [
         comment: "Clean and modern. Great value for the price.",
       },
     ],
-    geometry: { type: "Point", coordinates: [126.9780, 37.5665] },
+    geometry: { type: "Point", coordinates: [126.978, 37.5665] },
   },
 
   // Flats (3 listings: 1 Indian, 2 Global)
@@ -528,6 +567,9 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
       { name: "Balcony" },
+      { name: "Smart TV" },
+      { name: "Washer" },
+      { name: "Security" },
     ],
     reviews: [
       {
@@ -569,6 +611,9 @@ const sampleListings = [
       { name: "Full Kitchen" },
       { name: "Air Conditioning" },
       { name: "Balcony" },
+      { name: "Heating" },
+      { name: "TV" },
+      { name: "Washer" },
     ],
     reviews: [
       {
@@ -610,6 +655,9 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
       { name: "Washer" },
+      { name: "TV" },
+      { name: "Heating" },
+      { name: "Security" },
     ],
     reviews: [
       {
@@ -653,6 +701,9 @@ const sampleListings = [
       { name: "Shared Kitchen" },
       { name: "Laundry Service" },
       { name: "Security" },
+      { name: "City Access" },
+      { name: "Heating" },
+      { name: "Air Conditioning" },
     ],
     reviews: [
       {
@@ -694,6 +745,9 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Shared Kitchen" },
       { name: "24/7 Security" },
+      { name: "City Access" },
+      { name: "Laundry Service" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -735,6 +789,9 @@ const sampleListings = [
       { name: "Shared Kitchen" },
       { name: "Laundry Service" },
       { name: "City Access" },
+      { name: "Air Conditioning" },
+      { name: "Security" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -782,6 +839,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Mountain Views" },
       { name: "Free Parking" },
+      { name: "Heating" },
+      { name: "Hiking Trails" },
+      { name: "Shared Kitchen" },
     ],
     reviews: [
       {
@@ -823,6 +883,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Ski Storage" },
       { name: "Mountain Views" },
+      { name: "Full Kitchen" },
+      { name: "Heating" },
+      { name: "Washer" },
     ],
     reviews: [
       {
@@ -864,6 +927,9 @@ const sampleListings = [
       { name: "Free Parking" },
       { name: "Hiking Trails" },
       { name: "Pet Friendly" },
+      { name: "Heating" },
+      { name: "Shared Kitchen" },
+      { name: "BBQ Grill" },
     ],
     reviews: [
       {
@@ -907,6 +973,9 @@ const sampleListings = [
       { name: "Ganges View" },
       { name: "Air Conditioning" },
       { name: "Market Access" },
+      { name: "Heating" },
+      { name: "Shared Kitchen" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -948,6 +1017,9 @@ const sampleListings = [
       { name: "Market Access" },
       { name: "Air Conditioning" },
       { name: "Rooftop View" },
+      { name: "Heating" },
+      { name: "Shared Kitchen" },
+      { name: "Cultural Immersion" },
     ],
     reviews: [
       {
@@ -989,6 +1061,9 @@ const sampleListings = [
       { name: "Tatami Mats" },
       { name: "Air Conditioning" },
       { name: "Garden View" },
+      { name: "Heating" },
+      { name: "Shared Kitchen" },
+      { name: "Washer" },
     ],
     reviews: [
       {
@@ -999,7 +1074,7 @@ const sampleListings = [
         rating: 5,
         comment: "Unique and serene. Perfect for Kyoto.",
       },
-    ],  
+    ],
     geometry: { type: "Point", coordinates: [135.7681, 35.0116] },
   },
 
@@ -1032,6 +1107,9 @@ const sampleListings = [
       { name: "Rooftop Deck" },
       { name: "Air Conditioning" },
       { name: "Smart TV" },
+      { name: "Full Kitchen" },
+      { name: "Washer" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1073,6 +1151,9 @@ const sampleListings = [
       { name: "Rooftop Terrace" },
       { name: "Air Conditioning" },
       { name: "Washer" },
+      { name: "Full Kitchen" },
+      { name: "Smart TV" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -1114,6 +1195,9 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Smart TV" },
       { name: "City View" },
+      { name: "Shared Kitchen" },
+      { name: "Washer" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -1157,6 +1241,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Backwater View" },
       { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
+      { name: "Private Patio" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1198,6 +1285,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Ocean View" },
       { name: "Pet Friendly" },
+      { name: "Full Kitchen" },
+      { name: "Heating" },
+      { name: "TV" },
     ],
     reviews: [
       {
@@ -1239,6 +1329,9 @@ const sampleListings = [
       { name: "Free WiFi" },
       { name: "Private Patio" },
       { name: "Air Conditioning" },
+      { name: "Shared Kitchen" },
+      { name: "TV" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1279,9 +1372,12 @@ const sampleListings = [
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
       { name: "Riverside Tent" },
-      { name: "Yoga Classes" },
+      { name: "Wildlife Viewing" },
       { name: "Campfire" },
       { name: "Hiking Trails" },
+      { name: "Free Parking" },
+      { name: "Pet Friendly" },
+      { name: "Home-cooked Meals" },
     ],
     reviews: [
       {
@@ -1323,6 +1419,9 @@ const sampleListings = [
       { name: "Wildlife Viewing" },
       { name: "Private Fire Pit" },
       { name: "Guided Safari" },
+      { name: "Home-cooked Meals" },
+      { name: "Free WiFi" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -1363,7 +1462,10 @@ const sampleListings = [
       { name: "Cultural Immersion" },
       { name: "Stargazing" },
       { name: "Home-cooked Meals" },
-      { name: "Horse Riding" },
+      { name: "bicycle-rental" },
+      { name: "Campfire" },
+      { name: "Heating" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1415,6 +1517,9 @@ const sampleListings = [
       { name: "Rooftop Terrace" },
       { name: "Heritage Decor" },
       { name: "Private Courtyard" },
+      { name: "Free WiFi" },
+      { name: "Air Conditioning" },
+      { name: "Full Kitchen" },
     ],
     reviews: [
       {
@@ -1455,7 +1560,10 @@ const sampleListings = [
       { name: "Entire Castle" },
       { name: "Great Hall" },
       { name: "Private Grounds" },
-      { name: "Chef’s Kitchen" },
+      { name: "Air Conditioning" },
+      { name: "Free WiFi" },
+      { name: "Heating" },
+      { name: "Fireplace" },
     ],
     reviews: [
       {
@@ -1496,7 +1604,10 @@ const sampleListings = [
       { name: "Private Lake" },
       { name: "Manicured Gardens" },
       { name: "Ballroom" },
-      { name: "Helipad" },
+      { name: "Entire Palace" },
+      { name: "Air Conditioning" },
+      { name: "Free WiFi" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {

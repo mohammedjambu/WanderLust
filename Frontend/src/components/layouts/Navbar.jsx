@@ -12,7 +12,7 @@ import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { FaTreeCity } from "react-icons/fa6";
 import { BiBuildingHouse } from "react-icons/bi";
 import { IoFlame, IoBedOutline } from "react-icons/io5";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 // Define constant data outside the component to prevent re-creation on every render.
@@ -132,7 +132,7 @@ const Navbar = () => {
   };
 
   return (
-    <header>
+    <header className="navbar-header">
       <nav ref={navRef} className={`navbar-top ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}>
         <div className="container">
           <Link className="navbar-brand" to="/">Wanderlust</Link>

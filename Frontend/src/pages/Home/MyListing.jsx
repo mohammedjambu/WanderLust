@@ -15,7 +15,7 @@ const MyListingCard = ({ listing, onDelete }) => {
       <Link to={`/listings/${listing._id}`}>
         <div className="my-listing-image-container">
           <img
-            src={listing.image?.url || '/default-image.jpg'}
+            src={listing.images[0].url || '/default-image.jpg'}
             alt={listing.title}
             className="my-listing-image"
           />
@@ -89,8 +89,6 @@ const MyListings = () => {
 
   const renderContent = () => {
     if (loading) {
-      // For simplicity, we can use a simple loading text here.
-      // Or you can create a dedicated SkeletonMyListingCard component.
       return <div className="status-container"><p>Loading your listings...</p></div>;
     }
     
@@ -102,9 +100,6 @@ const MyListings = () => {
       return (
         <div className="status-container">
           <p>You haven't created any listings yet.</p>
-          <Link to="/createListing1" className="action-btn edit" style={{maxWidth: '200px', margin: '1rem auto'}}>
-             Create a Listing
-          </Link>
         </div>
       );
     }

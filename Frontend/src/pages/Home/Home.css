@@ -4,14 +4,18 @@
 
 .listings-container {
   max-width: 1440px; /* Constrain width on very large screens */
-  margin: 1.5rem auto;
-  padding: 0 1.5rem; /* Use padding instead of width % for better control */
+  margin: auto;
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+  margin-bottom: 2rem; 
 }
 
 .listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
+  justify-content: start;
 }
 
 .listing-link {
@@ -185,21 +189,26 @@
 .page-title {
     font-size: 1.75rem;
     font-weight: 600;
+    text-align: center;
+    color: var(--text-color-dark);
 }
 
 /* --- Responsive Overrides for Headers --- */
 @media (max-width: 768px) {
-    .page-header {
-        /* On mobile, stack elements if needed and center them */
-        flex-direction: column;
-        gap: 1rem;
-    }
+  .page-title {
+    font-size: 1.75rem; /* Make title smaller on mobile */
+    /* margin-top: rem; Adjust spacing */
+  }
 
-    .page-title {
-      margin-top: 3rem;
-        font-size: 1.5rem; /* Slightly smaller title on mobile */
-        text-align: center;
-    }
+  .listings-container {
+    padding: 0 1rem; /* Reduce side padding on small screens */
+    margin-top: 2rem;
+  }
+
+  /* When on a small screen, center the column(s) of cards */
+  .listings-grid {
+    justify-content: center;
+  }
 }
 
 /* --- Status Indicators (Loading, Error, No Results) --- */

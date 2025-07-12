@@ -291,6 +291,10 @@ button.nav-button.next {
 
 /* Responsive */
 @media (max-width: 640px) {
+    .create-listing-container{
+        margin-top: 3rem;
+    }
+
     .form-wrapper {
         padding: 1.5rem 1rem;
     }

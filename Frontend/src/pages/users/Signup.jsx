@@ -17,7 +17,7 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
     try {
       const res = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -25,9 +25,9 @@ function SignUp() {
         { withCredentials: true }
       );
       console.log(res.data);
-      setCurrentUser && setCurrentUser(res.data.user); // optional
+      setCurrentUser && setCurrentUser(res.data.user);
       toast.success("Signup Successful");
-      navigate('/'); // redirect to home page
+      navigate('/');
     } catch (err) {
       console.error("Signup error:", err.response?.data || err.message);
       setError(err.response?.data?.error || "Signup failed");
@@ -42,8 +42,10 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-container">
-      <h1 className="signup-title">SignUp on Wanderlust</h1>
+    // --- FIX IS HERE: Added style prop ---
+      <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,_#fdfcfb,_#e2d1c3)]">
+    <div className="signup-container" style={{ flexGrow: 1 }}>
+      <h1 className="signup-title">SignUp</h1>
       <div className="form-container">
         <form onSubmit={handleSubmit} className="signup-form" noValidate>
           <div className="form-group">
@@ -105,6 +107,7 @@ function SignUp() {
           </p>
         </form>
       </div>
+    </div>
     </div>
   );
 }
