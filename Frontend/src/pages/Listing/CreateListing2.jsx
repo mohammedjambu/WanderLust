@@ -1,11 +1,23 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import Select from 'react-select';
 import { toast } from "react-toastify";
 import { useCreateListing } from "../../context/CreateListingContext";
 import "./CreateListing.css";
 import ProgressTracker from "./ProgressTracker";
 import ImageUpload from "./ImageUpload";
+
+import {
+  // Property Details Icons
+  Users, Bed, Bath,
+  // Amenity Icons
+  Wifi, ChefHat, Waves, PawPrint, Snowflake, WashingMachine,
+  ThermometerSun, Flame, AirVent, Bike, Binoculars, FlameKindling,
+  Castle, DoorOpen, Fence, Globe2, Backpack, Home, Landmark,
+  Leaf, Mountain, ParkingCircle, Soup, Sprout, Store, Sun,
+  Tent, Trees, Tv2, View, Wine, WavesLadder, HelpCircle, Star, ShieldCheck,
+} from "lucide-react";
 
 // Import icons
 import {
@@ -18,9 +30,12 @@ import { FaTreeCity } from "react-icons/fa6";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { BiBuildingHouse } from "react-icons/bi";
 import { IoBedOutline } from "react-icons/io5";
-import { MdBedroomParent, MdOutlinePool } from "react-icons/md";
+import { MdBedroomParent, MdOutlinePool, MdBalcony  } from "react-icons/md";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
-import { useEffect } from "react";
+import { TbBeach } from "react-icons/tb";
+import { FaPeopleRoof } from "react-icons/fa6";
+
+
 
 const categoryOptions = [
   { name: "Villa", icon: <GiFamilyHouse /> },
@@ -29,12 +44,91 @@ const categoryOptions = [
   { name: "Rooms", icon: <MdBedroomParent /> },
   { name: "Flat", icon: <BiBuildingHouse /> },
   { name: "PG", icon: <IoBedOutline /> },
-  { name: "Cabin", icon: <GiWoodCabin /> },
+  { name: "Cabins", icon: <GiWoodCabin /> },
   { name: "Shops", icon: <SiHomeassistantcommunitystore /> },
   { name: "Beach", icon: <FaUmbrellaBeach /> },
   { name: "Camping", icon: <GiCampingTent /> },
   { name: "Castles", icon: <GiCastle /> },
 ];
+
+// NEW: Comprehensive list of amenities with icons
+const allAmenityNames = [
+  "24/7 Security", "Air Conditioning", "Backwater View", "Balcony", "Ballroom",
+  "BBQ Grill", "Beach Access", "Bicycle Rental", "Campfire", "Canal View",
+  "City Access", "City View", "Cultural Immersion", "Entire Castle", "Entire Palace",
+  "Fireplace", "Free Parking", "Free WiFi", "Full Kitchen", "Ganges View",
+  "Garden", "Garden View", "Great Hall", "Guided Safari", "Heating",
+  "Heritage Decor", "Hiking Trails", "Home-cooked Meals", "Infinity Pool",
+  "Lake View", "Laundry Service", "Luxury Tent", "Manicured Gardens",
+  "Market Access", "Mountain Views", "Ocean View", "Organic Farm", "Organic Garden",
+  "Outdoor Dining", "Pet Friendly", "Private Courtyard", "Private Fire Pit",
+  "Private Grounds", "Private Lake", "Private Patio", "Private Pool",
+  "Riverside Tent", "Rooftop Deck", "Rooftop Terrace", "Rooftop View",
+  "Sea View", "Security", "Shared Courtyard", "Shared Kitchen", "Ski Storage",
+  "Smart TV", "Stargazing", "Tatami Mats", "Tropical Garden", "TV", "Washer",
+  "Wildlife Viewing", "Wine Tasting", "Yoga Deck"
+];
+
+const normalizeAmenityName = (name) => {
+  if (!name) return "";
+  return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
+};
+
+// Icon mapping function, copied directly from your ShowListing.jsx for 100% consistency
+const getAmenityIcon = (name) => {
+  const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
+  const normalizedName = normalizeAmenityName(name);
+
+  switch (normalizedName) {
+    case "free-wifi": return <Wifi className={iconClass} />;
+    case "free-parking": return <ParkingCircle className={iconClass} />;
+    case "air-conditioning": return <AirVent className={iconClass} />;
+    case "heating": return <ThermometerSun className={iconClass} />;
+    case "pet-friendly": return <PawPrint className={iconClass} />;
+    case "fireplace": return <Flame className={iconClass} />;
+    case "washer": case "laundry-service": return <WashingMachine className={iconClass} />;
+    case "tv": case "smart-tv": return <Tv2 className={iconClass} />;
+    case "security": case "24/7-security": return <ShieldCheck className={iconClass} />;
+    case "tatami-mats": return <Home className={iconClass} />;
+    case "full-kitchen": case "shared-kitchen": return <ChefHat className={iconClass} />;
+    case "wine-tasting": return <Wine className={iconClass} />;
+    case "home-cooked-meals": return <Soup className={iconClass} />;
+    case "outdoor-dining": return <Sun className={iconClass} />;
+    case "bbq-grill": return <Flame className={iconClass} />;
+    case "private-pool": case "infinity-pool": return <WavesLadder className={iconClass} />;
+    case "sea-view": case "lake-view": case "backwater-view": case "ganges-view": case "canal-view": case "ocean-view": case "private-lake": return <Waves className={iconClass} />;
+    case "rooftop-deck": case "rooftop-terrace": case "rooftop-view": return <FaPeopleRoof className={iconClass} />
+    case "private-patio": case "balcony": return <MdBalcony className={iconClass} />;
+    case "city-view": return <View className={iconClass} />;
+    case "garden": case "tropical-garden": case "organic-garden": case "manicured-gardens": case "private-grounds": return <Trees className={iconClass} />;
+    case "garden-view": return <Leaf className={iconClass} />;
+    case "private-courtyard": case "shared-courtyard": return <Fence className={iconClass} />;
+    case "mountain-views": return <Mountain className={iconClass} />;
+    case "organic-farm": return <Sprout className={iconClass} />;
+    case "beach-access": return <TbBeach className={iconClass} />;
+    case "hiking-trails": return <Backpack className={iconClass} />;
+    case "camping-tent": case "riverside-tent": case "luxury-tent": return <Tent className={iconClass} />;
+    case "campfire": case "private-fire-pit": return <FlameKindling className={iconClass} />;
+    case "wildlife-viewing": case "guided-safari": return <Binoculars className={iconClass} />;
+    case "stargazing": return <Star className={iconClass} />;
+    case "bicycle-rental": return <Bike className={iconClass} />;
+    case "cultural-immersion": return <Globe2 className={iconClass} />;
+    case "ski-storage": return <Snowflake className={iconClass} />;
+    case "entire-castle": case "entire-palace": return <Castle className={iconClass} />;
+    case "heritage-decor": return <Landmark className={iconClass} />;
+    case "ballroom": case "great-hall": return <DoorOpen className={iconClass} />;
+    case "market-access": case "city-access": return <Store className={iconClass} />;
+    case "yoga-deck": return <Sprout className={iconClass} />; // Using Sprout as a stand-in for Yoga/Wellness
+    default: return <HelpCircle className={iconClass} />;
+  }
+};
+
+// Generate the final options array for rendering
+const amenityOptions = allAmenityNames.map(name => ({
+    name,
+    icon: getAmenityIcon(name)
+}));
+
 
 const CreateListing2 = () => {
   const navigate = useNavigate();
@@ -46,16 +140,25 @@ const CreateListing2 = () => {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
       category: listingData.category || null,
       images: listingData.images || [],
+      propertyDetails: listingData.propertyDetails || {
+        guests: 1,
+        bedrooms: 1,
+        bathrooms: 1,
+      },
+      amenities: listingData.amenities || [],
     },
   });
 
   const selectedCategory = watch("category");
   const uploadedImages = watch("images");
+
+  const selectedAmenities = watch("amenities");
 
   const handleFilesChange = useCallback(
     (files) => {
@@ -64,12 +167,22 @@ const CreateListing2 = () => {
     [setValue]
   );
 
-  // useEffect(() => {
-  //   if (!listingData.title) {
-  //     toast.error("Please start from step 1.");
-  //     navigate("/createListing1");
-  //   }
-  // }, [listingData, navigate]);
+ // NEW: Handler for toggling amenities
+const handleAmenityToggle = (amenityName) => {
+    const currentAmenities = selectedAmenities || [];
+    const newAmenities = currentAmenities.includes(amenityName)
+      ? currentAmenities.filter(name => name !== amenityName) // Deselect
+      : [...currentAmenities, amenityName]; // Select
+    setValue("amenities", newAmenities, { shouldValidate: true });
+  };
+
+  const goBack = () => {
+    // Save current step's data before going back
+    const currentData = watch();
+    updateListingData(currentData);
+    navigate("/createListing1");
+  };
+
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
@@ -85,19 +198,16 @@ const CreateListing2 = () => {
       formData.append("category", data.category);
     }
 
+    formData.append("propertyDetails", JSON.stringify(data.propertyDetails));
+
+     const amenitiesToSubmit = data.amenities.map(name => ({ name }));
+    formData.append("amenities", JSON.stringify(amenitiesToSubmit));
+
     if (data.images && data.images.length > 0) {
       data.images.forEach((image) => {
         formData.append("images", image);
       });
     }
-
-    // You can append other static details here
-    formData.append(
-      "propertyDetails",
-      JSON.stringify({ guests: 4, bedrooms: 2, bathrooms: 2 })
-    );
-
-    formData.append("amenities", JSON.stringify([]));
 
     try {
       const res = await fetch("http://localhost:5000/api/listings", {
@@ -122,6 +232,42 @@ const CreateListing2 = () => {
     }
   };
 
+  const propertyDetails = watch("propertyDetails");
+
+const handleDetailChange = (field, amount) => {
+    const currentValue = propertyDetails[field] || 1;
+    const newValue = Math.max(1, currentValue + amount); // Ensure value is never less than 1
+    setValue(`propertyDetails.${field}`, newValue, { shouldValidate: true });
+};
+
+// 1. A function to format how each option looks in the dropdown
+const formatOptionLabel = ({ name, icon }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      {icon}
+      <span>{name}</span>
+    </div>
+);
+
+// 2. Custom styles to create the 2-column dropdown menu
+const customSelectStyles = {
+    menu: (provided) => ({
+        ...provided,
+        width: '650px', // Make the dropdown menu wider
+        maxWidth: '90vw',
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr', // The 2-column magic
+        gap: '4px',
+        padding: '8px',
+    }),
+    control: (provided) => ({
+        ...provided,
+        padding: '4px',
+    }),
+};
+
   return (
     <main className="create-listing-container">
       <div className="form-wrapper">
@@ -130,7 +276,7 @@ const CreateListing2 = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="form-fields">
-              <label className="text-[20px]">Select the type of place</label>
+            <label className="text-[20px]">Select the type of place</label>
             <div className="form-group">
               <input
                 type="hidden"
@@ -162,11 +308,143 @@ const CreateListing2 = () => {
             </div>
             <hr className="bg-gray-200"></hr>
 
+            {/* --- START: NEW Property Details Section --- */}
+            <div className="form-group">
+              <label className="form-label">
+                Share some basics about your place
+              </label>
+              <div className="property-details-container-new">
+                {/* Guests Counter */}
+                <div className="property-detail-item-new">
+                  <div className="flex items-center gap-3">
+                    <Users className="property-detail-icon-new" />
+                    <span className="font-medium text-gray-700">Guests</span>
+                  </div>
+                  <div className="counter-controls">
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("guests", -1)}
+                      className="counter-btn"
+                    >
+                      -
+                    </button>
+                    <span className="counter-value">
+                      {propertyDetails.guests}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("guests", 1)}
+                      className="counter-btn"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Bedrooms Counter */}
+                <div className="property-detail-item-new">
+                  <div className="flex items-center gap-3">
+                    <Bed className="property-detail-icon-new" />
+                    <span className="font-medium text-gray-700">Bedrooms</span>
+                  </div>
+                  <div className="counter-controls">
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("bedrooms", -1)}
+                      className="counter-btn"
+                    >
+                      -
+                    </button>
+                    <span className="counter-value">
+                      {propertyDetails.bedrooms}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("bedrooms", 1)}
+                      className="counter-btn"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Bathrooms Counter */}
+                <div className="property-detail-item-new">
+                  <div className="flex items-center gap-3">
+                    <Bath className="property-detail-icon-new" />
+                    <span className="font-medium text-gray-700">Bathrooms</span>
+                  </div>
+                  <div className="counter-controls">
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("bathrooms", -1)}
+                      className="counter-btn"
+                    >
+                      -
+                    </button>
+                    <span className="counter-value">
+                      {propertyDetails.bathrooms}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleDetailChange("bathrooms", 1)}
+                      className="counter-btn"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {errors.propertyDetails && (
+                <p className="error-message">
+                  All fields are required and must be at least 1.
+                </p>
+              )}
+            </div>
+            <hr className="form-divider" />
+
+            {/* --- START: NEW Amenities Section --- */}
+            <div className="form-group">
+              <label className="form-label">What amenities do you offer?</label>
+              <Controller
+                name="amenities"
+                control={control}
+                rules={{ required: "Please select at least one amenity." }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    isMulti
+                    options={amenityOptions}
+                    styles={customSelectStyles}
+                    formatOptionLabel={formatOptionLabel}
+                    getOptionValue={(option) => option.name}
+                    getOptionLabel={(option) => option.name} // We use formatOptionLabel for display, but this is good practice
+                    placeholder="Select amenities..."
+                    classNamePrefix="react-select"
+                    // Convert value for react-select: from array of strings to array of objects
+                    value={amenityOptions.filter((option) =>
+                      field.value?.includes(option.name)
+                    )}
+                    // Convert value for react-hook-form: from array of objects to array of strings
+                    onChange={(selectedOptions) =>
+                      field.onChange(
+                        selectedOptions.map((option) => option.name)
+                      )
+                    }
+                  />
+                )}
+              />
+              {errors.amenities && (
+                <p className="error-message">{errors.amenities.message}</p>
+              )}
+            </div>
+            <hr className="form-divider" />
+
             <label className="text-[18px] font-[400]">Upload Images</label>
             <ImageUpload
-                value={uploadedImages} 
-                onFilesChange={handleFilesChange}
-                error={errors.images}
+              value={uploadedImages}
+              onFilesChange={handleFilesChange}
+              error={errors.images}
             />
             <input
               type="file"

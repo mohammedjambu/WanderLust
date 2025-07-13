@@ -353,14 +353,14 @@
 
 @media (max-width: 768px) {
 
-  body {
-    padding-top: 7rem;
-  }
-
-  .profile-container {
-    grid-template-columns: 1fr;
-    /* Stack sidebar and content */
-    gap: 1.5rem;
+  /* body {
+    } */
+    
+    .profile-container {
+      grid-template-columns: 1fr;
+      margin-top: 1rem;
+      /* padding-top: 1rem; */
+      gap: 1.5rem;
   }
 
   .profile-sidebar {
@@ -375,12 +375,10 @@
     display: flex;
     overflow-x: auto;
     padding-bottom: 0.5rem;
-    /* Space for scrollbar */
   }
 
   .sidebar-button {
     flex-shrink: 0;
-    /* Prevent buttons from shrinking */
     white-space: nowrap;
   }
 

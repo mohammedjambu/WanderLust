@@ -33,7 +33,7 @@ router
   // Update and Delete Route
   .put(
     isLoggedIn,
-    // isOwner,
+    isOwner,
     upload.array("images", 5),
     parseFormDataFields,
     validateListing,

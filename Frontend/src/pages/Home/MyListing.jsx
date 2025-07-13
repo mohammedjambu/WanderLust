@@ -117,7 +117,7 @@ const MyListings = () => {
     <main className="my-listings-container">
       <div className="page-header">
         <h1 className="page-title">My Listings</h1>
-        <Link to="/createListing1" className="action-btn-new">Create New Listing</Link>
+        {/* <Link to="/createListing1" className="action-btn-new">Create New Listing</Link> */}
       </div>
       <div className="my-listings-grid">
         {renderContent()}

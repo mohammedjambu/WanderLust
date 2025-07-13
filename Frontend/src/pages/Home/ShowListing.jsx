@@ -64,7 +64,7 @@ import {
 } from "lucide-react";
 
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation  } from "react-router-dom";
 import Map, { Marker } from "react-map-gl"; // Corrected import
 import "mapbox-gl/dist/mapbox-gl.css";
 import { authDataContext } from "../../context/AuthContext";
@@ -709,7 +709,7 @@ const getAmenityIcon = (name) => {
       animate="visible"
       className="min-h-screen bg-white"
     >
-      <div className="max-w-7xl mx-auto px-4 py-8 mt-6">
+      <div className="max-w-7xl mx-auto px-4 py-8 ">
         {/* Header Top section */}
         <motion.div variants={itemVariants}>
           <div className="mb-3">
@@ -763,68 +763,74 @@ const getAmenityIcon = (name) => {
 
         {/* Image Gallery */}
         <motion.div variants={itemVariants1} className="mb-8">
-          <div className="relative rounded-xl overflow-hidden h-96 grid grid-cols-4 gap-2">
-            <div className="col-span-2 relative group">
+          <div className="relative rounded-xl flex lg:grid lg:grid-cols-4 lg:grid-rows-2 gap-2 h-80 lg:h-96 mt-5 overflow-x-auto snap-x snap-mandatory">
+            {/* --- IMAGE 1 --- */}
+            <div className="relative w-full lg:col-span-2 lg:row-span-2 flex-shrink-0 snap-center group">
               <motion.img
                 src={additionalImages[0]}
                 alt="Main property view"
-                className="w-full h-full object-cover cursor-pointer transition-all duration-200"
+                className="w-full h-full object-cover cursor-pointer"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => setSelectedImageIndex(0)}
               />
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-200" />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity" />
             </div>
-            <div className="col-span-2 grid grid-cols-2 gap-2">
-              <div className="relative group">
-                <motion.img
-                  src={additionalImages[1]}
-                  alt="Property view 2"
-                  className="w-full h-full object-cover cursor-pointer transition-all duration-200"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  onClick={() => setSelectedImageIndex(1)}
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-200" />
-              </div>
-              <div className="relative group">
-                <motion.img
-                  src={additionalImages[2]}
-                  alt="Property view 3"
-                  className="w-full h-full object-cover cursor-pointer transition-all duration-200 rounded-tr-xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  onClick={() => setSelectedImageIndex(2)}
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-200" />
-              </div>
-              <div className="relative group">
-                <motion.img
-                  src={additionalImages[3]}
-                  alt="Property view 4"
-                  className="w-full h-full object-cover cursor-pointer transition-all duration-200"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                  onClick={() => setSelectedImageIndex(3)}
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-200" />
-              </div>
-              <div className="relative group">
-                <motion.img
-                  src={additionalImages[4]}
-                  alt="Property view 5"
-                  className="w-full h-full object-cover cursor-pointer transition-all duration-200 rounded-br-xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: 0.4 }}
-                  onClick={() => setSelectedImageIndex(4)}
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-200" />
-              </div>
+            {/* --- IMAGE 2 --- */}
+            <div className="relative w-full flex-shrink-0 snap-center group">
+              <motion.img
+                src={additionalImages[1]}
+                alt="Property view 2"
+                className="w-full h-full object-cover cursor-pointer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                onClick={() => setSelectedImageIndex(1)}
+              />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity" />
+            </div>
+
+            {/* --- IMAGE 3 --- */}
+            <div className="relative w-full flex-shrink-0 snap-center group">
+              <motion.img
+                src={additionalImages[2]}
+                alt="Property view 3"
+                className="w-full h-full object-cover cursor-pointer lg:rounded-tr-xl"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                onClick={() => setSelectedImageIndex(2)}
+              />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity" />
+            </div>
+
+            {/* --- IMAGE 4 --- */}
+            <div className="relative w-full flex-shrink-0 snap-center group">
+              <motion.img
+                src={additionalImages[3]}
+                alt="Property view 4"
+                className="w-full h-full object-cover cursor-pointer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                onClick={() => setSelectedImageIndex(3)}
+              />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity" />
+            </div>
+
+            {/* --- IMAGE 5 --- */}
+            <div className="relative w-full flex-shrink-0 snap-center group">
+              <motion.img
+                src={additionalImages[4]}
+                alt="Property view 5"
+                className="w-full h-full object-cover cursor-pointer lg:rounded-br-xl"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                onClick={() => setSelectedImageIndex(4)}
+              />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity" />
             </div>
           </div>
         </motion.div>
@@ -833,13 +839,21 @@ const getAmenityIcon = (name) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <div className="lg:col-span-2">
             <motion.div variants={itemVariants} className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h2 className="text-2xl font-semibold mb-2">
+              <div className="flex flex-col mb-4">
+                <div className="flex justify-between items-start w-full mb-2 gap-4">
+                  <h2 className="text-2xl font-semibold mt-3">
                     {listingData.category} hosted by{" "}
                     {listingData.owner?.username || listingData.owner?.name}
                   </h2>
-                  <div className="flex items-center gap-4 text-gray-600">
+                  <img
+                    src={listingData.owner?.avatar || "/default-avatar.png"}
+                    alt={listingData.owner?.username || listingData.owner?.name}
+                    className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-gray-600">
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
                       <span>{listingData.propertyDetails.guests} guests</span>
@@ -857,28 +871,21 @@ const getAmenityIcon = (name) => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-sm mt-4">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-5 h-5 fill-red-500 text-red-500" />
-                      <span className="font-medium text-lg">
-                        {listingData.reviews &&
-                        listingData.reviews.length > 0 ? (
-                          <>
-                            {listingData.owner?.rating} ·{" "}
-                            {listingData.reviews.length} reviews
-                          </>
-                        ) : (
-                          <>New</>
-                        )}
-                      </span>
-                    </div>
+
+                  <div className="flex items-center gap-1 text-sm mt-3 sm:mt-0">
+                    <Star className="w-5 h-5 fill-red-500 text-red-500" />
+                    <span className="font-medium text-lg">
+                      {listingData.reviews && listingData.reviews.length > 0 ? (
+                        <>
+                          {listingData.owner?.rating} ·{" "}
+                          {listingData.reviews.length} reviews
+                        </>
+                      ) : (
+                        <>New</>
+                      )}
+                    </span>
                   </div>
                 </div>
-                <img
-                  src={listingData.owner?.avatar || "/default-avatar.png"}
-                  alt={listingData.owner?.username || listingData.owner?.name}
-                  className="w-14 h-14 rounded-full object-cover"
-                />
               </div>
               <hr className="border-gray-200" />
             </motion.div>
@@ -890,37 +897,6 @@ const getAmenityIcon = (name) => {
               </p>
               <hr className="border-gray-200 mt-5" />
             </motion.div>
-
-            {/* What places offer */}
-            {/* <motion.div
-              variants={itemVariants}
-              className="py-10 border-b border-gray-200"
-            >
-              <h3 className="text-2xl font-semibold mb-6">
-                What this place offers
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {defaultOfferings.map((offering, index) => (
-                  // ✅ THE FIX: Changed to `flex-row` and `items-start` for side-by-side layout
-                  <div
-                    key={index}
-                    className="flex flex-row items-start gap-4 bg-gray-100 p-6 rounded-xl"
-                  >
-                    {offering.icon}
-
-                    <div>
-                      <h4 className="font-semibold text-base text-gray-900">
-                        {offering.title}
-                      </h4>
-                      <p className="text-gray-500 text-sm leading-snug mt-1">
-                        {offering.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div> */}
 
             {/* ✅ SECTION 1: "What this place offers" (Static Section) */}
             <motion.div
@@ -1498,7 +1474,9 @@ const getAmenityIcon = (name) => {
                   <p className="text-2xl font-semibold">
                     {listingData.owner?.username}
                   </p>
-                  <p className="text-sm text-gray-500">{listingData.owner?.hometown}</p>
+                  <p className="text-sm text-gray-500">
+                    {listingData.owner?.hometown}
+                  </p>
                 </div>
               </div>
 

@@ -16,6 +16,7 @@
   max-width: 1280px;
   margin: auto;
   padding: 0 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .page-header {
@@ -40,7 +41,7 @@
 /* This is already responsive thanks to auto-fit! No changes needed here. */
 .my-listings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -188,13 +189,19 @@
   
   .my-listings-container {
     padding: 0 1rem;
-    margin-top: 4rem;
+    margin-top: 1.5rem;
   }
   
   .page-header {
     flex-direction: column;
     align-items: center;
     gap: 1rem; 
+  }
+
+  .action-btn-new {
+    width: 9rem;
+    padding: 0.75rem; /* Adjust padding for better fit */
+    font-size: 0.9rem; /* Ensure text is readable */
   }
 
   .page-title {

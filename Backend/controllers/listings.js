@@ -1,6 +1,7 @@
 // controllers/listings.js
 const Listing = require("../models/listing.js");
 const geocodingClient = require("../utils/mapbox");
+const {cloudinary} = require("../cloudConfig.js");
 
 // Index Route
 // Index Route with Search + Filter Support
@@ -100,13 +101,23 @@ module.exports.createListing = async (req, res, next) => {
       .send();
 
     if (!geoResponse.body.features.length) {
-      return res.status(400).json({ message: "Invalid location. Please enter a valid city or address." });
+      return res
+        .status(400)
+        .json({
+          message: "Invalid location. Please enter a valid city or address.",
+        });
     }
     const geoData = geoResponse.body.features[0];
 
     const {
-      title, description, price, location, country,
-      category, propertyDetails, amenities, 
+      title,
+      description,
+      price,
+      location,
+      country,
+      category,
+      propertyDetails,
+      amenities,
     } = req.body;
 
     const mappedImages = req.files.map((file) => ({
@@ -115,7 +126,12 @@ module.exports.createListing = async (req, res, next) => {
     }));
 
     const newListing = new Listing({
-      title, description, price: parseFloat(price), location, country, category,
+      title,
+      description,
+      price: parseFloat(price),
+      location,
+      country,
+      category,
       geometry: geoData.geometry,
       owner: req.user._id,
       images: mappedImages,
@@ -126,19 +142,20 @@ module.exports.createListing = async (req, res, next) => {
 
     const savedListing = await newListing.save();
 
-    // ✅ THE FIX: After saving, re-fetch the listing with populated owner details
-    // This ensures the data sent to the frontend has the correct shape.
-    const populatedListing = await Listing.findById(savedListing._id).populate('owner');
+    const populatedListing = await Listing.findById(savedListing._id).populate(
+      "owner"
+    );
 
     res.status(201).json({
       success: true,
       message: "Listing created successfully!",
       listing: populatedListing, // Send the fully populated listing
     });
-
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(400).json({ message: "A listing with this title already exists." });
+      return res
+        .status(400)
+        .json({ message: "A listing with this title already exists." });
     }
     console.error("❌ Error in createListing:", err);
     next(err);
@@ -149,15 +166,13 @@ module.exports.createListing = async (req, res, next) => {
 module.exports.updateListing = async (req, res, next) => {
   try {
     const { id } = req.params;
-    // 1. Find the document first
     const listing = await Listing.findById(id);
 
     if (!listing) {
       return res.status(404).json({ error: "Listing not found" });
     }
 
-    // 2. Update all simple text fields from the request body
-    // The `parseFormDataFields` middleware has already processed this
+    // 1. Update all text/JSON fields (this logic is unchanged and correct)
     listing.title = req.body.title;
     listing.description = req.body.description;
     listing.price = req.body.price;
@@ -167,27 +182,26 @@ module.exports.updateListing = async (req, res, next) => {
     listing.propertyDetails = req.body.propertyDetails;
     listing.amenities = req.body.amenities;
 
-    // 3. Handle image manipulations
-    let finalImages = [...listing.images];
-
-    // Handle deletions
-    if (req.body.deletedImages && Array.isArray(req.body.deletedImages)) {
-      finalImages = finalImages.filter(
-        (img) => !req.body.deletedImages.includes(img.filename)
-      );
-    }
-
-    // Handle additions
     if (req.files && req.files.length > 0) {
-      const newImages = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-      finalImages.push(...newImages);
+      if (listing.images && listing.images.length > 0) {
+        console.log("Deleting old images from Cloudinary...");
+        for (const oldImage of listing.images) {
+          await cloudinary.uploader.destroy(oldImage.filename);
+        }
+      }
+
+      // Then, create the new image array from the uploaded files.
+      const newImages = req.files.map((f) => ({
+        url: f.path,
+        filename: f.filename,
+      }));
+
+      // Replace the old image arrays with the new one.
+      listing.images = newImages;
+      listing.image = newImages[0]; 
     }
 
-    // 4. Assign the final image arrays back to the document
-    listing.images = finalImages;
-    listing.image = finalImages.length > 0 ? finalImages[0] : { url: "", filename: "" };
-
-    // 5. Save the fully modified document
+    // 3. Save the updated document
     const updatedListing = await listing.save();
 
     res.status(200).json({
@@ -200,7 +214,6 @@ module.exports.updateListing = async (req, res, next) => {
     next(err);
   }
 };
-
 
 // Get My Listings Route
 module.exports.getMyListings = async (req, res) => {

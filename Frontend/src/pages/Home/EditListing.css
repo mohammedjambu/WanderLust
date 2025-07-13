@@ -211,6 +211,12 @@
     place-items: center;
 }
 
+.property-details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
 /* --- Form Navigation Buttons --- */
 .form-navigation {
     display: flex;
@@ -262,5 +268,8 @@
     }
     .nav-button {
         width: 100%;
+    }
+    .property-details-grid {
+        grid-template-columns: 1fr; /* Stack on small screens */
     }
 }

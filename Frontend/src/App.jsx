@@ -21,6 +21,7 @@ import { CssBaseline } from "@mui/material";
 import Privacy from "./components/extras/Privacy";
 import Terms from "./components/extras/Terms";
 import Contact from "./components/extras/Contact";
+import ScrollToTop from "./components/utils/ScrollToTop";
 
 function App() {
   return (
@@ -29,7 +30,7 @@ function App() {
         <Box
           sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
         >
-
+          <ScrollToTop />     
           <Navbar />
           <Box sx={{ flexGrow: 1}}>
 

@@ -24,9 +24,6 @@ body {
   padding-top: 6rem;
 }
 
-/* .navbar-header {
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.9)
-} */
 
 .navbar-top {
   position: fixed;
@@ -42,16 +39,12 @@ body {
 
 .container {
   max-width: 1280px;
-  /* Added max-width for large screens */
-  /* margin: 0 auto; */
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* Important for responsive behavior */
   gap: 3rem;
-  /* Adds space between items when they wrap */
 }
 
 .navbar-brand {
@@ -307,55 +300,43 @@ body {
 
 @media (max-width: 768px) {
   .navbar-header {
-    margin-top: 4rem;
+    margin-top: 3.5rem;
   }
+  
   .search-container {
-    /* On mobile, search appears below the main nav items */
     order: 3;
-    /* Places it at the end of the flex container */
     width: 100%;
-    /* padding: 0.5rem 0; */
     margin: 0;
+    margin-top: 0;
     min-width: unset;
+    padding: 0 1rem;
   }
 
   .user-menu-container {
     display: none;
-    /* Hide desktop dropdown */
   }
 
   .navbar-toggler {
     display: block;
-    /* Show hamburger menu button */
-  }
-
-  body {
-    padding-top: 11rem;
-    border-bottom: 1px solid var(--border-color-light);
   }
 
   .filters {
     justify-content: flex-start;
-    /* Align filters to the left on mobile */
     gap: 1.5rem;
+    padding: 1rem;
   }
 
-  /* --- Mobile Menu Styles --- */
   .mobile-menu {
     display: none;
-    /* Hidden by default */
     width: 100%;
     order: 4;
-    /* Place it last */
     background-color: var(--background-color-light);
   }
 
-  /* When the mobile menu is open, show the menu */
   .navbar-top.mobile-menu-open .mobile-menu {
     display: block;
   }
 
-  /* Use the same dropdown-menu styles but adjust for mobile context */
   .navbar-top.mobile-menu-open .dropdown-menu {
     display: block;
     position: static;

@@ -289,6 +289,101 @@ button.nav-button.next {
     cursor: not-allowed;
 }
 
+.form-label {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-divider {
+    border: none;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 2rem 0;
+}
+
+
+/* New Property Details "Counter" Styles */
+.property-details-container-new {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.property-detail-item-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.property-detail-icon-new {
+    font-size: 1.5rem;
+    color: #4b5563;
+}
+
+.counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.counter-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #9ca3af;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.2s;
+}
+
+.counter-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.counter-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+    min-width: 25px;
+    text-align: center;
+}
+
+
+/* --- Amenities Grid Styles --- */
+/* React Select Customizations */
+.react-select__control {
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+}
+
+.react-select__control:hover {
+    border-color: #9ca3af !important;
+}
+
+.react-select__control--is-focused {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 1px #3b82f6 !important;
+}
+
+.react-select__multi-value {
+    background-color: #eef2ff !important;
+    color: #4338ca !important;
+}
+
+.react-select__multi-value__label {
+    color: #4338ca !important;
+    font-weight: 500;
+}
+
+
 /* Responsive */
 @media (max-width: 640px) {
     .create-listing-container{
