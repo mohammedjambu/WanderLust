@@ -15,17 +15,14 @@ const userSchema = new Schema({
   },
   fullName: {
     type: String,
-    default: "",
     required: true,
   },
   hometown: {
     type: String,
-    default: "",
     required: true
   },
   phone: {
     type: String,
-    default: "",
     required: true
   },
   bio: {

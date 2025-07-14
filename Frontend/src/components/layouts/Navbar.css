@@ -16,7 +16,7 @@
 }
 
 body {
-  padding-top: 6rem;
+  padding-top: 4.5rem;
 }
 
 .navbar-top {
@@ -28,7 +28,6 @@ body {
   background-color: var(--background-color-light);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
-  margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-color-light);
   width: 100%;
 }
@@ -119,7 +118,7 @@ body {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0.25rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--border-color-light);
 }
 

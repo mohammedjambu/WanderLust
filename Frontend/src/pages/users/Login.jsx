@@ -10,14 +10,31 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [apiError, setApiError] = useState("");
+
+  // ✅ NEW: State for client-side validation errors
+  const [validationErrors, setValidationErrors] = useState({});
 
   const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
   const navigate = useNavigate();
 
+  // ✅ NEW: Validation function
+  const validateForm = () => {
+    const errors = {};
+    if (!username.trim()) errors.username = "Username is required.";
+    if (!password) errors.password = "Password is required.";
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setApiError("");
+
+     // ✅ NEW: Validate before submitting
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const res = await axios.post(
@@ -33,74 +50,56 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       console.error("Login error:", err);
-      setError(
+      setApiError(
         err.response?.data?.error ||
           "Login failed. User does not exist or password is incorrect."
       );
     }
   };
 
-  return (
-    // --- FIX IS HERE: Added style prop ---
-    <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,_#fdfcfb,_#e2d1c3)]">
-    
-    <div className="login-container" style={{ flexGrow: 1,  }}>
-      <h1 className="login-title">Login</h1>
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="login-form" noValidate>
-          <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              className="form-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+   return (
+    <div className="login-page-wrapper">
+      {/* ✅ NEW: Added 'animate' class to trigger animation */}
+      <div className="login-container animate">
+        <h1 className="login-title">Login</h1>
+        <div className="form-container">
+          <form onSubmit={handleSubmit} className="login-form" noValidate>
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">Username</label>
+              <input
+                name="username" id="username" type="text"
+                className={`form-input ${validationErrors.username ? 'is-invalid' : ''}`}
+                value={username} onChange={(e) => setUsername(e.target.value)}
+              />
+              {/* ✅ NEW: Display validation error */}
+              {validationErrors.username && <p className="form-error-validation">{validationErrors.username}</p>}
+            </div>
 
-          <div className="form-group password">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              name="password"
-              id="password"
-              type={show ? "text" : "password"}
-              className="form-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {!show ? (
-              <IoMdEye className="eye" onClick={() => setShow(true)} />
-            ) : (
-              <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
-            )}
-          </div>
+            <div className="form-group password">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                name="password" id="password" type={show ? "text" : "password"}
+                className={`form-input ${validationErrors.password ? 'is-invalid' : ''}`}
+                value={password} onChange={(e) => setPassword(e.target.value)}
+              />
+              {!show ? <IoMdEye className="eye" onClick={() => setShow(true)} /> : <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />}
+              {/* ✅ NEW: Display validation error */}
+              {validationErrors.password && <p className="form-error-validation">{validationErrors.password}</p>}
+            </div>
 
-          {error && <p className="error-text text-red-500">{error}</p>}
+            {apiError && <p className="form-error-api">{apiError}</p>}
+            
+            <button type="submit" className="submit-button">Login</button>
 
-          <button type="submit" className="submit-button">
-            Login
-          </button>
-
-          <p className="text-[18px]">
-            Don't have an account?{" "}
-            <span
-              className="text-[19px] text-[red] cursor-pointer"
-              onClick={() => navigate("/signup")}
-            >
-              SignUp
-            </span>
-          </p>
-        </form>
+            <p className="signup-prompt">
+              Don't have an account?{" "}
+              <span className="signup-link" onClick={() => navigate("/signup")}>
+                Sign Up
+              </span>
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
