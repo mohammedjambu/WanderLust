@@ -1,108 +1,123 @@
-import React, { useState, useContext } from "react";
-import "./Login.css";
+import React, { useContext, useState } from "react";
+import "./Signup.css";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { authDataContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const Login = () => {
+function SignUp() {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+  const { serverUrl, setCurrentUser } = useContext(authDataContext);
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
       const res = await axios.post(
-        `${serverUrl}/api/auth/login`,
-        { username, password },
+        `${serverUrl}/api/auth/signup`,
+        { username, email, password },
         { withCredentials: true }
       );
-
-      handleLoginSuccess(res.data.user);
-
-      console.log("Login successful");
-      toast.success("Login Successfully");
+      console.log(res.data);
+      setCurrentUser && setCurrentUser(res.data.user);
+      toast.success("Signup Successful");
       navigate("/");
     } catch (err) {
-      console.error("Login error:", err);
-      setError(
-        err.response?.data?.error ||
-          "Login failed. User does not exist or password is incorrect."
-      );
+      console.error("Signup error:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "Signup failed");
     }
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "username") setUsername(value);
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
   };
 
   return (
     // --- FIX IS HERE: Added style prop ---
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,_#fdfcfb,_#e2d1c3)]">
-    
-    <div className="login-container" style={{ flexGrow: 1,  }}>
-      <h1 className="login-title">Login</h1>
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="login-form" noValidate>
-          <div className="form-group">
-            <label htmlFor="username" className="form-label">
-              Username
-            </label>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              className="form-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
+      <div className="signup-container" style={{ flexGrow: 1 }}>
+        <h1 className="signup-title">SignUp</h1>
+        <div className="form-container">
+          <form onSubmit={handleSubmit} className="signup-form" noValidate>
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
+              <input
+                name="username"
+                id="username"
+                type="text"
+                className="form-input"
+                onChange={handleOnChange}
+                value={username}
+                required
+              />
+            </div>
 
-          <div className="form-group password">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              name="password"
-              id="password"
-              type={show ? "text" : "password"}
-              className="form-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {!show ? (
-              <IoMdEye className="eye" onClick={() => setShow(true)} />
-            ) : (
-              <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
-            )}
-          </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                name="email"
+                id="email"
+                type="email"
+                className="form-input"
+                onChange={handleOnChange}
+                value={email}
+                required
+              />
+            </div>
 
-          {error && <p className="error-text text-red-500">{error}</p>}
+            <div className="form-group password">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                name="password"
+                id="password"
+                type={show ? "text" : "password"}
+                className="form-input"
+                onChange={handleOnChange}
+                value={password}
+                required
+              />
+              {show ? (
+                <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
+              ) : (
+                <IoMdEye className="eye" onClick={() => setShow(true)} />
+              )}
+            </div>
 
-          <button type="submit" className="submit-button">
-            Login
-          </button>
+            {error && <p className="error-text">{error}</p>}
 
-          <p className="text-[18px]">
-            Don't have an account?{" "}
-            <span
-              className="text-[19px] text-[red] cursor-pointer"
-              onClick={() => navigate("/signup")}
-            >
+            <button type="submit" className="submit-button">
               SignUp
-            </span>
-          </p>
-        </form>
+            </button>
+
+            <p className="text-[18px]">
+              Already have an account?{" "}
+              <span
+                className="text-[19px] text-[red] cursor-pointer"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </span>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
-    </div>
   );
-};
+}
 
-export default Login;
+export default SignUp;

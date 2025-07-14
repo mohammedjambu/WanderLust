@@ -12,13 +12,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [apiError, setApiError] = useState("");
 
-  // ✅ NEW: State for client-side validation errors
   const [validationErrors, setValidationErrors] = useState({});
 
   const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
   const navigate = useNavigate();
 
-  // ✅ NEW: Validation function
+  // Validation function
   const validateForm = () => {
     const errors = {};
     if (!username.trim()) errors.username = "Username is required.";
@@ -31,7 +30,6 @@ const Login = () => {
     e.preventDefault();
     setApiError("");
 
-     // ✅ NEW: Validate before submitting
     if (!validateForm()) {
       return;
     }
@@ -57,39 +55,66 @@ const Login = () => {
     }
   };
 
-   return (
+  return (
     <div className="login-page-wrapper">
-      {/* ✅ NEW: Added 'animate' class to trigger animation */}
       <div className="login-container animate">
         <h1 className="login-title">Login</h1>
         <div className="form-container">
           <form onSubmit={handleSubmit} className="login-form" noValidate>
             <div className="form-group">
-              <label htmlFor="username" className="form-label">Username</label>
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
               <input
-                name="username" id="username" type="text"
-                className={`form-input ${validationErrors.username ? 'is-invalid' : ''}`}
-                value={username} onChange={(e) => setUsername(e.target.value)}
+                name="username"
+                id="username"
+                type="text"
+                className={`form-input ${
+                  validationErrors.username ? "is-invalid" : ""
+                }`}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
-              {/* ✅ NEW: Display validation error */}
-              {validationErrors.username && <p className="form-error-validation">{validationErrors.username}</p>}
+              {/* Display validation error */}
+              {validationErrors.username && (
+                <p className="form-error-validation">
+                  {validationErrors.username}
+                </p>
+              )}
             </div>
 
             <div className="form-group password">
-              <label htmlFor="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
               <input
-                name="password" id="password" type={show ? "text" : "password"}
-                className={`form-input ${validationErrors.password ? 'is-invalid' : ''}`}
-                value={password} onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                id="password"
+                type={show ? "text" : "password"}
+                className={`form-input ${
+                  validationErrors.password ? "is-invalid" : ""
+                }`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              {!show ? <IoMdEye className="eye" onClick={() => setShow(true)} /> : <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />}
-              {/* ✅ NEW: Display validation error */}
-              {validationErrors.password && <p className="form-error-validation">{validationErrors.password}</p>}
+              {!show ? (
+                <IoMdEye className="eye" onClick={() => setShow(true)} />
+              ) : (
+                <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
+              )}
+              {/* Display validation error */}
+              {validationErrors.password && (
+                <p className="form-error-validation">
+                  {validationErrors.password}
+                </p>
+              )}
             </div>
 
             {apiError && <p className="form-error-api">{apiError}</p>}
-            
-            <button type="submit" className="submit-button">Login</button>
+
+            <button type="submit" className="submit-button">
+              Login
+            </button>
 
             <p className="signup-prompt">
               Don't have an account?{" "}

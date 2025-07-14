@@ -1,13 +1,10 @@
-/* Login.css (Refactored) */
-
-/* ✅ NEW: A wrapper to perfectly center the login box */
 .login-page-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 90vh; /* Full viewport height */
+  min-height: 90vh;
   padding: 2rem 1rem;
-  background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  background: linear-gradient(135deg, #fff6ed 0%, #ffdebd 100%);
   box-sizing: border-box;
 }
 
@@ -23,7 +20,6 @@
   transform: translateY(20px);
 }
 
-/* ✅ NEW: Trigger animation */
 .login-container.animate {
   animation: fadeInUp 0.5s 0.2s ease-out forwards;
 }
@@ -69,23 +65,24 @@
   box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
 }
 
-/* ✅ NEW: Style for invalid inputs */
 .form-input.is-invalid {
-  border-color: #e53e3e; /* Red border */
+  border-color: #e53e3e;
 }
+
 .form-input.is-invalid:focus {
   border-color: #e53e3e;
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.3);
 }
 
-/* ✅ NEW: Style for validation error text */
+/* Style for validation error text */
 .form-error-validation {
   color: #e53e3e;
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
-.eye, .eyeoff {
+.eye,
+.eyeoff {
   position: absolute;
   right: 1rem;
   top: 70%;
@@ -105,19 +102,19 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease; /* ✅ Smoother transition */
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .submit-button:hover {
   background-color: var(--primary-color-hover);
-   transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .submit-button:active {
   transform: scale(0.98);
 }
 
-/* ✅ NEW: Classes for prompts and links */
+
 .signup-prompt {
   text-align: center;
   color: var(--text-color-light);
@@ -138,7 +135,7 @@
   margin-bottom: -0.5rem;
 }
 
-/* ✅ NEW: Keyframe animation for the container */
+/* Keyframe animation for the container */
 @keyframes fadeInUp {
   to {
     opacity: 1;
@@ -157,6 +154,7 @@
   .login-container {
     padding: 2rem 1.5rem;
   }
+
   .login-title {
     font-size: 1.75rem;
   }

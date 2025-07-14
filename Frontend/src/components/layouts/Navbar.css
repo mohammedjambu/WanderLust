@@ -19,13 +19,14 @@ body {
   padding-top: 4.5rem;
 }
 
+
 .navbar-top {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: var(--background-color-light);
+  background: linear-gradient(135deg, #fdfcfb 0%, #fff8f1 100%);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
   border-bottom: 1px solid var(--border-color-light);
@@ -113,7 +114,7 @@ body {
 .filters-wrapper {
   position: sticky;
   top: 0;
-  background-color: var(--background-color-light);
+  background: linear-gradient(135deg, #fdfcfb 0%, #fffdfa 100%);
   z-index: 999;
   overflow-x: auto;
   scrollbar-width: none;
@@ -360,7 +361,7 @@ body {
   }
 }
 
-/* For very small screens, hide the brand name to save space */
+/* For small screens */
 @media (max-width: 360px) {
   .navbar-brand {
     font-size: 1.2rem;

@@ -1,113 +1,163 @@
-import React, { useContext, useState } from 'react';
-import './Signup.css';
+import React, { useContext, useState } from "react";
+import "./Signup.css";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { useNavigate } from 'react-router-dom';
-import { authDataContext } from '../../context/AuthContext';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { authDataContext } from "../../context/AuthContext";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 function SignUp() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const { serverUrl, setCurrentUser } = useContext(authDataContext);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const { serverUrl, handleLoginSuccess } = useContext(authDataContext);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [apiError, setApiError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const handleOnChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Validation function
+  const validateForm = () => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.username.trim()) errors.username = "Username is required.";
+    if (!formData.email.trim()) {
+      errors.email = "Email is required.";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!formData.password) {
+      errors.password = "Password is required.";
+    } else if (formData.password.length < 8) {
+      errors.password = "Password must be at least 8 characters long.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setApiError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      const res = await axios.post(
-        `${serverUrl}/api/auth/signup`,
-        { username, email, password },
-        { withCredentials: true }
-      );
-      console.log(res.data);
-      setCurrentUser && setCurrentUser(res.data.user);
+      const res = await axios.post(`${serverUrl}/api/auth/signup`, formData, {
+        withCredentials: true,
+      });
+
+      handleLoginSuccess(res.data.user);
+
       toast.success("Signup Successful");
-      navigate('/');
+      navigate("/");
     } catch (err) {
       console.error("Signup error:", err.response?.data || err.message);
-      setError(err.response?.data?.error || "Signup failed");
+      setApiError(
+        err.response?.data?.message ||
+          "Signup failed. The username or email may already be taken."
+      );
     }
   };
 
-  const handleOnChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "username") setUsername(value);
-    if (name === "email") setEmail(value);
-    if (name === "password") setPassword(value);
-  };
-
   return (
-    // --- FIX IS HERE: Added style prop ---
-      <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,_#fdfcfb,_#e2d1c3)]">
-    <div className="signup-container" style={{ flexGrow: 1 }}>
-      <h1 className="signup-title">SignUp</h1>
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="signup-form" noValidate>
-          <div className="form-group">
-            <label htmlFor="username" className="form-label">Username</label>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              className="form-input"
-              onChange={handleOnChange}
-              value={username}
-              required
-            />
-          </div>
+    <div className="signup-page-wrapper">
+      <div className="signup-container animate">
+        <h1 className="signup-title">Create an Account</h1>
+        <div className="form-container">
+          <form onSubmit={handleSubmit} className="signup-form" noValidate>
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
+              <input
+                name="username"
+                id="username"
+                type="text"
+                className={`form-input ${
+                  validationErrors.username ? "is-invalid" : ""
+                }`}
+                onChange={handleOnChange}
+                value={formData.username}
+              />
+              {validationErrors.username && (
+                <p className="form-error-validation">
+                  {validationErrors.username}
+                </p>
+              )}
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className="form-input"
-              onChange={handleOnChange}
-              value={email}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                name="email"
+                id="email"
+                type="email"
+                className={`form-input ${
+                  validationErrors.email ? "is-invalid" : ""
+                }`}
+                onChange={handleOnChange}
+                value={formData.email}
+              />
+              {validationErrors.email && (
+                <p className="form-error-validation">
+                  {validationErrors.email}
+                </p>
+              )}
+            </div>
 
-          <div className="form-group password">
-            <label htmlFor="password" className="form-label">Password</label>
-            <input
-              name="password"
-              id="password"
-              type={show ? "text" : "password"}
-              className="form-input"
-              onChange={handleOnChange}
-              value={password}
-              required
-            />
-            {show ? (
-              <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
-            ) : (
-              <IoMdEye className="eye" onClick={() => setShow(true)} />
-            )}
-          </div>
+            <div className="form-group password">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                name="password"
+                id="password"
+                type={show ? "text" : "password"}
+                className={`form-input ${
+                  validationErrors.password ? "is-invalid" : ""
+                }`}
+                onChange={handleOnChange}
+                value={formData.password}
+              />
+              {show ? (
+                <IoMdEyeOff className="eyeoff" onClick={() => setShow(false)} />
+              ) : (
+                <IoMdEye className="eye" onClick={() => setShow(true)} />
+              )}
+              {validationErrors.password && (
+                <p className="form-error-validation">
+                  {validationErrors.password}
+                </p>
+              )}
+            </div>
 
-          {error && <p className="error-text">{error}</p>}
+            {apiError && <p className="form-error-api">{apiError}</p>}
 
-          <button type="submit" className="submit-button">SignUp</button>
+            <button type="submit" className="submit-button">
+              Sign Up
+            </button>
 
-          <p className="text-[18px]">
-            Already have an account?{' '}
-            <span
-              className="text-[19px] text-[red] cursor-pointer"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </span>
-          </p>
-        </form>
+            <p className="login-prompt">
+              Already have an account?{" "}
+              <span className="login-link" onClick={() => navigate("/login")}>
+                Login
+              </span>
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
