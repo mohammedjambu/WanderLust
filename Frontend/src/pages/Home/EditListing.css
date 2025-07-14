@@ -1,14 +1,10 @@
-/* =================================================================
-   EditListing.css - Unified Styles for the Edit Listing Page
-   ================================================================= */
-
 /* --- Variables --- */
 :root {
-    --primary-brand-color: #28a745; /* Green for "Save" actions */
-    --primary-brand-hover: #218838;
-    --secondary-button-bg: #6c757d; /* Grey for "Cancel" */
+    --primary-brand-color: #fe424d;
+    --primary-brand-hover: #de333b;
+    --secondary-button-bg: #6c757d;
     --secondary-button-hover: #5a6268;
-    --danger-color: #dc3545; /* Red for destructive actions like delete */
+    --danger-color: #dc3545;
     --border-color-light: #e5e7eb;
     --border-color-medium: #d1d5db;
     --text-color-dark: #222;
@@ -22,7 +18,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: calc(100vh - 122px); /* Adjust based on your navbar height */
+    min-height: calc(100vh - 122px);
 }
 
 .form-wrapper {
@@ -48,9 +44,11 @@
     flex-direction: column;
     gap: 1.5rem;
 }
+
 .form-group {
     width: 100%;
 }
+
 .form-group label {
     display: block;
     font-size: 0.875rem;
@@ -58,7 +56,8 @@
     color: var(--text-color-dark);
     margin-bottom: 0.5rem;
 }
-.form-input, 
+
+.form-input,
 .form-textarea,
 .form-select {
     width: 100%;
@@ -68,13 +67,15 @@
     font-size: 1rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.form-input:focus, 
+
+.form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
     outline: none;
     border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+    box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2);
 }
+
 .form-textarea {
     min-height: 120px;
     resize: vertical;
@@ -86,6 +87,7 @@
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+
 .error-border {
     border-color: var(--error-color) !important;
 }
@@ -94,31 +96,36 @@
 .react-select-container.error-border .react-select__control {
     border-color: var(--error-color) !important;
 }
+
 .react-select__control {
     border-radius: 8px !important;
     padding: 0.25rem !important;
     border: 1px solid var(--border-color-medium) !important;
     box-shadow: none !important;
 }
+
 .react-select__control--is-focused {
     border-color: var(--primary-brand-color) !important;
-    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2) !important;
+    box-shadow: 0 0 0 2px rgba(254, 66, 77, 0.2) !important;
 }
+
 .react-select__indicator-separator {
     display: none !important;
 }
+
 .react-select__menu {
     border-radius: 8px !important;
     z-index: 10;
 }
 
-/* --- Existing Images Grid (for deletion) --- */
+/* --- Existing Images Grid  --- */
 .existing-images-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 1rem;
     margin-top: 0.5rem;
 }
+
 .existing-image-item {
     position: relative;
     aspect-ratio: 1/1;
@@ -126,19 +133,23 @@
     overflow: hidden;
     cursor: pointer;
 }
+
 .existing-image-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: filter 0.3s ease, transform 0.3s ease;
 }
+
 .existing-image-item:hover img {
     transform: scale(1.05);
 }
+
 .existing-image-item.marked-for-deletion img {
     filter: grayscale(100%) brightness(50%);
     transform: scale(1);
 }
+
 .existing-image-delete-btn {
     position: absolute;
     top: 50%;
@@ -155,6 +166,7 @@
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 .existing-image-item.marked-for-deletion .existing-image-delete-btn {
     opacity: 1;
 }
@@ -168,10 +180,12 @@
     cursor: pointer;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
+
 .dropzone.active {
     border-color: var(--primary-brand-color);
     background-color: #f5fff5;
 }
+
 .dropzone-content {
     display: flex;
     flex-direction: column;
@@ -179,23 +193,27 @@
     gap: 1rem;
     color: var(--text-color-light);
 }
+
 .previews-grid {
     margin-top: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 1rem;
 }
+
 .preview-item {
     position: relative;
     aspect-ratio: 1/1;
     border-radius: 8px;
     overflow: hidden;
 }
+
 .preview-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .preview-remove-btn {
     position: absolute;
     top: 4px;
@@ -220,12 +238,13 @@
 /* --- Form Navigation Buttons --- */
 .form-navigation {
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
     border-top: 1px solid var(--border-color-light);
     padding-top: 1.5rem;
 }
+
 .nav-button {
     padding: 0.75rem 1.5rem;
     border: none;
@@ -235,20 +254,26 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
-.nav-button.primary {
+
+
+.form-navigation .nav-button.primary {
     background-color: var(--primary-brand-color);
-    color: #fff;
+    color: white;
 }
-.nav-button.primary:hover:not(:disabled) {
+
+.form-navigation .nav-button.primary:hover {
     background-color: var(--primary-brand-hover);
 }
+
 .nav-button.secondary {
     background-color: var(--secondary-button-bg);
     color: #fff;
 }
+
 .nav-button.secondary:hover {
     background-color: var(--secondary-button-hover);
 }
+
 .nav-button:disabled {
     background-color: #e5e7eb;
     color: var(--text-color-light);
@@ -260,16 +285,20 @@
     .form-wrapper {
         padding: 1.5rem 1rem;
     }
+
     .form-title {
         font-size: 1.5rem;
     }
+
     .form-navigation {
         flex-direction: column-reverse;
     }
+
     .nav-button {
         width: 100%;
     }
+
     .property-details-grid {
-        grid-template-columns: 1fr; /* Stack on small screens */
+        grid-template-columns: 1fr;
     }
 }

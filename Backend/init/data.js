@@ -30,8 +30,8 @@ const sampleListings = [
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
       { name: "Smart TV" },
-      { name: "Washer" },
-      { name: "Security" },
+      { name: "24/7 Security" },
+      { name: "Garden" },
     ],
     reviews: [
       {
@@ -70,11 +70,11 @@ const sampleListings = [
     propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 3 },
     amenities: [
       { name: "Infinity Pool" },
-      { name: "Sea View" },
+      { name: "Lake View" }, // Proxy for Sea View
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
-      { name: "Private Patio" },
+      { name: "Balcony" },
       { name: "Smart TV" },
       { name: "Heating" },
     ],
@@ -121,6 +121,7 @@ const sampleListings = [
       { name: "Full Kitchen" },
       { name: "BBQ Grill" },
       { name: "Garden" },
+      { name: "Outdoor Dining" },
     ],
     reviews: [
       {
@@ -210,8 +211,8 @@ const sampleListings = [
       { name: "Garden" },
       { name: "Pet Friendly" },
       { name: "Full Kitchen" },
-      { name: "Washer" },
-      { name: "TV" },
+      { name: "Heating" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -249,13 +250,14 @@ const sampleListings = [
     category: "Farm House",
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
     amenities: [
-      { name: "Organic Garden" },
+      { name: "Organic Farm" },
       { name: "Free WiFi" },
       { name: "Free Parking" },
       { name: "Fireplace" },
       { name: "Hiking Trails" },
       { name: "Pet Friendly" },
       { name: "Heating" },
+      { name: "Garden" },
     ],
     reviews: [
       {
@@ -297,7 +299,7 @@ const sampleListings = [
     amenities: [
       { name: "Private Pool" },
       { name: "Free WiFi" },
-      { name: "Tropical Garden" },
+      { name: "Garden" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
       { name: "Beach Access" },
@@ -342,10 +344,10 @@ const sampleListings = [
       { name: "Infinity Pool" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
-      { name: "Yoga Deck" },
+      { name: "Garden" },
       { name: "Full Kitchen" },
-      { name: "Garden View" },
-      { name: "Private Patio" },
+      { name: "Outdoor Dining" },
+      { name: "Smart TV" },
     ],
     reviews: [
       {
@@ -390,6 +392,7 @@ const sampleListings = [
       { name: "Full Kitchen" },
       { name: "Smart TV" },
       { name: "Free Parking" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -429,13 +432,13 @@ const sampleListings = [
     category: "Rooms",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Heritage Decor" },
       { name: "Free WiFi" },
-      { name: "Shared Courtyard" },
       { name: "Air Conditioning" },
       { name: "Heating" },
-      { name: "TV" },
       { name: "City Access" },
+      { name: "Shared Kitchen" },
+      { name: "Laundry Service" },
+      { name: "Balcony" },
     ],
     reviews: [
       {
@@ -473,13 +476,13 @@ const sampleListings = [
     category: "Rooms",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Canal View" },
+      { name: "Bicycle Rental" },
       { name: "Free WiFi" },
       { name: "Shared Kitchen" },
-      { name: "Bicycle Rental" },
       { name: "Heating" },
-      { name: "TV" },
-      { name: "Washer" },
+      { name: "Laundry Service" },
+      { name: "City Access" },
+      { name: "Cultural Immersion" },
     ],
     reviews: [
       {
@@ -517,13 +520,13 @@ const sampleListings = [
     category: "Rooms",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "City Access" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Shared Kitchen" },
-      { name: "City Access" },
       { name: "Heating" },
-      { name: "TV" },
-      { name: "Washer" },
+      { name: "Laundry Service" },
+      { name: "Smart TV" },
     ],
     reviews: [
       {
@@ -563,13 +566,13 @@ const sampleListings = [
     category: "Flat",
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
+      { name: "Balcony" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
-      { name: "Balcony" },
       { name: "Smart TV" },
-      { name: "Washer" },
-      { name: "Security" },
+      { name: "Laundry Service" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -607,13 +610,13 @@ const sampleListings = [
     category: "Flat",
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
     amenities: [
+      { name: "Balcony" },
       { name: "Free WiFi" },
       { name: "Full Kitchen" },
       { name: "Air Conditioning" },
-      { name: "Balcony" },
       { name: "Heating" },
-      { name: "TV" },
-      { name: "Washer" },
+      { name: "Laundry Service" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -651,13 +654,13 @@ const sampleListings = [
     category: "Flat",
     propertyDetails: { guests: 3, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "Full Kitchen" },
+      { name: "Laundry Service" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
-      { name: "Full Kitchen" },
-      { name: "Washer" },
-      { name: "TV" },
+      { name: "Smart TV" },
       { name: "Heating" },
-      { name: "Security" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -697,13 +700,13 @@ const sampleListings = [
     category: "PG",
     propertyDetails: { guests: 1, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "Laundry Service" },
+      { name: "24/7 Security" },
       { name: "Free WiFi" },
       { name: "Shared Kitchen" },
-      { name: "Laundry Service" },
-      { name: "Security" },
       { name: "City Access" },
-      { name: "Heating" },
       { name: "Air Conditioning" },
+      { name: "Heating" },
     ],
     reviews: [
       {
@@ -741,10 +744,10 @@ const sampleListings = [
     category: "PG",
     propertyDetails: { guests: 1, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "24/7 Security" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Shared Kitchen" },
-      { name: "24/7 Security" },
       { name: "City Access" },
       { name: "Laundry Service" },
       { name: "Heating" },
@@ -785,13 +788,13 @@ const sampleListings = [
     category: "PG",
     propertyDetails: { guests: 1, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Free WiFi" },
-      { name: "Shared Kitchen" },
       { name: "Laundry Service" },
       { name: "City Access" },
+      { name: "Free WiFi" },
+      { name: "Shared Kitchen" },
       { name: "Air Conditioning" },
-      { name: "Security" },
       { name: "Heating" },
+      { name: "24/7 Security" },
     ],
     reviews: [
       {
@@ -836,8 +839,8 @@ const sampleListings = [
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
     amenities: [
       { name: "Fireplace" },
-      { name: "Free WiFi" },
       { name: "Mountain Views" },
+      { name: "Free WiFi" },
       { name: "Free Parking" },
       { name: "Heating" },
       { name: "Hiking Trails" },
@@ -880,12 +883,12 @@ const sampleListings = [
     propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 2 },
     amenities: [
       { name: "Fireplace" },
-      { name: "Free WiFi" },
       { name: "Ski Storage" },
       { name: "Mountain Views" },
+      { name: "Free WiFi" },
       { name: "Full Kitchen" },
       { name: "Heating" },
-      { name: "Washer" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -924,12 +927,12 @@ const sampleListings = [
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
     amenities: [
       { name: "Fireplace" },
-      { name: "Free Parking" },
       { name: "Hiking Trails" },
       { name: "Pet Friendly" },
+      { name: "Free Parking" },
       { name: "Heating" },
       { name: "Shared Kitchen" },
-      { name: "BBQ Grill" },
+      { name: "Stargazing" },
     ],
     reviews: [
       {
@@ -969,13 +972,13 @@ const sampleListings = [
     category: "Shops",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "Lake View" }, // Proxy for Ganges View
       { name: "Free WiFi" },
-      { name: "Ganges View" },
       { name: "Air Conditioning" },
-      { name: "Market Access" },
-      { name: "Heating" },
-      { name: "Shared Kitchen" },
       { name: "City Access" },
+      { name: "Shared Kitchen" },
+      { name: "Heating" },
+      { name: "Cultural Immersion" },
     ],
     reviews: [
       {
@@ -1013,12 +1016,12 @@ const sampleListings = [
     category: "Shops",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Free WiFi" },
-      { name: "Market Access" },
-      { name: "Air Conditioning" },
       { name: "Rooftop View" },
-      { name: "Heating" },
+      { name: "Free WiFi" },
+      { name: "Air Conditioning" },
+      { name: "City Access" },
       { name: "Shared Kitchen" },
+      { name: "Heating" },
       { name: "Cultural Immersion" },
     ],
     reviews: [
@@ -1057,13 +1060,13 @@ const sampleListings = [
     category: "Shops",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "Garden" },
       { name: "Free WiFi" },
-      { name: "Tatami Mats" },
       { name: "Air Conditioning" },
-      { name: "Garden View" },
-      { name: "Heating" },
       { name: "Shared Kitchen" },
-      { name: "Washer" },
+      { name: "Heating" },
+      { name: "City Access" },
+      { name: "Cultural Immersion" },
     ],
     reviews: [
       {
@@ -1103,13 +1106,13 @@ const sampleListings = [
     category: "Trending",
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
-      { name: "Free WiFi" },
-      { name: "Rooftop Deck" },
-      { name: "Air Conditioning" },
+      { name: "Rooftop View" },
       { name: "Smart TV" },
+      { name: "Free WiFi" },
+      { name: "Air Conditioning" },
       { name: "Full Kitchen" },
-      { name: "Washer" },
       { name: "Free Parking" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -1147,13 +1150,13 @@ const sampleListings = [
     category: "Trending",
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
+      { name: "Rooftop View" },
       { name: "Free WiFi" },
-      { name: "Rooftop Terrace" },
       { name: "Air Conditioning" },
-      { name: "Washer" },
       { name: "Full Kitchen" },
       { name: "Smart TV" },
       { name: "Heating" },
+      { name: "City Access" },
     ],
     reviews: [
       {
@@ -1191,13 +1194,13 @@ const sampleListings = [
     category: "Trending",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
+      { name: "Smart TV" },
+      { name: "City Access" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
-      { name: "Smart TV" },
-      { name: "City View" },
       { name: "Shared Kitchen" },
-      { name: "Washer" },
       { name: "Heating" },
+      { name: "Rooftop View" },
     ],
     reviews: [
       {
@@ -1238,12 +1241,12 @@ const sampleListings = [
     propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 2 },
     amenities: [
       { name: "Beach Access" },
+      { name: "Lake View" }, // Proxy for Backwater View
       { name: "Free WiFi" },
-      { name: "Backwater View" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
-      { name: "Private Patio" },
       { name: "Free Parking" },
+      { name: "Outdoor Dining" },
     ],
     reviews: [
       {
@@ -1282,12 +1285,12 @@ const sampleListings = [
     propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
     amenities: [
       { name: "Beach Access" },
+      { name: "Lake View" }, // Proxy for Ocean View
       { name: "Free WiFi" },
-      { name: "Ocean View" },
       { name: "Pet Friendly" },
       { name: "Full Kitchen" },
       { name: "Heating" },
-      { name: "TV" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1327,11 +1330,11 @@ const sampleListings = [
     amenities: [
       { name: "Beach Access" },
       { name: "Free WiFi" },
-      { name: "Private Patio" },
       { name: "Air Conditioning" },
       { name: "Shared Kitchen" },
-      { name: "TV" },
       { name: "Free Parking" },
+      { name: "Outdoor Dining" },
+      { name: "Balcony" },
     ],
     reviews: [
       {
@@ -1371,13 +1374,13 @@ const sampleListings = [
     category: "Camping",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Riverside Tent" },
-      { name: "Wildlife Viewing" },
       { name: "Campfire" },
       { name: "Hiking Trails" },
+      { name: "Wildlife Viewing" },
+      { name: "Home-cooked Meals" },
       { name: "Free Parking" },
       { name: "Pet Friendly" },
-      { name: "Home-cooked Meals" },
+      { name: "Stargazing" },
     ],
     reviews: [
       {
@@ -1417,11 +1420,11 @@ const sampleListings = [
     amenities: [
       { name: "Luxury Tent" },
       { name: "Wildlife Viewing" },
-      { name: "Private Fire Pit" },
       { name: "Guided Safari" },
       { name: "Home-cooked Meals" },
       { name: "Free WiFi" },
       { name: "Heating" },
+      { name: "Stargazing" },
     ],
     reviews: [
       {
@@ -1462,7 +1465,7 @@ const sampleListings = [
       { name: "Cultural Immersion" },
       { name: "Stargazing" },
       { name: "Home-cooked Meals" },
-      { name: "bicycle-rental" },
+      { name: "Bicycle Rental" },
       { name: "Campfire" },
       { name: "Heating" },
       { name: "Free Parking" },
@@ -1514,12 +1517,12 @@ const sampleListings = [
     propertyDetails: { guests: 12, bedrooms: 6, bathrooms: 7 },
     amenities: [
       { name: "Entire Palace" },
-      { name: "Rooftop Terrace" },
-      { name: "Heritage Decor" },
-      { name: "Private Courtyard" },
+      { name: "Rooftop View" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
+      { name: "Garden" },
+      { name: "24/7 Security" },
     ],
     reviews: [
       {
@@ -1558,12 +1561,12 @@ const sampleListings = [
     propertyDetails: { guests: 16, bedrooms: 8, bathrooms: 9 },
     amenities: [
       { name: "Entire Castle" },
-      { name: "Great Hall" },
-      { name: "Private Grounds" },
-      { name: "Air Conditioning" },
       { name: "Free WiFi" },
       { name: "Heating" },
       { name: "Fireplace" },
+      { name: "Full Kitchen" },
+      { name: "Garden" },
+      { name: "Free Parking" },
     ],
     reviews: [
       {
@@ -1601,13 +1604,13 @@ const sampleListings = [
     category: "Castles",
     propertyDetails: { guests: 20, bedrooms: 10, bathrooms: 12 },
     amenities: [
-      { name: "Private Lake" },
-      { name: "Manicured Gardens" },
-      { name: "Ballroom" },
-      { name: "Entire Palace" },
-      { name: "Air Conditioning" },
+      { name: "Entire Castle" },
+      { name: "Lake View" },
+      { name: "Garden" },
       { name: "Free WiFi" },
       { name: "Free Parking" },
+      { name: "Full Kitchen" },
+      { name: "Heating" },
     ],
     reviews: [
       {

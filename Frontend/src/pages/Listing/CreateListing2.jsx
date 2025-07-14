@@ -254,7 +254,9 @@ const customSelectStyles = {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="form-fields">
-            <label className="text-[20px]">Select the type of place</label>
+            <label className="form-label text-[18px] font-[400]">
+              Select the type of place
+            </label>
             <div className="form-group">
               <input
                 type="hidden"
@@ -287,8 +289,8 @@ const customSelectStyles = {
             <hr className="bg-gray-200"></hr>
 
             {/* NEW Property Details Section */}
-            <div className="form-group">
-              <label className="form-label">
+            <div className="form-fields">
+              <label className="form-label text-[18px] font-[400]">
                 Share some basics about your place
               </label>
               <div className="property-details-container-new">
@@ -382,8 +384,10 @@ const customSelectStyles = {
             <hr className="form-divider" />
 
             {/* NEW Amenities Section */}
-            <div className="form-group amenities-section">
-              <label className="form-label">What amenities do you offer?</label>
+            <div className="form-fields amenities-section">
+              <label className="form-label text-[18px] font-[400]">
+                What amenities do you offer?
+              </label>
               <Controller
                 name="amenities"
                 control={control}
@@ -396,7 +400,7 @@ const customSelectStyles = {
                     styles={customSelectStyles}
                     formatOptionLabel={formatOptionLabel}
                     getOptionValue={(option) => option.name}
-                    getOptionLabel={(option) => option.name} 
+                    getOptionLabel={(option) => option.name}
                     placeholder="Select amenities..."
                     classNamePrefix="react-select"
                     value={amenityOptions.filter((option) =>
@@ -416,20 +420,24 @@ const customSelectStyles = {
             </div>
             <hr className="form-divider" />
 
-            <label className="text-[18px] font-[400]">Upload Images</label>
-            <ImageUpload
-              value={uploadedImages}
-              onFilesChange={handleFilesChange}
-              error={errors.images}
-            />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              {...register("images", {
-                validate: (value) =>
-                  value.length > 0 || "Please upload at least one image",
-              })}
-            />
+            <div className="form-fields">
+              <label className="form-label text-[18px] font-[400]">
+                Upload Images
+              </label>
+              <ImageUpload
+                value={uploadedImages}
+                onFilesChange={handleFilesChange}
+                error={errors.images}
+              />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                {...register("images", {
+                  validate: (value) =>
+                    value.length > 0 || "Please upload at least one image",
+                })}
+              />
+            </div>
           </div>
 
           <div className="form-navigation">

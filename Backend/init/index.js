@@ -36,8 +36,6 @@ const initDB = async () => {
   await Review.deleteMany({});
 
   console.log("Starting to seed new data...");
-  // ✅ THE FIX: Use a for...of loop and explicitly map each field to ensure
-  // nothing is missed, especially nested objects like `image` and `geometry`.
   for (const listingData of data) {
     const newListing = new Listing({
       title: listingData.title,

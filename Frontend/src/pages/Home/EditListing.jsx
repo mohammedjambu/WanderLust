@@ -9,16 +9,46 @@ import ImageUpload from "../Listing/ImageUpload";
 import "./EditListing.css";
 
 import {
-  Users, Bed, Bath, Wifi, ChefHat, Waves, PawPrint, Snowflake, WashingMachine,
-  ThermometerSun, Flame, AirVent, Bike, Binoculars, FlameKindling,
-  Castle, DoorOpen, Fence, Globe2, Backpack, Home, Landmark,
-  Leaf, Mountain, ParkingCircle, Soup, Sprout, Store, Sun,
-  Tent, Trees, Tv2, View, Wine, WavesLadder, HelpCircle, Star, ShieldCheck
+  Users,
+  Bed,
+  Bath,
+  Wifi,
+  ChefHat,
+  Waves,
+  PawPrint,
+  Snowflake,
+  WashingMachine,
+  ThermometerSun,
+  AirVent,
+  Bike,
+  Binoculars,
+  FlameKindling,
+  Castle,
+  Globe2,
+  Mountain,
+  ParkingCircle,
+  Soup,
+  Sprout,
+  Store,
+  Tent,
+  Trees,
+  Tv2,
+  Wine,
+  WavesLadder,
+  HelpCircle,
+  Star,
+  ShieldCheck,
 } from "lucide-react";
-import { MdBalcony } from "react-icons/md";
-import { FaPeopleRoof } from "react-icons/fa6";
-import { TbBeach } from "react-icons/tb";
-import { backIn } from "framer-motion";
+import {
+  MdBalcony,
+  MdOutlineFireplace,
+  MdOutlineHiking,
+  MdOutlineBrunchDining,
+  MdOutlinePool,
+} from "react-icons/md";
+import { FaPeopleRoof, FaTent } from "react-icons/fa6";
+import { TbBeach, TbGrill, TbToolsKitchen2 } from "react-icons/tb";
+import { GiIndianPalace, GiCircleForest } from "react-icons/gi";
 
 const EditListing = () => {
   const { id } = useParams();
@@ -42,7 +72,7 @@ const EditListing = () => {
       category: "",
       country: null,
       location: null,
-      newImages: [], // This is now the ONLY field for images
+      newImages: [],
       propertyDetails: { guests: 1, bedrooms: 1, bathrooms: 1 },
       amenities: [],
     },
@@ -50,7 +80,6 @@ const EditListing = () => {
 
   const selectedCountry = watch("country");
 
-  // Fetch initial data (without setting existing images)
   useEffect(() => {
     const fetchInitialData = async () => {
       setIsLoading(true);
@@ -96,11 +125,9 @@ const EditListing = () => {
             bedrooms: 1,
             bathrooms: 1,
           },
-          amenities: listingData.amenities?.map(a => a.name) || [],
+          amenities: listingData.amenities?.map((a) => a.name) || [],
           newImages: [],
         });
-
-        // ❌ No longer need to set existingImages state
       } catch (err) {
         toast.error(err.message);
         navigate("/");
@@ -111,7 +138,7 @@ const EditListing = () => {
     fetchInitialData();
   }, [id, reset, navigate]);
 
-  // City fetching logic (no changes needed)
+  // City fetching
   const fetchCities = (inputValue, callback) => {
     if (!selectedCountry?.code || inputValue.length < 2) return callback([]);
     const geoDbApiUrl = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=10000&namePrefix=${inputValue}&countryIds=${selectedCountry.code}`;
@@ -138,7 +165,6 @@ const EditListing = () => {
     [selectedCountry]
   );
 
-
   // onSubmit function
   const onSubmit = useCallback(
     async (data) => {
@@ -150,15 +176,12 @@ const EditListing = () => {
       formData.append("country", data.country.value);
       formData.append("location", data.location.value);
       formData.append("propertyDetails", JSON.stringify(data.propertyDetails));
-      const amenitiesToSubmit = data.amenities.map(name => ({ name }));
+      const amenitiesToSubmit = data.amenities.map((name) => ({ name }));
       formData.append("amenities", JSON.stringify(amenitiesToSubmit));
 
-      // Only append images if the user has selected new ones
       if (data.newImages && data.newImages.length > 0) {
         data.newImages.forEach((file) => formData.append("images", file));
       }
-
-      // ❌ No longer need to append `deletedImages`.
 
       try {
         const res = await fetch(`http://localhost:5000/api/listings/${id}`, {
@@ -179,7 +202,7 @@ const EditListing = () => {
       }
     },
     [id, navigate]
-  ); // Dependency array is now simpler
+  );
 
   if (isLoading)
     return (
@@ -190,100 +213,156 @@ const EditListing = () => {
       </div>
     );
 
-    // Paste this block inside the EditListing component
+  const allAmenityNames = [
+    "Free WiFi",
+    "24/7 Security",
+    "Air Conditioning",
+    "Balcony",
+    "BBQ Grill",
+    "Beach Access",
+    "Bicycle Rental",
+    "Campfire",
+    "City Access",
+    "Cultural Immersion",
+    "Entire Castle",
+    "Entire Palace",
+    "Fireplace",
+    "Free Parking",
+    "Full Kitchen",
+    "Garden",
+    "Guided Safari",
+    "Heating",
+    "Hiking Trails",
+    "Home-cooked Meals",
+    "Infinity Pool",
+    "Lake View",
+    "Laundry Service",
+    "Luxury Tent",
+    "Mountain Views",
+    "Organic Farm",
+    "Outdoor Dining",
+    "Pet Friendly",
+    "Private Pool",
+    "Rooftop View",
+    "Shared Kitchen",
+    "Ski Storage",
+    "Smart TV",
+    "Stargazing",
+    "Wildlife Viewing",
+    "Wine Tasting",
+  ];
 
-const allAmenityNames = [
-  "24/7 Security", "Air Conditioning", "Backwater View", "Balcony", "Ballroom", "BBQ Grill", 
-  "Beach Access", "Bicycle Rental", "Campfire", "Canal View", "City Access", "City View", 
-  "Cultural Immersion", "Entire Castle", "Entire Palace", "Fireplace", "Free Parking", 
-  "Free WiFi", "Full Kitchen", "Ganges View", "Garden", "Garden View", "Great Hall", 
-  "Guided Safari", "Heating", "Heritage Decor", "Hiking Trails", "Home-cooked Meals", 
-  "Infinity Pool", "Lake View", "Laundry Service", "Luxury Tent", "Manicured Gardens", 
-  "Market Access", "Mountain Views", "Ocean View", "Organic Farm", "Organic Garden", 
-  "Outdoor Dining", "Pet Friendly", "Private Courtyard", "Private Fire Pit", 
-  "Private Grounds", "Private Lake", "Private Patio", "Private Pool", "Riverside Tent", 
-  "Rooftop Deck", "Rooftop Terrace", "Rooftop View", "Sea View", "Security", 
-  "Shared Courtyard", "Shared Kitchen", "Ski Storage", "Smart TV", "Stargazing", 
-  "Tatami Mats", "Tropical Garden", "TV", "Washer", "Wildlife Viewing", 
-  "Wine Tasting", "Yoga Deck"
-];
+  const normalizeAmenityName = (name) => {
+    if (!name) return "";
+    return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
+  };
 
-const normalizeAmenityName = (name) => {
-  if (!name) return "";
-  return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
-};
+  const getAmenityIcon = (name) => {
+    const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
+    const normalizedName = normalizeAmenityName(name);
+    switch (normalizedName) {
+      case "free-wifi":
+        return <Wifi className={iconClass} />;
+      case "free-parking":
+        return <ParkingCircle className={iconClass} />;
+      case "air-conditioning":
+        return <AirVent className={iconClass} />;
+      case "heating":
+        return <ThermometerSun className={iconClass} />;
+      case "pet-friendly":
+        return <PawPrint className={iconClass} />;
+      case "fireplace":
+        return <MdOutlineFireplace className={iconClass} />;
+      case "laundry-service":
+        return <WashingMachine className={iconClass} />;
+      case "smart-tv":
+        return <Tv2 className={iconClass} />;
+      case "24/7-security":
+        return <ShieldCheck className={iconClass} />;
+      case "full-kitchen":
+        return <ChefHat className={iconClass} />;
+      case "shared-kitchen":
+        return <TbToolsKitchen2 className={iconClass} />;
+      case "wine-tasting":
+        return <Wine className={iconClass} />;
+      case "home-cooked-meals":
+        return <Soup className={iconClass} />;
+      case "outdoor-dining":
+        return <MdOutlineBrunchDining className={iconClass} />;
+      case "bbq-grill":
+        return <TbGrill className={iconClass} />;
+      case "private-pool":
+        return <MdOutlinePool className={iconClass} />;
+      case "infinity-pool":
+        return <WavesLadder className={iconClass} />;
+      case "lake-view":
+        return <Waves className={iconClass} />;
+      case "rooftop-view":
+        return <FaPeopleRoof className={iconClass} />;
+      case "balcony":
+        return <MdBalcony className={iconClass} />;
+      case "garden":
+        return <Trees className={iconClass} />;
+      case "mountain-views":
+        return <Mountain className={iconClass} />;
+      case "organic-farm":
+        return <Sprout className={iconClass} />;
+      case "beach-access":
+        return <TbBeach className={iconClass} />;
+      case "hiking-trails":
+        return <MdOutlineHiking className={iconClass} />;
+      case "camping-tent":
+        return <Tent className={iconClass} />;
+      case "luxury-tent":
+        return <FaTent className={iconClass} />;
+      case "campfire":
+        return <FlameKindling className={iconClass} />;
+      case "wildlife-viewing":
+        return <Binoculars className={iconClass} />;
+      case "guided-safari":
+        return <GiCircleForest className={iconClass} />;
+      case "stargazing":
+        return <Star className={iconClass} />;
+      case "bicycle-rental":
+        return <Bike className={iconClass} />;
+      case "cultural-immersion":
+        return <Globe2 className={iconClass} />;
+      case "ski-storage":
+        return <Snowflake className={iconClass} />;
+      case "entire-castle":
+        return <Castle className={iconClass} />;
+      case "entire-palace":
+        return <GiIndianPalace className={iconClass} />;
+      case "city-access":
+        return <Store className={iconClass} />;
+      default:
+        return <HelpCircle className={iconClass} />;
+    }
+  };
 
-const getAmenityIcon = (name) => {
-  const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
-  const normalizedName = normalizeAmenityName(name);
-  switch (normalizedName) {
-    case "free-wifi": return <Wifi className={iconClass} />;
-    case "free-parking": return <ParkingCircle className={iconClass} />;
-    case "air-conditioning": return <AirVent className={iconClass} />;
-    case "heating": return <ThermometerSun className={iconClass} />;
-    case "pet-friendly": return <PawPrint className={iconClass} />;
-    case "fireplace": return <Flame className={iconClass} />;
-    case "washer": case "laundry-service": return <WashingMachine className={iconClass} />;
-    case "tv": case "smart-tv": return <Tv2 className={iconClass} />;
-    case "security": case "24/7-security": return <ShieldCheck className={iconClass} />;
-    case "tatami-mats": return <Home className={iconClass} />;
-    case "full-kitchen": case "shared-kitchen": return <ChefHat className={iconClass} />;
-    case "wine-tasting": return <Wine className={iconClass} />;
-    case "home-cooked-meals": return <Soup className={iconClass} />;
-    case "outdoor-dining": return <Sun className={iconClass} />;
-    case "bbq-grill": return <Flame className={iconClass} />;
-    case "private-pool": case "infinity-pool": return <WavesLadder className={iconClass} />;
-    case "sea-view": case "lake-view": case "backwater-view": case "ganges-view": case "canal-view": case "ocean-view": case "private-lake": return <Waves className={iconClass} />;
-    case "rooftop-deck": case "rooftop-terrace": case "rooftop-view": return <FaPeopleRoof className={iconClass} />
-    case "private-patio": case "balcony": return <MdBalcony className={iconClass} />;
-    case "city-view": return <View className={iconClass} />;
-    case "garden": case "tropical-garden": case "organic-garden": case "manicured-gardens": case "private-grounds": return <Trees className={iconClass} />;
-    case "garden-view": return <Leaf className={iconClass} />;
-    case "private-courtyard": case "shared-courtyard": return <Fence className={iconClass} />;
-    case "mountain-views": return <Mountain className={iconClass} />;
-    case "organic-farm": return <Sprout className={iconClass} />;
-    case "beach-access": return <TbBeach className={iconClass} />;
-    case "hiking-trails": return <Backpack className={iconClass} />;
-    case "camping-tent": case "riverside-tent": case "luxury-tent": return <Tent className={iconClass} />;
-    case "campfire": case "private-fire-pit": return <FlameKindling className={iconClass} />;
-    case "wildlife-viewing": case "guided-safari": return <Binoculars className={iconClass} />;
-    case "stargazing": return <Star className={iconClass} />;
-    case "bicycle-rental": return <Bike className={iconClass} />;
-    case "cultural-immersion": return <Globe2 className={iconClass} />;
-    case "ski-storage": return <Snowflake className={iconClass} />;
-    case "entire-castle": case "entire-palace": return <Castle className={iconClass} />;
-    case "heritage-decor": return <Landmark className={iconClass} />;
-    case "ballroom": case "great-hall": return <DoorOpen className={iconClass} />;
-    case "market-access": case "city-access": return <Store className={iconClass} />;
-    case "yoga-deck": return <Sprout className={iconClass} />;
-    default: return <HelpCircle className={iconClass} />;
-  }
-};
-
-const amenityOptions = allAmenityNames.map(name => ({
+  const amenityOptions = allAmenityNames.map((name) => ({
     name,
-    icon: getAmenityIcon(name)
-}));
+    icon: getAmenityIcon(name),
+  }));
 
-const formatOptionLabel = ({ name, icon }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+  const formatOptionLabel = ({ name, icon }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       {icon}
       <span>{name}</span>
     </div>
-);
+  );
 
-const customSelectStyles = {
-  menu: (provided) => ({ ...provided, width: "580px", maxWidth: "90vw" }),
-  menuList: (provided) => ({
-    ...provided,
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "4px",
-    padding: "8px",
-  }),
-  control: (provided) => ({ ...provided, padding: "4px", }),
-};
-
+  const customSelectStyles = {
+    menu: (provided) => ({ ...provided, width: "580px", maxWidth: "90vw" }),
+    menuList: (provided) => ({
+      ...provided,
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "4px",
+      padding: "8px",
+    }),
+    control: (provided) => ({ ...provided, padding: "4px" }),
+  };
 
   return (
     <main className="edit-listing-container">
@@ -300,6 +379,7 @@ const customSelectStyles = {
               />
             </div>
 
+            {/* DESCRIPTION */}
             <div className="form-group">
               <label htmlFor="description">Description</label>
               <textarea
@@ -313,6 +393,7 @@ const customSelectStyles = {
               ></textarea>
             </div>
 
+            {/* PRICE */}
             <div className="form-group">
               <label htmlFor="price">Price (₹ per night)</label>
               <input
@@ -326,10 +407,15 @@ const customSelectStyles = {
               />
             </div>
 
-            {/* ++ FIX: ADDED PROPERTY DETAILS FIELDS */}
+            {/* PROPERTY DETAIL FIELDS */}
             <div className="property-details-grid">
               <div className="form-group">
-                <label htmlFor="guests">Guests</label>
+                <div className="flex items-center gap-2 text-base">
+                  <div className="text-current">
+                    <Users className="w-6 h-6" />
+                  </div>
+                  <label htmlFor="guests">Guests</label>
+                </div>
                 <input
                   id="guests"
                   type="number"
@@ -342,7 +428,12 @@ const customSelectStyles = {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="bedrooms">Bedrooms</label>
+                <div className="flex items-center gap-2 text-base">
+                  <div className="text-current">
+                    <Bed className="w-6 h-6" />
+                  </div>
+                  <label htmlFor="bedrooms">Bedrooms</label>
+                </div>
                 <input
                   id="bedrooms"
                   type="number"
@@ -355,7 +446,12 @@ const customSelectStyles = {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="bathrooms">Bathrooms</label>
+                <div className="flex items-center gap-2 text-base">
+                  <div className="text-current">
+                    <Bath className="w-6 h-6" />
+                  </div>
+                  <label htmlFor="bathrooms">Bathrooms</label>
+                </div>
                 <input
                   id="bathrooms"
                   type="number"
@@ -369,7 +465,7 @@ const customSelectStyles = {
               </div>
             </div>
 
-            {/* Add this section right after the Category dropdown */}
+            {/* Amenities */}
             <div className="form-group">
               <label htmlFor="amenities">Amenities</label>
               <Controller
@@ -404,6 +500,7 @@ const customSelectStyles = {
               )}
             </div>
 
+            {/* Country */}
             <div className="form-group">
               <label htmlFor="country">Country</label>
               <Controller
@@ -423,6 +520,8 @@ const customSelectStyles = {
                 )}
               />
             </div>
+
+            {/* Location */}
             <div className="form-group">
               <label htmlFor="location">City / Location</label>
               <Controller
@@ -448,6 +547,7 @@ const customSelectStyles = {
               />
             </div>
 
+            {/* Category */}
             <div className="form-group">
               <label htmlFor="category">Category</label>
               <select
@@ -469,6 +569,9 @@ const customSelectStyles = {
                   "PG",
                   "Cabins",
                   "Shops",
+                  "Beach",
+                  "Camping",
+                  "Castles",
                 ].map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -477,11 +580,10 @@ const customSelectStyles = {
               </select>
             </div>
 
-            {/*  SIMPLIFIED Image Upload */}
+            {/* Image Upload */}
             <div className="form-group">
-              <label>
-                Upload Images (This will replace all current images)
-              </label>
+              <label>Upload New Images</label>
+
               <Controller
                 name="newImages"
                 control={control}
@@ -492,6 +594,10 @@ const customSelectStyles = {
                   />
                 )}
               />
+              <p className="text-sm text-gray-500 mb-2">
+                Uploading new images will replace all existing ones. If you
+                don't upload any, your current images will be kept.
+              </p>
             </div>
           </div>
 
