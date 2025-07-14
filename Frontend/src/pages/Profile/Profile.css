@@ -1,21 +1,20 @@
-
 :root {
   --brand-color: #fe424d;
   --brand-color-active: #222222;
+  --brand-color-hover: #e03b44;
   --border-color: #e5e7eb;
   --bg-light-gray: #f7f7f7;
   --text-dark: #222222;
   --text-light: #717171;
 }
 
-/* --- Main Layout --- */
+/* --- Profile Page Styles --- */
 .profile-container {
   max-width: 1120px;
   margin: 3rem auto;
   padding: 1.5rem;
   display: grid;
   grid-template-columns: 280px 1fr;
-  /* Fixed-width sidebar */
   gap: 3rem;
 }
 
@@ -63,11 +62,16 @@
   color: white;
 }
 
-/* --- Main Content Area --- */
-/* .profile-content {
-  padding-left: 1rem;
-} */
 
+/* --- Animations --- */
+.tab-content-wrapper {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 /* --- Tab Content --- */
 .tab-content h3 {
@@ -150,7 +154,7 @@
   background-color: var(--brand-color-hover);
 }
 
-/* --- Data Card (for Bookings, Reviews, Listings) --- */
+/* --- Data Card --- */
 .data-card-list {
   display: grid;
   gap: 1.5rem;
@@ -203,32 +207,71 @@
   display: flex;
   gap: 0.25rem;
   color: #f59e0b;
-  /* Amber/Yellow color */
 }
 
+/* --- Skeleton Loader Styles --- */
+.skeleton-image {
+  background-color: #e0e0e0;
+}
+.skeleton-text {
+  height: 1em;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+.skeleton-image, .skeleton-text {
+  background-image: linear-gradient(90deg, #e0e0e0 0px, #f5f5f5 40px, #e0e0e0 80px);
+  background-size: 200%;
+  animation: skeleton-shine 1.5s infinite linear;
+}
 
-/* The form container inside the modal */
-.modal-form {
+@keyframes skeleton-shine {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
+
+/* --- Robust Modal Styles --- */
+.modal-panel {
   display: flex;
   flex-direction: column;
+  max-height: 90vh;
+  padding: 1.5rem;
 }
 
-/* A single row in the modal form (e.g., "Full Name" + input) */
+.modal-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.modal-form-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  min-height: 0; 
+}
+
+.modal-scrollable-content {
+  overflow-y: auto; 
+  padding: 0.5rem; 
+  margin: 0 -0.5rem; 
+}
+
 .modal-form-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.1rem 0;
-  /* Increased padding for more space */
   border-bottom: 1px solid var(--border-color);
+  gap: 0.5rem;
 }
 
 .modal-form-row:last-of-type {
   border-bottom: none;
-  /* No border for the last item */
 }
 
-/* Modifier for sections like "About Me" where the label is on top */
 .modal-form-row.vertical {
   flex-direction: column;
   align-items: flex-start;
@@ -239,15 +282,12 @@
   font-size: 1rem;
   color: var(--text-dark);
   flex-shrink: 0;
-  /* Prevents the label from shrinking */
 }
 
-/* The "invisible" input style */
-.modal-input {
+.modal-input, .modal-textarea {
   border: none;
   background: transparent;
   padding: 0.25rem 0;
-  text-align: right;
   font-size: 1rem;
   color: var(--text-light);
   width: 100%;
@@ -257,60 +297,45 @@
   transition: box-shadow 0.2s ease-in-out;
 }
 
-.modal-input:focus {
-  outline: none;
-  color: var(--text-dark);
-  box-shadow: 0 1px 0 0 var(--text-dark);
-  /* Add bottom border on focus */
+.modal-input {
+  text-align: right;
 }
 
-/* Textarea styling */
 .modal-textarea {
-  width: 100%;
-  border: none;
-  padding: 0.5rem 0;
-  font-size: 1rem;
-  color: var(--text-light);
   resize: none;
-  background: transparent;
-  transition: box-shadow 0.2s ease-in-out;
 }
 
-.modal-textarea:focus {
+.modal-input:focus, .modal-textarea:focus {
   outline: none;
   color: var(--text-dark);
   box-shadow: 0 1px 0 0 var(--text-dark);
 }
 
-/* Phone Input Customization for the Modal */
+.modal-phone-input {
+  flex-grow: 1;
+}
+
 .modal-phone-input .PhoneInputInput {
   border: none !important;
   text-align: right !important;
-  /* Align phone number to the right */
   padding: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
   color: var(--text-light) !important;
-  flex-grow: 1;
 }
-
-/* .modal-phone-input .PhoneInput  {
-  display: flex;
-  justify-content: space-evenly;
-  text-align: start;
-} */
 
 .modal-phone-input .PhoneInputInput:focus {
   box-shadow: 0 1px 0 0 var(--text-dark) !important;
 }
 
-/* Modal Buttons */
+
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   padding-top: 1.5rem;
-  margin-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .modal-btn {
@@ -346,21 +371,15 @@
 @media (max-width: 900px) {
   .profile-container {
     grid-template-columns: 220px 1fr;
-    /* Slimmer sidebar */
     gap: 2rem;
   }
 }
 
 @media (max-width: 768px) {
-
-  /* body {
-    } */
-    
-    .profile-container {
-      grid-template-columns: 1fr;
-      margin-top: 1rem;
-      /* padding-top: 1rem; */
-      gap: 1.5rem;
+  .profile-container {
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+    gap: 1.5rem;
   }
 
   .profile-sidebar {
@@ -375,6 +394,7 @@
     display: flex;
     overflow-x: auto;
     padding-bottom: 0.5rem;
+
   }
 
   .sidebar-button {

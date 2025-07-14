@@ -36,7 +36,7 @@ import { TbBeach } from "react-icons/tb";
 import { FaPeopleRoof } from "react-icons/fa6";
 
 
-
+// Category options with icons
 const categoryOptions = [
   { name: "Villa", icon: <GiFamilyHouse /> },
   { name: "Farm House", icon: <FaTreeCity /> },
@@ -51,7 +51,7 @@ const categoryOptions = [
   { name: "Castles", icon: <GiCastle /> },
 ];
 
-// NEW: Comprehensive list of amenities with icons
+// Amenity options with icons
 const allAmenityNames = [
   "24/7 Security", "Air Conditioning", "Backwater View", "Balcony", "Ballroom",
   "BBQ Grill", "Beach Access", "Bicycle Rental", "Campfire", "Canal View",
@@ -74,7 +74,6 @@ const normalizeAmenityName = (name) => {
   return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
 };
 
-// Icon mapping function, copied directly from your ShowListing.jsx for 100% consistency
 const getAmenityIcon = (name) => {
   const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
   const normalizedName = normalizeAmenityName(name);
@@ -118,12 +117,11 @@ const getAmenityIcon = (name) => {
     case "heritage-decor": return <Landmark className={iconClass} />;
     case "ballroom": case "great-hall": return <DoorOpen className={iconClass} />;
     case "market-access": case "city-access": return <Store className={iconClass} />;
-    case "yoga-deck": return <Sprout className={iconClass} />; // Using Sprout as a stand-in for Yoga/Wellness
+    case "yoga-deck": return <Sprout className={iconClass} />;
     default: return <HelpCircle className={iconClass} />;
   }
 };
 
-// Generate the final options array for rendering
 const amenityOptions = allAmenityNames.map(name => ({
     name,
     icon: getAmenityIcon(name)
@@ -158,8 +156,6 @@ const CreateListing2 = () => {
   const selectedCategory = watch("category");
   const uploadedImages = watch("images");
 
-  const selectedAmenities = watch("amenities");
-
   const handleFilesChange = useCallback(
     (files) => {
       setValue("images", files, { shouldValidate: true });
@@ -167,23 +163,7 @@ const CreateListing2 = () => {
     [setValue]
   );
 
- // NEW: Handler for toggling amenities
-const handleAmenityToggle = (amenityName) => {
-    const currentAmenities = selectedAmenities || [];
-    const newAmenities = currentAmenities.includes(amenityName)
-      ? currentAmenities.filter(name => name !== amenityName) // Deselect
-      : [...currentAmenities, amenityName]; // Select
-    setValue("amenities", newAmenities, { shouldValidate: true });
-  };
-
-  const goBack = () => {
-    // Save current step's data before going back
-    const currentData = watch();
-    updateListingData(currentData);
-    navigate("/createListing1");
-  };
-
-
+  // Handle form submission
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     const formData = new FormData();
@@ -200,7 +180,7 @@ const handleAmenityToggle = (amenityName) => {
 
     formData.append("propertyDetails", JSON.stringify(data.propertyDetails));
 
-     const amenitiesToSubmit = data.amenities.map(name => ({ name }));
+    const amenitiesToSubmit = data.amenities.map(name => ({ name }));
     formData.append("amenities", JSON.stringify(amenitiesToSubmit));
 
     if (data.images && data.images.length > 0) {
@@ -236,11 +216,10 @@ const handleAmenityToggle = (amenityName) => {
 
 const handleDetailChange = (field, amount) => {
     const currentValue = propertyDetails[field] || 1;
-    const newValue = Math.max(1, currentValue + amount); // Ensure value is never less than 1
+    const newValue = Math.max(1, currentValue + amount); 
     setValue(`propertyDetails.${field}`, newValue, { shouldValidate: true });
 };
 
-// 1. A function to format how each option looks in the dropdown
 const formatOptionLabel = ({ name, icon }) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       {icon}
@@ -248,17 +227,16 @@ const formatOptionLabel = ({ name, icon }) => (
     </div>
 );
 
-// 2. Custom styles to create the 2-column dropdown menu
 const customSelectStyles = {
     menu: (provided) => ({
         ...provided,
-        width: '650px', // Make the dropdown menu wider
+        width: '580px',
         maxWidth: '90vw',
     }),
     menuList: (provided) => ({
         ...provided,
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr', // The 2-column magic
+        gridTemplateColumns: '1fr 1fr',
         gap: '4px',
         padding: '8px',
     }),
@@ -308,7 +286,7 @@ const customSelectStyles = {
             </div>
             <hr className="bg-gray-200"></hr>
 
-            {/* --- START: NEW Property Details Section --- */}
+            {/* NEW Property Details Section */}
             <div className="form-group">
               <label className="form-label">
                 Share some basics about your place
@@ -403,8 +381,8 @@ const customSelectStyles = {
             </div>
             <hr className="form-divider" />
 
-            {/* --- START: NEW Amenities Section --- */}
-            <div className="form-group">
+            {/* NEW Amenities Section */}
+            <div className="form-group amenities-section">
               <label className="form-label">What amenities do you offer?</label>
               <Controller
                 name="amenities"
@@ -418,14 +396,12 @@ const customSelectStyles = {
                     styles={customSelectStyles}
                     formatOptionLabel={formatOptionLabel}
                     getOptionValue={(option) => option.name}
-                    getOptionLabel={(option) => option.name} // We use formatOptionLabel for display, but this is good practice
+                    getOptionLabel={(option) => option.name} 
                     placeholder="Select amenities..."
                     classNamePrefix="react-select"
-                    // Convert value for react-select: from array of strings to array of objects
                     value={amenityOptions.filter((option) =>
                       field.value?.includes(option.name)
                     )}
-                    // Convert value for react-hook-form: from array of objects to array of strings
                     onChange={(selectedOptions) =>
                       field.onChange(
                         selectedOptions.map((option) => option.name)

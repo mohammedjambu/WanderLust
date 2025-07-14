@@ -1,3 +1,5 @@
+// src/components/ImageUpload.jsx
+
 import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { UploadCloud, X } from "lucide-react";
@@ -8,12 +10,11 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
 
   useEffect(() => {
     if (!value || value.length === 0) {
-      previews.forEach((file) => URL.revokeObjectURL(file.preview)); // Clean up old blobs
+      previews.forEach((file) => URL.revokeObjectURL(file.preview));
       setPreviews([]);
       return;
     }
 
-    // This part runs if the parent provides files, creating the visual previews.
     const newPreviews = value.map((file) =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
@@ -21,17 +22,16 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
     );
     setPreviews(newPreviews);
 
-    // CRITICAL: This cleanup function runs when the component unmounts or when `value` changes again.
-    // It prevents memory leaks.
+    // This is a CRITICAL cleanup function. It runs when the component unmounts OR when `value` changes again.
     return () =>
       newPreviews.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [value]); // The dependency array makes this component truly controlled by its parent.
+  }, [value]); // The dependency array `[value]` makes this component truly controlled by its parent.
 
   const onDrop = useCallback(
     (acceptedFiles) => {
-      onFilesChange([...value, ...acceptedFiles]); // Append new files to existing ones
+      onFilesChange(acceptedFiles);
     },
-    [onFilesChange, value]
+    [onFilesChange]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -39,11 +39,10 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
     accept: { "image/*": [".jpeg", ".png", ".jpg", ".webp"] },
   });
 
-  const removeFile = (e, fileToRemove) => {
+  const removeAllPreviews = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const updatedFiles = value.filter((file) => file !== fileToRemove);
-    onFilesChange(updatedFiles);
+    onFilesChange([]); // Tell the parent form to clear the 'newImages' field.
   };
 
   return (
@@ -68,18 +67,19 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
 
       {previews.length > 0 && (
         <div className="previews-grid">
-          {previews.map((file, index) => (
-            <div key={index} className="preview-item">
+          {previews.map((file) => (
+            <div key={file.name} className="preview-item">
               <img src={file.preview} alt="Preview" />
-              <button
-                onClick={(e) => removeFile(e, file)}
-                className="preview-remove-btn"
-                aria-label="Remove image"
-              >
-                <X size={16} />
-              </button>
             </div>
           ))}
+          <button
+            onClick={removeAllPreviews}
+            className="preview-remove-btn"
+            aria-label="Clear all new images"
+            title="Clear all new images"
+          >
+            <X size={16} />
+          </button>
         </div>
       )}
     </div>

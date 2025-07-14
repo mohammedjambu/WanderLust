@@ -1,4 +1,3 @@
-/* src/styles/CreateListing.css */
 :root {
     --primary-brand-color: #fe424d;
     --primary-brand-hover: #e03b44;
@@ -75,11 +74,6 @@
     transform: translateY(-12px);
 }
 
-/* .progress-step.active .progress-dot {
-    background-color: var(--primary-brand-color) !important;
-    border-color: var(--primary-brand-color) !important;
-    color: #fff;
-} */
 
 .progress-bar .progress-step.active .progress-dot {
   background-color: #fe424d !important;
@@ -96,17 +90,21 @@
 .form-fields {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .form-group {
     width: 100%;
 }
 
+.amenities-section {
+    margin-top: 1.5rem;
+}
+
 .form-group label {
     display: block;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 800;
     color: var(--text-color-dark);
     margin-bottom: 0.5rem;
 }
@@ -124,7 +122,6 @@
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    /* border-color: var(--primary-brand-color); */
     box-shadow: 0 0 0 2px rgba(255, 88, 100, 0.2);
 }
 
@@ -290,7 +287,7 @@ button.nav-button.next {
 }
 
 .form-label {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
     font-weight: 600;
     color: #333;
     margin-bottom: 0.5rem;
@@ -301,11 +298,11 @@ button.nav-button.next {
     border: none;
     height: 1px;
     background-color: #e5e7eb;
-    margin: 2rem 0;
+    /* margin: 0; */
 }
 
 
-/* New Property Details "Counter" Styles */
+/* New Property Details */
 .property-details-container-new {
     display: flex;
     flex-direction: column;
@@ -358,7 +355,6 @@ button.nav-button.next {
 
 
 /* --- Amenities Grid Styles --- */
-/* React Select Customizations */
 .react-select__control {
     border-color: #d1d5db !important;
     box-shadow: none !important;
@@ -383,12 +379,24 @@ button.nav-button.next {
     font-weight: 500;
 }
 
+.form-wrapper {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: formFadeIn 0.5s 0.2s ease-out forwards;
+}
+
+@keyframes formFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 /* Responsive */
 @media (max-width: 640px) {
-    .create-listing-container{
-        margin-top: 3rem;
-    }
+    /* .create-listing-container{
+        margin-top: 0.5rem;
+    } */
 
     .form-wrapper {
         padding: 1.5rem 1rem;
@@ -417,14 +425,13 @@ button.nav-button.next {
 }
 
 
-/* This class is applied by our Controller component for error handling */
 .react-select-container.error-border .react-select__control {
     border-color: var(--error-color) !important;
 }
 
 .react-select__control {
     border-radius: 8px !important;
-    padding: 0.25rem !important; /* Makes it feel like the other inputs */
+    padding: 0.25rem !important; 
     border: 1px solid var(--border-color-medium) !important;
     box-shadow: none !important;
 }
@@ -435,10 +442,10 @@ button.nav-button.next {
 }
 
 .react-select__indicator-separator {
-    display: none !important; /* Hides the small vertical line */
+    display: none !important;
 }
 
 .react-select__menu {
     border-radius: 8px !important;
-    z-index: 10; /* Ensures the dropdown appears above other content */
+    z-index: 10;
 }
