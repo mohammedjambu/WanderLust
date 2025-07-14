@@ -1,11 +1,20 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import "./Navbar.css";
 import { FaBars } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
-import { GiFamilyHouse, GiWoodCabin, GiCampingTent,
-  GiCastle, } from "react-icons/gi";
+import {
+  GiFamilyHouse,
+  GiWoodCabin,
+  GiCampingTent,
+  GiCastle,
+} from "react-icons/gi";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { MdBedroomParent, MdOutlinePool } from "react-icons/md";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
@@ -15,7 +24,6 @@ import { IoFlame, IoBedOutline } from "react-icons/io5";
 import { authDataContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
-// Define constant data outside the component to prevent re-creation on every render.
 const filterItems = [
   { icon: <IoFlame />, label: "Trending" },
   { icon: <GiFamilyHouse />, label: "Villa" },
@@ -36,41 +44,50 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchInput, setSearchInput] = useState(searchParams.get("search") || "");
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "");
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("search") || ""
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || ""
+  );
 
   const { authUser, loading, logout } = useContext(authDataContext);
   const navigate = useNavigate();
-  
+  const location = useLocation();
+
   const navRef = useRef(null);
   const filtersRef = useRef(null);
 
-  // BEST PRACTICE: Dynamically calculate the height of fixed/sticky elements
-  // This avoids "magic numbers" in CSS and adapts if content changes.
   useEffect(() => {
     const calculateHeight = () => {
       const navbarHeight = navRef.current?.offsetHeight || 0;
       const filtersHeight = filtersRef.current?.offsetHeight || 0;
       const totalHeight = navbarHeight + filtersHeight;
-      
-      document.documentElement.style.setProperty('--navbar-height', `${navbarHeight}px`);
-      document.documentElement.style.setProperty('--filters-height', `${filtersHeight}px`);
-      document.documentElement.style.setProperty('--total-fixed-height', `${totalHeight}px`);
+
+      document.documentElement.style.setProperty(
+        "--navbar-height",
+        `${navbarHeight}px`
+      );
+      document.documentElement.style.setProperty(
+        "--filters-height",
+        `${filtersHeight}px`
+      );
+      document.documentElement.style.setProperty(
+        "--total-fixed-height",
+        `${totalHeight}px`
+      );
     };
 
     calculateHeight();
-    // Recalculate on window resize
-    window.addEventListener('resize', calculateHeight);
-    return () => window.removeEventListener('resize', calculateHeight);
-  }, [location.pathname]); // Recalculate if we navigate to/from a page with filters
+    window.addEventListener("resize", calculateHeight);
+    return () => window.removeEventListener("resize", calculateHeight);
+  }, [location.pathname]); 
 
-  // Close dropdowns when navigating
   useEffect(() => {
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
   }, [location.pathname, location.search]);
-  
-  // Sync state with URL Search Params
+
   useEffect(() => {
     setSearchInput(searchParams.get("search") || "");
     setSelectedCategory(searchParams.get("category") || "");
@@ -90,7 +107,7 @@ const Navbar = () => {
     }
     setSearchParams(params);
   };
-  
+
   const handleLogout = async () => {
     await logout();
     toast.success("Logout Successful");
@@ -100,42 +117,87 @@ const Navbar = () => {
   const closeAllMenus = () => {
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
-  }
+  };
 
-  // A single, reusable dropdown menu component for DRY code
   const renderDropdownMenu = () => {
     if (loading) return null;
 
     if (!authUser) {
       return (
         <>
-          <Link className="dropdown-item bold" to="/login" onClick={closeAllMenus}>Log in</Link>
-          <Link className="dropdown-item bold" to="/signup" onClick={closeAllMenus}>Sign up</Link>
+          <Link
+            className="dropdown-item bold"
+            to="/login"
+            onClick={closeAllMenus}
+          >
+            Log in
+          </Link>
+          <Link
+            className="dropdown-item bold"
+            to="/signup"
+            onClick={closeAllMenus}
+          >
+            Sign up
+          </Link>
           <hr />
-          <Link className="dropdown-item" to="/createListing1" onClick={closeAllMenus}>Airbnb your home</Link>
+          <Link
+            className="dropdown-item"
+            to="/createListing1"
+            onClick={closeAllMenus}
+          >
+            Airbnb your home
+          </Link>
         </>
       );
     }
     return (
       <>
-        <Link className="dropdown-item bold" to="/mytrips" onClick={closeAllMenus}>Trips</Link>
-        <Link className="dropdown-item bold" to="/wishlist" onClick={closeAllMenus}>Wishlist</Link>
-        <Link className="dropdown-item" to="/mylisting" onClick={closeAllMenus}>My Listings</Link>
-        <Link className="dropdown-item" to="/profile" onClick={closeAllMenus}>Profile</Link>
+        <Link
+          className="dropdown-item bold"
+          to="/mytrips"
+          onClick={closeAllMenus}
+        >
+          Trips
+        </Link>
+        <Link
+          className="dropdown-item bold"
+          to="/wishlist"
+          onClick={closeAllMenus}
+        >
+          Wishlist
+        </Link>
+        <Link className="dropdown-item" to="/mylisting" onClick={closeAllMenus}>
+          My Listings
+        </Link>
+        <Link className="dropdown-item" to="/profile" onClick={closeAllMenus}>
+          Profile
+        </Link>
         <hr />
-        <Link className="dropdown-item" to="/createListing1" onClick={closeAllMenus}>Airbnb your home</Link>
+        <Link
+          className="dropdown-item"
+          to="/createListing1"
+          onClick={closeAllMenus}
+        >
+          Airbnb your home
+        </Link>
         <hr />
-        {/* BEST PRACTICE: Use a button for actions like logout for accessibility */}
-        <button className="dropdown-item" onClick={handleLogout}>Log out</button>
+        <button className="dropdown-item" onClick={handleLogout}>
+          Log out
+        </button>
       </>
     );
   };
 
   return (
     <header className="navbar-header">
-      <nav ref={navRef} className={`navbar-top ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}>
+      <nav
+        ref={navRef}
+        className={`navbar-top ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}
+      >
         <div className="container">
-          <Link className="navbar-brand" to="/">Wanderlust</Link>
+          <Link className="navbar-brand" to="/">
+            Wanderlust
+          </Link>
 
           <div className="search-container">
             <form
@@ -160,7 +222,6 @@ const Navbar = () => {
             </form>
           </div>
 
-          {/* ACCESSIBILITY: Added aria attributes for screen readers */}
           <button
             className="navbar-toggler"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -191,17 +252,18 @@ const Navbar = () => {
                 <CgProfile className="dropdown-icon" />
               )}
             </button>
-            <div id="desktop-dropdown-menu" className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
+            <div
+              id="desktop-dropdown-menu"
+              className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}
+            >
               {renderDropdownMenu()}
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu Content - simplified logic */}
+        {/* Mobile Menu Content */}
         <div id="mobile-menu-content" className="mobile-menu">
-            <div className="dropdown-menu">
-                {renderDropdownMenu()}
-            </div>
+          <div className="dropdown-menu">{renderDropdownMenu()}</div>
         </div>
       </nav>
 
@@ -209,7 +271,8 @@ const Navbar = () => {
         <div className="filters-wrapper" ref={filtersRef}>
           <div className="filters">
             {filterItems.map((item) => {
-              const isTrendingActive = item.label === "Trending" && !selectedCategory;
+              const isTrendingActive =
+                item.label === "Trending" && !selectedCategory;
               const isCategoryActive = selectedCategory === item.label;
               const isActive = isTrendingActive || isCategoryActive;
 
@@ -218,7 +281,8 @@ const Navbar = () => {
                   key={item.label}
                   className={`filter ${isActive ? "active" : ""}`}
                   onClick={() => {
-                    const newCategory = item.label === "Trending" ? "" : item.label;
+                    const newCategory =
+                      item.label === "Trending" ? "" : item.label;
                     handleFilterOrSearch(searchInput, newCategory);
                   }}
                   role="button"
