@@ -1,18 +1,13 @@
-/* --- Home.css (Refactored) --- */
-
-/* Inherits --primary-color, etc. from the :root in Navbar.css */
-
 .listings-container {
-  max-width: 1440px; /* Constrain width on very large screens */
+  max-width: 1440px;
   margin: auto;
   margin-top: 2rem;
   padding: 0 1.5rem;
-  margin-bottom: 2rem; 
+  margin-bottom: 2rem;
 }
 
 .listings-grid {
   display: grid;
-  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   justify-content: start;
@@ -21,7 +16,7 @@
 .listing-link {
   text-decoration: none;
   color: inherit;
-  display: block; /* Ensures the link takes up the full card area */
+  display: block;
 }
 
 .listing-card {
@@ -30,22 +25,58 @@
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-light); /* Using variable from Navbar.css */
+  box-shadow: var(--shadow-light);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 100%; /* Ensures cards in the same row have equal height */
+  height: 100%;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardFadeIn 0.5s ease-out forwards;
+}
+
+
+.listing-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.listing-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.listing-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.listing-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.listing-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.listing-card:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.listing-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.listing-card:nth-child(8) {
+  animation-delay: 0.4s;
 }
 
 .listing-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-medium); /* Using variable */
+  transform: translateY(-10px);
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
 }
 
 .listing-image-container {
   width: 100%;
   overflow: hidden;
-  /* BEST PRACTICE: Use aspect-ratio for responsive images */
   aspect-ratio: 16 / 10;
-  background-color: #f0f0f0; /* Placeholder color for lazy loading */
+  background-color: #f0f0f0;
 }
 
 .listing-image {
@@ -60,7 +91,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  flex-grow: 1; /* Allows this section to grow and push the price down */
+  flex-grow: 1;
 }
 
 .listing-title {
@@ -89,7 +120,7 @@
 .listing-price {
   font-size: 1rem;
   color: var(--text-color-dark);
-  margin-top: auto; /* Pushes the price to the bottom of the card */
+  margin-top: auto;
   padding-top: 0.5rem;
 }
 
@@ -105,14 +136,14 @@
 .listing-card-actions {
   display: flex;
   gap: 0.5rem;
-  padding: 0 1rem 0.75rem; /* Match horizontal padding of the body */
+  padding: 0 1rem 0.75rem;
   border-top: 1px solid #f0f0f0;
   margin-top: 0.5rem;
   padding-top: 0.75rem;
 }
 
 .action-btn {
-  flex-grow: 1; /* Make buttons share space equally */
+  flex-grow: 1;
   padding: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -128,6 +159,7 @@
   background-color: #f0f0f0;
   color: #333;
 }
+
 .action-btn.edit:hover {
   background-color: #e0e0e0;
 }
@@ -136,84 +168,55 @@
   background-color: #fff0f0;
   color: var(--error-color, #dc2626);
 }
+
 .action-btn.delete:hover {
   background-color: var(--error-color, #dc2626);
   color: #fff;
 }
 
-/* ✅ NEW: Styles for the wishlist heart button on a listing card */
-.listing-image-container {
-    position: relative; /* Required for absolute positioning of the child button */
-}
-
-.wishlist-toggle-btn {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(4px);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    border: none;
-    cursor: pointer;
-    color: var(--text-dark);
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.wishlist-toggle-btn:hover {
-    transform: scale(1.1);
-}
-
-.wishlist-toggle-btn.active {
-    color: var(--primary-color, #fe424d);
-}
-
-.wishlist-toggle-btn.active svg {
-    fill: currentColor;
-}
-
 
 .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .page-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    text-align: center;
-    color: var(--text-color-dark);
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-color-dark);
+}
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- Responsive Overrides for Headers --- */
 @media (max-width: 768px) {
   .page-title {
     font-size: 1.75rem;
-    /* margin-top: rem; Adjust spacing */
   }
 
   .listings-container {
-    padding: 0 1rem; /* Reduce side padding on small screens */
+    padding: 0 1rem;
     margin-top: 2rem;
   }
 
-  /* When on a small screen, center the column(s) of cards */
   .listings-grid {
     justify-content: center;
   }
 }
 
-/* --- Status Indicators (Loading, Error, No Results) --- */
+/* --- Status Indicators --- */
 .status-container {
-  grid-column: 1 / -1; /* Make it span the full grid width */
+  grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 1rem;
   color: var(--text-color-light);
@@ -226,22 +229,27 @@
   overflow: hidden;
   box-shadow: var(--shadow-light);
 }
+
 .skeleton-image {
   aspect-ratio: 16 / 10;
   background-color: #e0e0e0;
 }
+
 .skeleton-body {
   padding: 1rem;
 }
+
 .skeleton-text {
   height: 1em;
   background-color: #e0e0e0;
   border-radius: 4px;
   margin-bottom: 0.75rem;
 }
+
 .skeleton-text.short {
   width: 60%;
 }
+
 .skeleton-text.long {
   width: 90%;
 }
@@ -258,6 +266,7 @@
   0% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: -100% 50%;
   }

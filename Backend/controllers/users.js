@@ -1,4 +1,3 @@
-// controllers/users.js
 const User = require("../models/user.js");
 
 // Signup Controller
@@ -60,10 +59,8 @@ module.exports.logout = (req, res, next) => {
 module.exports.updateProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    // ✅ Destructure the new bio field from the request body
     const { fullName, hometown, phone, bio } = req.body;
 
-    // Prepare the data for updating
     const updateData = {
       fullName,
       hometown,
@@ -71,12 +68,10 @@ module.exports.updateProfile = async (req, res) => {
       bio,
     };
 
-    // ✅ If a file was uploaded by multer, add its path to the update data
     if (req.file) {
       updateData.avatar = req.file.path;
     }
 
-    // Find the user and update them with the new data
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
