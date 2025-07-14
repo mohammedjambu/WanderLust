@@ -1,119 +1,60 @@
-// Home.jsx (Refactored)
+// src/pages/MyWishlist/MyWishlist.jsx
+
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import './Home.css';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { authDataContext } from '../../context/AuthContext';
-import { MapPin, Heart } from 'lucide-react';
 
-// BEST PRACTICE: Create a separate, reusable component for the listing card.
-export const ListingCard = ({ listing, isWishlisted = false, onToggleWishlist = null, actions = null }) => {
-  const location = [listing.location, listing.country].filter(Boolean).join(', ');
+import { ListingCard, SkeletonCard } from '../Home/Home'; 
+import '../Home/Home.css'; 
 
-  const handleWishlistClick = (e) => {
-    e.preventDefault(); // Stop the card's link from navigating
-    e.stopPropagation();
-    if (onToggleWishlist) {
-      onToggleWishlist(listing._id);
-    }
-  };
+const MyWishlist = () => {
+  const { authUser, serverUrl } = useContext(authDataContext);
+  const navigate = useNavigate();
 
-  return (
-    // We change the outer element from a Link to a div, so the action buttons can be separate.
-    <div className="listing-card">
-      <Link to={`/listings/${listing._id}`} className="listing-card-link">
-       {onToggleWishlist && (
-          <button
-            onClick={handleWishlistClick}
-            className={`wishlist-toggle-btn ${isWishlisted ? 'active' : ''}`}
-            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <Heart size={20} />
-          </button>
-        )}
-        <div className="listing-image-container">
-          <img
-            loading="lazy"
-            src={listing.images[0].url || '/default-image.jpg'}
-            alt={listing.title}
-            className="listing-image"
-          />
-        </div>
-        <div className="listing-body">
-          <h3 className="listing-title" title={listing.title}>{listing.title}</h3>
-          <p className="listing-location">
-            <MapPin size={14} className="location-icon" />
-            {location}
-          </p>
-          <p className="listing-price">
-            <b>₹{listing.price.toLocaleString('en-IN')}</b>
-            <span> / night</span>
-          </p>
-        </div>
-      </Link>
-      
-      {/* ✅ NEW: Conditionally render the action buttons if they are passed in */}
-      {actions && (
-        <div className="listing-card-actions">
-          {actions}
-        </div>
-      )}
-    </div>
-  );
-};
-
-
-
-// UX ENHANCEMENT: A skeleton loader component for a better loading experience.
-export const SkeletonCard = () => (
-  <div className="skeleton-card">
-    <div className="skeleton-image"></div>
-    <div className="skeleton-body">
-      <div className="skeleton-text long"></div>
-      <div className="skeleton-text short"></div>
-      <div className="skeleton-text"></div>
-    </div>
-  </div>
-);
-
-const Home = () => {
-  const { serverUrl } = useContext(authDataContext); 
-  const [listings, setListings] = useState([]);
-  const [error, setError] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchParams] = useSearchParams();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!serverUrl) return;
+    if (!authUser) {
+      navigate('/login');
+      return;
+    }
 
-    const fetchListings = async () => {
+    const fetchWishlist = async () => {
       try {
         setLoading(true);
-        // Use URLSearchParams for cleaner query string construction
-        const params = new URLSearchParams();
-        const search = searchParams.get("search");
-        const category = searchParams.get("category");
-        if (search) params.append("search", search);
-        if (category) params.append("category", category);
-
-        const url = `${serverUrl}/api/listings?${params.toString()}`;
-        
-        const response = await axios.get(url, { timeout: 15000 });
-        setListings(response.data);
-        setError(null);
+        const res = await axios.get(`${serverUrl}/api/wishlist`, { withCredentials: true });
+        setWishlist(res.data);
       } catch (err) {
-        console.error("Error fetching listings:", err);
-        setError("Could not load listings. Please try refreshing the page.");
+        console.error("Error fetching wishlist:", err);
+        setError("Could not load your wishlist. Try again later.");
       } finally {
         setLoading(false);
       }
     };
-    fetchListings();
-  }, [serverUrl, searchParams]);
+    fetchWishlist();
+  }, [authUser, serverUrl, navigate]);
+
+  const handleRemoveFromWishlist = async (listingId) => {
+    const originalWishlist = [...wishlist];
+    setWishlist(prev => prev.filter(item => item._id !== listingId));
+
+    try {
+      await axios.post(`${serverUrl}/api/wishlist/toggle/${listingId}`, {}, { withCredentials: true });
+      toast.info("Removed from wishlist");
+    } catch (err) {
+      // If the API call fails, revert the change and show an error
+      toast.error("Failed to update wishlist. Please try again.");
+      setWishlist(originalWishlist);
+      console.error("Error toggling wishlist:", err);
+    }
+  };
 
   const renderContent = () => {
     if (loading) {
-      // Display 8 skeleton cards while loading
       return Array.from({ length: 8 }).map((_, index) => <SkeletonCard key={index} />);
     }
     
@@ -121,18 +62,30 @@ const Home = () => {
       return <div className="status-container" role="alert">{error}</div>;
     }
     
-    if (listings.length === 0) {
-      return <div className="status-container"><p>No listings found for your search.</p></div>;
+    if (wishlist.length === 0) {
+      return (
+        <div className="status-container">
+          <p>Your wishlist is empty. Start exploring to find places you love!</p>
+          <Link to="/">Explore Listings</Link>
+        </div>
+      );
     }
 
-    return listings.map((listing) => (
-      <ListingCard key={listing._id} listing={listing} />
+    return wishlist.map((listing) => (
+      <ListingCard
+        key={listing._id}
+        listing={listing}
+        isWishlisted={true} // All items on this page are wishlisted
+        onToggleWishlist={handleRemoveFromWishlist}
+      />
     ));
-  }
+  };
 
   return (
-    // ACCESSIBILITY: Use <main> for the primary content of the page
     <main className="listings-container">
+      <div className="page-header">
+        <h1 className="page-title">My Wishlist ❤️</h1>
+      </div>
       <div className="listings-grid">
         {renderContent()}
       </div>
@@ -140,4 +93,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MyWishlist;
