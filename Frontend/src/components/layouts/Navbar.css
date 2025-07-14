@@ -1,5 +1,3 @@
-/* --- Navbar.css (Refactored) --- */
-
 :root {
   --primary-color: #fe424d;
   --primary-color-hover: #e03b44;
@@ -12,18 +10,14 @@
   --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.08);
   --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-  /* Dynamic height variable set by JavaScript */
   --navbar-height: 72px;
   --filters-height: 50px;
   --total-fixed-height: 122px;
-  /* Default fallback */
 }
-
 
 body {
   padding-top: 6rem;
 }
-
 
 .navbar-top {
   position: fixed;
@@ -32,7 +26,9 @@ body {
   right: 0;
   z-index: 1000;
   background-color: var(--background-color-light);
-  padding: 0.5rem 1rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-color-light);
   width: 100%;
 }
@@ -48,14 +44,13 @@ body {
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 700;
   color: var(--primary-color);
   text-decoration: none;
   transition: color 0.2s ease;
   flex-shrink: 0;
-  /* Prevents brand from shrinking */
-  margin-left: 1rem;
+  margin-left: 2rem;
 }
 
 /* --- Search --- */
@@ -65,7 +60,6 @@ body {
   justify-content: center;
   min-width: 200px;
   margin-top: 0.5rem;
-  /* Prevents search from being too squished */
 }
 
 .search-form {
@@ -82,7 +76,6 @@ body {
   font-size: 1rem;
   border: 1px solid var(--border-color-medium);
   width: 100%;
-  /* Changed from flex-grow for better control */
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -120,7 +113,6 @@ body {
 /* --- Filters Section --- */
 .filters-wrapper {
   position: sticky;
-  /* top is now set by a CSS variable from JS */
   top: 0;
   background-color: var(--background-color-light);
   z-index: 999;
@@ -128,7 +120,6 @@ body {
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0.25rem 0;
-  /* Adjusted padding */
   border-bottom: 1px solid var(--border-color-light);
 }
 
@@ -140,36 +131,56 @@ body {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  /* Adjusted gap */
   padding: 0 1rem;
-  /* Add horizontal padding for small screens */
   width: max-content;
-  /* Allows container to be scrollable */
   margin: 0 auto;
-  /* Center the filters if they don't fill the width */
 }
 
 .filter {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
   opacity: 0.7;
-  transition: opacity 0.2s ease, border-bottom 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease-in-out;
   color: var(--text-color-dark);
   padding: 4px 0;
-  border-bottom: 2px solid transparent;
-  /* Reserve space for the border */
   cursor: pointer;
   flex-shrink: 0;
-  /* Prevent items from shrinking */
+}
+
+.filter::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: width 0.25s ease-out;
 }
 
 .filter:hover {
   opacity: 1;
-  border-bottom-color: var(--border-color-medium);
+  transform: translateY(-3px);
+}
+
+.filter:hover::after {
+  width: 80%;
+  background-color: var(--border-color-medium);
 }
 
 .filter.active {
   opacity: 1;
-  border-bottom-color: var(--primary-color);
+  transform: translateY(-3px);
+}
+
+.filter.active::after {
+  width: 100%;
+  background-color: var(--primary-color);
 }
 
 .filter-icon {
@@ -180,7 +191,6 @@ body {
   font-size: 0.8rem;
   margin-top: 0.25rem;
   white-space: nowrap;
-  /* Prevent text from wrapping */
 }
 
 /* --- Dropdown Menu --- */
@@ -188,8 +198,6 @@ body {
   position: absolute;
   right: 1rem;
 }
-
-
 
 .dropdown-toggle {
   display: flex;
@@ -203,19 +211,12 @@ body {
   transition: box-shadow 0.2s ease;
 }
 
-.dropdown-toggle:hover {
-  color: var(--primary-color);                /* highlight icon color */
-  box-shadow: 0 3px 10px rgba(255,0,0,0.3);
-  transform: scale(1.2);
-}
 
 .user-menu-container:hover .dropdown-toggle {
+  color: var(--primary-color);
   transform: scale(1.1);
-  background-color: rgba(255,56,92,0.1);
   color: #ff385c;
-  box-shadow: 
-    0 0 0 2px rgba(255,56,92,0.2),
-    inset 0 0 0 1px rgba(255,56,92,0.1);
+  box-shadow: 0 2px 8px rgba(255, 56, 56, 0.5);
 }
 
 .dropdown-toggle .fa-bars {
@@ -237,10 +238,12 @@ body {
 
 /* Base dropdown menu styles */
 .dropdown-menu {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, visibility 0.2s;
   position: absolute;
   top: calc(100% + 12px);
-  /* Position below the toggle */
   right: 0;
   background-color: var(--background-color-dropdown);
   border: 1px solid var(--border-color-light);
@@ -250,11 +253,12 @@ body {
   z-index: 1001;
   padding: 8px 0;
   overflow: hidden;
-  /* Ensures border-radius is respected by children */
 }
 
 .dropdown-menu.show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .dropdown-item {
@@ -285,11 +289,9 @@ body {
   margin: 8px 0;
 }
 
-
 /* --- Responsive Design --- */
 .navbar-toggler {
   display: none;
-  /* Hidden by default */
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -299,15 +301,20 @@ body {
 }
 
 @media (max-width: 768px) {
+  .container {
+    gap: 1rem;
+    margin-bottom: 0;
+  }
+
   .navbar-header {
     margin-top: 3.5rem;
   }
-  
+
   .search-container {
     order: 3;
     width: 100%;
     margin: 0;
-    margin-top: 0;
+    margin-bottom: 0.7rem;
     min-width: unset;
     padding: 0 1rem;
   }
@@ -322,8 +329,6 @@ body {
 
   .filters {
     justify-content: flex-start;
-    gap: 1.5rem;
-    padding: 1rem;
   }
 
   .mobile-menu {
@@ -338,9 +343,11 @@ body {
   }
 
   .navbar-top.mobile-menu-open .dropdown-menu {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+
     position: static;
-    /* Override absolute positioning */
     width: 100%;
     box-shadow: none;
     border-radius: 0;
@@ -348,7 +355,7 @@ body {
     border-left: none;
     border-bottom: none;
     min-width: unset;
-    margin-top: 0;
+    margin-top: 1rem;
     padding-top: 0;
     background-color: var(--background-color-light);
   }

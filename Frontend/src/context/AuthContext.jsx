@@ -28,8 +28,6 @@ function AuthContext({ children }) {
   axios.defaults.withCredentials = true;
 
   const fetchCurrentUser = useCallback(async () => {
-    // Only set loading to true on the very first fetch
-    // Subsequent background fetches shouldn't show a loading screen
     if (loading) setLoading(true); 
     
     try {
@@ -69,15 +67,9 @@ function AuthContext({ children }) {
     }
   }, [serverUrl]);
 
-  // ✅ FIX: This function now ensures the user state is always set from the canonical server route.
   const handleLoginSuccess = async (loginResponseUser) => {
-    // 1. Set the user immediately from the login response for a snappy UI.
     setAuthUser(loginResponseUser);
     localStorage.setItem("authUser", JSON.stringify(loginResponseUser));
-
-    // 2. Then, immediately fetch the "official" user data from the server
-    //    to ensure the state is consistent with what a page refresh would get.
-    //    This prevents the race condition.
     await fetchCurrentUser();
   };
 
