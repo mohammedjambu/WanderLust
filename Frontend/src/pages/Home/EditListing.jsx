@@ -260,6 +260,7 @@ const EditListing = () => {
   const getAmenityIcon = (name) => {
     const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
     const normalizedName = normalizeAmenityName(name);
+    
     switch (normalizedName) {
       case "free-wifi":
         return <Wifi className={iconClass} />;

@@ -75,6 +75,7 @@ import { eachDayOfInterval, parseISO } from "date-fns";
 import { Dialog } from "@headlessui/react"; // Modal UI
 import { differenceInCalendarDays } from "date-fns";
 import "./ShowListing.css";
+import { getAmenityIcon } from "../../components/utils/getAmenityIcon";
 
 const ShowListing = () => {
   const { id } = useParams();
@@ -281,141 +282,7 @@ const ShowListing = () => {
     }
   };
 
-  // Function to get amenity icon based on name
-  // Helper function to make amenity names consistent
-const normalizeAmenityName = (name) => {
-  if (!name) return "";
-  return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
-};
 
-const getAmenityIcon = (name) => {
-  const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
-  const normalizedName = normalizeAmenityName(name);
-
-  switch (normalizedName) {
-    // === Basic & Room Amenities ===
-    case "free-wifi":
-      return <Wifi className={iconClass} />;
-    case "free-parking":
-      return <ParkingCircle className={iconClass} />;
-    case "air-conditioning":
-      return <AirVent className={iconClass} />;
-    case "heating":
-      return <ThermometerSun className={iconClass} />;
-    case "pet-friendly":
-      return <PawPrint className={iconClass} />;
-    case "fireplace":
-      return <Flame className={iconClass} />;
-    case "washer":
-    case "laundry-service":
-      return <WashingMachine className={iconClass} />;
-    case "tv":
-    case "smart-tv":
-      return <Tv2 className={iconClass} />;
-    case "security":
-    case "24/7-security":
-      return <ShieldCheck className={iconClass} />;
-    case "tatami-mats":
-      return <Home className={iconClass} />;
-
-    // === Kitchen & Dining ===
-    case "full-kitchen":
-    case "shared-kitchen":
-    // case "chef's-kitchen":
-      return <ChefHat className={iconClass} />;
-    case "wine-tasting":
-      return <Wine className={iconClass} />;
-    case "home-cooked-meals":
-      return <Soup className={iconClass} />;
-    case "outdoor-dining":
-      return <Sun className={iconClass} />;
-    case "bbq-grill":
-      return <Flame className={iconClass} />;
-
-    // === Views & Outdoor Spaces ===
-    case "private-pool":
-    case "infinity-pool":
-      return <WavesLadder className={iconClass} />;
-    case "sea-view":
-    case "lake-view":
-    case "backwater-view":
-    case "ganges-view":
-    case "canal-view":
-    case "ocean-view":
-    case "private-lake":
-      return <Waves className={iconClass} />;
-    case "rooftop-deck":
-    case "rooftop-terrace":
-    case "rooftop-view":
-      return <FaPeopleRoof className={iconClass} />
-    case "private-patio":
-    case "balcony":
-      return <MdBalcony className={iconClass} />;
-    case "city-view":
-      return <View className={iconClass} />;
-    case "garden":
-    case "tropical-garden":
-    case "organic-garden":
-    case "manicured-gardens":
-    case "private-grounds":
-      return <Trees className={iconClass} />;
-    case "garden-view":
-      return <Leaf className={iconClass} />;
-    case "private-courtyard":
-    case "shared-courtyard":
-      return <Fence className={iconClass} />;
-    case "mountain-views":
-      return <Mountain className={iconClass} />;
-    case "organic-farm":
-      return <Sprout className={iconClass} />;
-
-    // === Activities & Experiences ===
-    case "beach-access":
-      return <TbBeach className={iconClass} />;
-    case "hiking-trails":
-      return <Backpack className={iconClass} />;
-    case "camping-tent": // Generic term
-    case "riverside-tent":
-    case "luxury-tent":
-      return <Tent className={iconClass} />;
-    case "campfire":
-    case "private-fire-pit":
-      return <FlameKindling className={iconClass} />;
-    // case "yoga-classes":
-    case "wildlife-viewing":
-    case "guided-safari":
-      return <Binoculars className={iconClass} />;
-    case "stargazing":
-      return <Star className={iconClass} />;
-    case "bicycle-rental":
-      return <Bike className={iconClass} />;
-    case "cultural-immersion":
-      return <Globe2 className={iconClass} />;
-    case "ski-storage":
-      return <Snowflake className={iconClass} />;
-
-    // === Unique Properties & Access ===
-    case "entire-castle":
-      return <Castle className={iconClass} />;
-    case "entire-palace":
-      return <Castle className={iconClass} />;
-    case "heritage-decor":
-      return <Landmark className={iconClass} />;
-    case "ballroom":
-    case "great-hall":
-      return <DoorOpen className={iconClass} />;
-    case "market-access":
-    case "city-access":
-      return <Store className={iconClass} />;
-
-    // === Fallback for Debugging ===
-    // This is the most important part! If an icon is missing,
-    // it will show a question mark and log a warning in the console.
-    default:
-      console.warn(`No icon found for amenity: "${name}" (normalized to "${normalizedName}")`);
-      return <HelpCircle className={iconClass} />;
-  }
-};
 
 
   //  const getAmenityIcon = (name) => {
@@ -713,7 +580,7 @@ const getAmenityIcon = (name) => {
         {/* Header Top section */}
         <motion.div variants={itemVariants}>
           <div className="mb-3">
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-2">
               <h1 className="text-3xl font-semibold text-gray-900">
                 {listingData.title}
               </h1>
@@ -721,7 +588,7 @@ const getAmenityIcon = (name) => {
 
             {/* Location */}
             <div className="flex justify-between items-start ">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 mt-2">
                 <MapPin className="w-4 h-4 text-gray-500" />
                 <span className="text-gray-600">
                   {listingData.location}, {listingData.country}
@@ -756,7 +623,9 @@ const getAmenityIcon = (name) => {
                     {isFavorited ? "Saved" : "Save"}
                   </span>
                 </motion.button>
+                
               </div>
+
             </div>
           </div>
         </motion.div>
@@ -836,7 +705,7 @@ const getAmenityIcon = (name) => {
         </motion.div>
 
         {/* Two-Column Grid for Property Details, Description, Offerings, Amenities, and Booking */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-8 mb-8 ">
           <div className="lg:col-span-2">
             <motion.div variants={itemVariants} className="mb-8">
               <div className="flex flex-col mb-4">
@@ -929,20 +798,20 @@ const getAmenityIcon = (name) => {
               </div>
             </motion.div>
 
-            {/* ✅ SECTION 2: "Amenities" (Dynamic Data from Backend) */}
+            {/* Amenities Section */}
             <motion.div
               variants={{
                 hidden: { y: 20, opacity: 0 },
                 visible: { y: 0, opacity: 1 },
               }}
-              // className="py-10 border-b border-gray-200"
             >
               <h3 className="text-2xl font-semibold mb-6 mt-6">Amenities</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+              <div className="amenities-container grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                 {listingData.amenities && listingData.amenities.length > 0 ? (
                   listingData.amenities.slice(0, 6).map((amenity) => (
                     <div key={amenity.name} className="flex items-center gap-4">
                       {getAmenityIcon(amenity.name)}
+                      
                       <span className="text-gray-700">{amenity.name}</span>
                     </div>
                   ))
@@ -1059,14 +928,16 @@ const getAmenityIcon = (name) => {
                   </div>
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleReserve}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-lg transition-colors mb-4"
-                >
-                  Reserve
-                </motion.button>
+                {!isOwner && (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleReserve}
+                    className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-lg transition-colors mb-4"
+                  >
+                    Reserve
+                  </motion.button>
+                )}
 
                 {authUser && listingData?.owner?._id === authUser._id && (
                   <div className="flex gap-2 mb-4">
@@ -1074,7 +945,7 @@ const getAmenityIcon = (name) => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleEdit}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors"
+                      className="w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors"
                     >
                       Edit Listing
                     </motion.button>
@@ -1303,7 +1174,7 @@ const getAmenityIcon = (name) => {
                       border: "3px solid white",
                       borderRadius: "50% 50% 50% 0",
                       transform: "rotate(-45deg)",
-                      boxShadow: "0 0 5px rgba(0,0,0,0.3)",
+                      boxShadow: "0 0 5px rgba(0,0,0,0.5)",
                       zIndex: 10,
                     }}
                   />
@@ -1342,7 +1213,6 @@ const getAmenityIcon = (name) => {
                 <span>{listingData.owner?.username || "our Host"}</span>
               </h2>
               <ul className="host-meta-new">
-                {/* ✅ UPDATED: Using specific icons and classes for targeted coloring */}
                 <li className="meta-joined">
                   <Calendar size={14} className="icon" /> Joined:{" "}
                   {new Date(listingData.owner?.createdAt).toLocaleDateString(
@@ -1403,7 +1273,6 @@ const getAmenityIcon = (name) => {
           <div className="about-host-new">
             <h3>About {listingData.owner?.name || "your host"}</h3>
             <p>
-              {/* ✅ THE FIX: Dynamically display the bio from the API, with a fallback. */}
               {listingData.owner?.bio ||
                 "This host prefers to keep an air of mystery, but they promise you a great stay!"}
             </p>
@@ -1436,19 +1305,37 @@ const getAmenityIcon = (name) => {
                 {isFavorited ? "Saved" : "Save"}
               </span>
             </motion.button>
+            {/* <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleWishlist}
+                  disabled={loading} // Disable while any data is loading
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                    isFavorited
+                      ? "border-red-500 bg-red-50 text-red-600"
+                      : "border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  <Heart
+                    className={`w-4 h-4 transition-all ${
+                      isFavorited ? "fill-current" : ""
+                    }`}
+                  />
+                  <span className="text-[1.2rem] font-medium">
+                    {isFavorited ? "Saved" : "Save"}
+                  </span>
+                </motion.button> */}
           </div>
         </div>
 
-        {/* ======================= HOST CONTACT MODAL ======================= */}
+        {/* HOST CONTACT MODAL */}
         <Dialog
           open={isHostContactModalOpen}
           onClose={closeHostContactModal}
           className="relative z-50"
         >
-          {/* The backdrop, rendered as a fixed sibling to the panel container */}
           <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
 
-          {/* Full-screen container to center the panel */}
           <div className="fixed inset-0 flex items-center justify-center p-4 mt-10">
             <Dialog.Panel className="mx-auto max-w-md w-full rounded-2xl bg-white p-6 shadow-xl">
               <div className="flex justify-between items-start">
