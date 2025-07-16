@@ -12,7 +12,6 @@ const validCategories = [
   "PG",
   "Cabins",
   "Shops",
-  "Trending",
   "Beach",
   "Camping",
   "Castles",

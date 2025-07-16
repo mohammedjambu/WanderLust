@@ -1872,3 +1872,40 @@ const sampleListings = [
 ];
 
 module.exports = { data: sampleListings };
+
+
+// Working Images
+
+// ---- Villa ----
+
+"https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800"
+"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+
+
+const sample = {
+
+  image: {
+    filename: "image5",
+    url: "",
+  },
+  images: [
+    {
+      filename: "mainImage",
+      url: "",
+    },
+    {
+      filename: "image2",
+      url: "",
+    },
+    {
+      filename: "image3",
+      url: "",
+    },
+    {
+      filename: "image4",
+      url: "",
+    },
+  ],
+
+
+};

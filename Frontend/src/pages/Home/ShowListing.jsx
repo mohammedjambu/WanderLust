@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FaPeopleRoof } from "react-icons/fa6";
-import { MdBalcony } from "react-icons/md";
-import { TbBeach } from "react-icons/tb";
 import {
   // Main Icons
   Heart,
@@ -23,41 +20,6 @@ import {
   Briefcase,
   CalendarCheck,
   XCircle,
-  HelpCircle, // Added HelpCircle for debugging
-
-  // Amenity Icons
-  Wifi,
-  ChefHat,
-  Waves,
-  PawPrint,
-  Snowflake,
-  WashingMachine,
-  ThermometerSun,
-  Flame,
-  AirVent,
-  Bike,
-  Binoculars,
-  FlameKindling,
-  Castle,
-  DoorOpen,
-  Fence,
-  Globe2,
-  Backpack,
-  Home,
-  Landmark,
-  Leaf,
-  Mountain,
-  ParkingCircle,
-  Soup,
-  Sprout,
-  Store,
-  Sun,
-  Tent,
-  Trees,
-  Tv2,
-  View,
-  Wine,
-  WavesLadder,
   Mail,
   Phone,
   Copy,
@@ -65,14 +27,14 @@ import {
 
 import axios from "axios";
 import { useParams, useNavigate, useLocation  } from "react-router-dom";
-import Map, { Marker } from "react-map-gl"; // Corrected import
+import Map, { Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { authDataContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { eachDayOfInterval, parseISO } from "date-fns";
-import { Dialog } from "@headlessui/react"; // Modal UI
+import { Dialog } from "@headlessui/react";
 import { differenceInCalendarDays } from "date-fns";
 import "./ShowListing.css";
 import { getAmenityIcon } from "../../components/utils/getAmenityIcon";
@@ -92,7 +54,6 @@ const ShowListing = () => {
   const [isAmenitiesModalOpen, setIsAmenitiesModalOpen] = useState(false);
   const [coordinates, setCoordinates] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(1);
@@ -100,7 +61,6 @@ const ShowListing = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mapError, setMapError] = useState(null);
-  const [unavailableRanges, setUnavailableRanges] = useState([]);
   const [bookedDates, setBookedDates] = useState([]);
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -132,14 +92,13 @@ const ShowListing = () => {
   const fetchListingData = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch the main listing data from the backend
       const response = await axios.get(`${serverUrl}/api/listings/${id}`, {
         withCredentials: true,
       });
       const data = response.data;
-      setListingData(data); // Update the state with the fetched data
+      setListingData(data);
 
-      // Set up fallback images
+      // fallback images
       const fallbackImage =
         data.image?.url ||
         "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
@@ -158,9 +117,7 @@ const ShowListing = () => {
       ].slice(0, 5);
 
       setAdditionalImages(displayImages);
-      // If the user is logged in, perform additional checks
       if (authUser && data._id) {
-        // Check if the listing is in the user's wishlist
         const wishlistRes = await axios.get(`${serverUrl}/api/wishlist`, {
           withCredentials: true,
         });
@@ -168,7 +125,6 @@ const ShowListing = () => {
           wishlistRes.data.some((listing) => listing._id === data._id)
         );
 
-        // Check if the user has booked this listing before
         const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, {
           withCredentials: true,
         });
@@ -177,12 +133,10 @@ const ShowListing = () => {
           bookingRes.data.some((b) => b.listing && b.listing._id === data._id)
         );
       } else {
-        // If no user, reset these states
         setIsFavorited(false);
         setHasBooked(false);
       }
     } catch (err) {
-      // Handle any errors during the fetch
       setError("Failed to load listing data: " + err.message);
       setIsFavorited(false);
       setHasBooked(false);
@@ -255,18 +209,15 @@ const ShowListing = () => {
       return;
     }
 
-    // This removes the dependency on the listingData object having the _id.
     if (!id) {
       toast.error("Listing ID is missing.");
       return;
     }
-
-    // Optimistic UI update for a better user experience
     setIsFavorited(!isFavorited);
 
     try {
       const res = await axios.post(
-        `${serverUrl}/api/wishlist/toggle/${id}`, // Use the ID from the URL
+        `${serverUrl}/api/wishlist/toggle/${id}`,
         {},
         { withCredentials: true }
       );
@@ -277,135 +228,10 @@ const ShowListing = () => {
       }
     } catch (err) {
       toast.error("Could not update wishlist. Reverting change.");
-      setIsFavorited(isFavorited); // Revert the UI state if the API call fails
+      setIsFavorited(isFavorited);
       console.error(err);
     }
   };
-
-
-
-
-  //  const getAmenityIcon = (name) => {
-  //   const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
-  //   switch (name.toLowerCase()) {
-  //     case "free wifi":
-  //     case "wi-fi":
-  //       return <Wifi size={24} className={iconClass} />;
-  //     case "full kitchen":
-  //       return <ChefHat size={24} className={iconClass} />;
-  //     case "private pool":
-  //       return <Waves size={24} className={iconClass} />;
-  //     case "free parking":
-  //       return <Car size={24} className={iconClass} />;
-  //     case "air conditioning":
-  //       return <Snowflake size={24} className={iconClass} />;
-  //     case "pet friendly":
-  //       return <PawPrint size={24} className={iconClass} />;
-  //     case "tv":
-  //       return <Tv size={24} className={iconClass} />;
-  //     case "washer":
-  //       return <WashingMachine size={24} className={iconClass} />;
-  //     case "heating":
-  //       return <ThermometerSun size={24} className={iconClass} />;
-  //     case "fireplace":
-  //       return <Flame size={24} className={iconClass} />;
-  //     case "first aid kit":
-  //       return <HeartPulse size={24} className={iconClass} />;
-
-  //     case "air conditioning":
-  //       return <AirVent size={24} className={iconClass} />;
-  //     case "entire castle":
-  //       return <Castle size={24} className={iconClass} />;
-  //     case "entire palace":
-  //       return <Palace size={24} className={iconClass} />;
-  //     case "heritage decor":
-  //     case "landmark": // Generic case
-  //       return <Landmark size={24} className={iconClass} />;
-  //     case "fireplace":
-  //       return <Home size={24} className={iconClass} />; // Using Home as a proxy for hearth/fireplace
-  //     case "smart-tv":
-  //       return <Tv2 size={24} className={iconClass} />;
-  //     case "security":
-  //       return <Lock size={24} className={iconClass} />;
-  //     case "tatami-mats": // Using Home as a generic interior icon
-  //       return <Home size={24} className={iconClass} />;
-
-  //     // --- Kitchen & Dining ---
-  //     case "full-kitchen":
-  //     case "shared kitchen":
-  //       return <CookingPot size={24} className={iconClass} />;
-  //     case "home cooked meals":
-  //       return <Soup size={24} className={iconClass} />; // Or <HandPlatter />
-  //     case "outdoor dining":
-  //       return <Sun size={24} className={iconClass} />; // Using Sun as a proxy for 'outdoor'
-  //     case "wine tasting":
-  //       return <Wine size={24} className={iconClass} />;
-
-  //     // --- Outdoor & Views ---
-  //     case "city view":
-  //     case "rooftop deck":
-  //     case "rooftop terrace":
-  //     case "rooftop view":
-  //     case "private patio":
-  //       return <View size={24} className={iconClass} />;
-  //     case "garden":
-  //     case "tropical-garden":
-  //       return <Trees size={24} className={iconClass} />;
-  //     case "garden view":
-  //     case "organic garden":
-  //       return <Leaf size={24} className={iconClass} />;
-  //     case "private courtyard":
-  //     case "shared courtyard":
-  //       return <Fence size={24} className={iconClass} />;
-  //     case "mountain views":
-  //       return <Mountain size={24} className={iconClass} />;
-  //     case "organic farm":
-  //       return <Sprout size={24} className={iconClass} />;
-  //     case "balcony":
-  //     case "city access":
-  //       return <Building2 size={24} className={iconClass} />;
-
-  //     // --- Activities & Experiences ---
-  //     case "bicycle rental":
-  //       return <Bike size={24} className={iconClass} />;
-  //     case "wildlife-viewing":
-  //     case "guided-safari":
-  //       return <Binoculars size={24} className={iconClass} />;
-  //     case "campfire":
-  //     case "private-fire-pit":
-  //       return <Campfire size={24} className={iconClass} />;
-  //     case "camping tent": // Generic for Riverside/Luxury Tent
-  //       return <Tent size={24} className={iconClass} />;
-  //     case "cultural immersion":
-  //       return <Globe2 size={24} className={iconClass} />;
-  //     case "hiking trails":
-  //       return <Hiking size={24} className={iconClass} />;
-  //     case "horse riding":
-  //       return <Horse size={24} className={iconClass} />;
-  //     case "yoga-classes":
-  //     case "yoga-deck":
-  //       return <Lotus size={24} className={iconClass} />; // Or <PersonStanding />
-  //     case "stargazing": // This was missing from your list, but is a logical addition
-  //       return <Star size={24} className={iconClass} />;
-
-  //     // --- Unique & Specific Amenities ---
-  //     case "ballroom":
-  //     case "greathall":
-  //       return <DoorOpen size={24} className={iconClass} />;
-  //     case "beach access":
-  //       return <Umbrella size={24} className={iconClass} />;
-  //     case "helipad":
-  //       return <Helicopter size={24} className={iconClass} />;
-  //     case "market access":
-  //       return <Store size={24} className={iconClass} />;
-  //     case "pet friendly":
-  //       return <Dog size={24} className={iconClass} />; // Or <Cat />
-  //     case "free parking":
-  //       return <ParkingCircle size={24} className={iconClass} />;
-  //     default:
-  //       return <Check size={24} className={iconClass} />;
-  //   }
-  // };
 
   const defaultOfferings = [
     {
@@ -496,13 +322,21 @@ const ShowListing = () => {
   const nightsCount =
     checkIn && checkOut ? differenceInCalendarDays(checkOut, checkIn) : 0;
 
+  const CLEANING_FEE = 750; // A realistic flat cleaning fee
+  const SERVICE_FEE_RATE = 0.08; // 14% service fee
+  const TAX_RATE = 0.08; // 18% tax rate (e.g., GST)
+
   const listingPrice = listingData.price || 0;
-  const cleaningFee = 75; // You can make these dynamic later if needed
-  const serviceFee = 89;
-
+  
   const subtotal = listingPrice * nightsCount;
-  const total = nightsCount > 0 ? subtotal + cleaningFee + serviceFee : 0;
 
+  const serviceFee = nightsCount > 0 ? Math.round(subtotal * SERVICE_FEE_RATE) : 0;
+  const taxes = nightsCount > 0 ? Math.round((subtotal + CLEANING_FEE + serviceFee) * TAX_RATE) : 0;
+
+  // Calculate the final total
+  const total = nightsCount > 0 ? subtotal + CLEANING_FEE + serviceFee + taxes : 0;
+
+  
   const isOwner = authUser && listingData.owner?._id === authUser._id;
 
   const handleReviewSubmit = async () => {
@@ -522,7 +356,7 @@ const ShowListing = () => {
       );
       closeReviewModal();
 
-      fetchListingData(); // Re-fetch data to show the new/updated review
+      fetchListingData();
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to submit review");
       console.error(err);
@@ -607,7 +441,7 @@ const ShowListing = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={toggleWishlist}
-                  disabled={loading} // Disable while any data is loading
+                  disabled={loading}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
                     isFavorited
                       ? "border-red-500 bg-red-50 text-red-600"
@@ -704,7 +538,7 @@ const ShowListing = () => {
           </div>
         </motion.div>
 
-        {/* Two-Column Grid for Property Details, Description, Offerings, Amenities, and Booking */}
+        {/* Main Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-8 mb-8 ">
           <div className="lg:col-span-2">
             <motion.div variants={itemVariants} className="mb-8">
@@ -767,7 +601,6 @@ const ShowListing = () => {
               <hr className="border-gray-200 mt-5" />
             </motion.div>
 
-            {/* ✅ SECTION 1: "What this place offers" (Static Section) */}
             <motion.div
               variants={{
                 hidden: { y: 20, opacity: 0 },
@@ -835,7 +668,7 @@ const ShowListing = () => {
               )}
             </motion.div>
 
-            {/* MODAL for All Amenities */}
+            {/* Modal for All Amenities */}
             <Dialog
               open={isAmenitiesModalOpen}
               onClose={() => setIsAmenitiesModalOpen(false)}
@@ -964,10 +797,10 @@ const ShowListing = () => {
                   You won't be charged yet
                 </p>
 
-                {nightsCount > 0 && (
+                  {nightsCount > 0 && (
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600 underline">
+                      <span className="text-gray-600 underline cursor-pointer">
                         ₹{listingPrice.toLocaleString("en-IN")} x {nightsCount}{" "}
                         nights
                       </span>
@@ -975,11 +808,15 @@ const ShowListing = () => {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Cleaning fee</span>
-                      <span>₹{cleaningFee.toLocaleString("en-IN")}</span>
+                      <span>₹{CLEANING_FEE.toLocaleString("en-IN")}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Service fee</span>
+                      <span className="text-gray-600">Wanderlust service fee</span>
                       <span>₹{serviceFee.toLocaleString("en-IN")}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Taxes</span>
+                      <span>₹{taxes.toLocaleString("en-IN")}</span>
                     </div>
                   </div>
                 )}
@@ -1000,7 +837,6 @@ const ShowListing = () => {
             <div className="flex items-center gap-2">
               <Star className="w-6 h-6 fill-red-500 text-red-500" />
               <h3 className="text-xl font-semibold">
-                {/* ✅ CORRECTED LOGIC: Check for reviews first */}
                 {listingData.reviews && listingData.reviews.length > 0 ? (
                   <>
                     {listingData.owner?.rating} · {listingData.reviews.length}{" "}
@@ -1289,7 +1125,7 @@ const ShowListing = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleWishlist}
-              disabled={loading} // Disable while any data is loading
+              disabled={loading}
               className={`btn secondary ${
                 isFavorited
                   ? "border-red-500 bg-red-50 text-red-600"
@@ -1305,26 +1141,6 @@ const ShowListing = () => {
                 {isFavorited ? "Saved" : "Save"}
               </span>
             </motion.button>
-            {/* <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={toggleWishlist}
-                  disabled={loading} // Disable while any data is loading
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
-                    isFavorited
-                      ? "border-red-500 bg-red-50 text-red-600"
-                      : "border-gray-300 hover:bg-gray-50"
-                  }`}
-                >
-                  <Heart
-                    className={`w-4 h-4 transition-all ${
-                      isFavorited ? "fill-current" : ""
-                    }`}
-                  />
-                  <span className="text-[1.2rem] font-medium">
-                    {isFavorited ? "Saved" : "Save"}
-                  </span>
-                </motion.button> */}
           </div>
         </div>
 
@@ -1396,7 +1212,6 @@ const ShowListing = () => {
                     <Phone className="text-gray-600" size={20} />
                     <div>
                       <p className="text-xs text-gray-500">Phone</p>
-                      {/* IMPORTANT: Use your actual phone number field, or a placeholder */}
                       <p className="font-medium text-gray-800">
                         {listingData.owner?.phone || "+1 (555) 123-4567"}
                       </p>

@@ -288,7 +288,7 @@ const customSelectStyles = {
             </div>
             <hr className="bg-gray-200"></hr>
 
-            {/* NEW Property Details Section */}
+            {/* Property Details Section */}
             <div className="form-fields">
               <label className="form-label text-[18px] font-[400]">
                 Share some basics about your place
@@ -383,7 +383,7 @@ const customSelectStyles = {
             </div>
             <hr className="form-divider" />
 
-            {/* NEW Amenities Section */}
+            {/* Amenities Section */}
             <div className="form-fields amenities-section">
               <label className="form-label text-[18px] font-[400]">
                 What amenities do you offer?

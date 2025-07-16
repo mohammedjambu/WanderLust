@@ -1,7 +1,4 @@
 import {
-  Users,
-  Bed,
-  Bath,
   Wifi,
   ChefHat,
   Waves,
