@@ -100,7 +100,13 @@ const Privacy = () => {
           variant="h2"
           component="h1"
           textAlign="center"
-          sx={{ fontWeight: 700, color: "#3d7fe3ff", mb: 2 }}
+          sx={{
+            fontWeight: 700,
+            color: "#3d7fe3ff",
+            mb: 2,
+            // ✅ This makes the font size responsive
+            fontSize: { xs: "2.25rem", md: "3.75rem" },
+          }}
         >
           Privacy Policy
         </Typography>

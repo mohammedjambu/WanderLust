@@ -38,7 +38,7 @@ router.get("/check", (req, res) => {
 router.put(
   "/profile",
   isLoggedIn,
-  upload.single("avatar"), 
+  upload.single("avatar"),
   userController.updateProfile
 );
 module.exports = router;

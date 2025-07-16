@@ -10,11 +10,12 @@ const userSchema = new Schema({
   },
   avatar: {
     type: String,
-    default: "https://wallpapers.com/images/hd/user-profile-avatar-login-account-male-user-icon-hd-png-download-lrue3mennq6knv5l.jpg",
+    default:
+      "https://wallpapers.com/images/hd/user-profile-avatar-login-account-male-user-icon-hd-png-download-lrue3mennq6knv5l.jpg",
   },
   fullName: {
     type: String,
-    default: "", 
+    default: "",
   },
   hometown: {
     type: String,
@@ -33,12 +34,14 @@ const userSchema = new Schema({
     default: Date.now,
   },
   wishlist: {
-    type: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Listing'
-    }],
-    default: [] // This prevents crashes on users with no wishlist yet.
-  }
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Listing",
+      },
+    ],
+    default: [], // This prevents crashes on users with no wishlist yet.
+  },
 });
 
 userSchema.plugin(passportLocalMongoose);

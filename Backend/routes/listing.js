@@ -1,8 +1,12 @@
-// routes/listing.js
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
-const { isLoggedIn, isOwner, validateListing, parseFormDataFields } = require("../middleware.js");
+const {
+  isLoggedIn,
+  isOwner,
+  validateListing,
+  parseFormDataFields,
+} = require("../middleware.js");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
 const upload = multer({ storage });
@@ -12,7 +16,6 @@ const listingController = require("../controllers/listings");
 // routes for my listings
 router.get("/mine", isLoggedIn, wrapAsync(listingController.getMyListings));
 
-
 router
   .route("/")
   // Index Route
@@ -21,7 +24,7 @@ router
   .post(
     isLoggedIn,
     upload.array("images", 5),
-    parseFormDataFields, 
+    parseFormDataFields,
     validateListing,
     wrapAsync(listingController.createListing)
   );
@@ -41,8 +44,7 @@ router
   )
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
-// Add this new route definition
+// Route
 router.post("/add-all-amenities", listingController.addAllAmenities);
-
 
 module.exports = router;

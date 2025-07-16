@@ -1,10 +1,8 @@
-// controllers/listings.js
 const Listing = require("../models/listing.js");
 const geocodingClient = require("../utils/mapbox");
-const {cloudinary} = require("../cloudConfig.js");
+const { cloudinary } = require("../cloudConfig.js");
 
 // Index Route
-// Index Route with Search + Filter Support
 module.exports.index = async (req, res) => {
   try {
     const { search, category } = req.query;
@@ -20,7 +18,7 @@ module.exports.index = async (req, res) => {
     }
 
     if (category) {
-      query.category = new RegExp(`^${category}$`, "i"); // case-insensitive match
+      query.category = new RegExp(`^${category}$`, "i");
     }
 
     console.log("Query params:", { search, category });
@@ -68,7 +66,6 @@ module.exports.showListing = async (req, res) => {
       ownerObject.rating = avgRating;
     }
 
-    // This is the final data object sent to the frontend
     const listingData = {
       _id: listing._id,
       title: listing.title,
@@ -101,11 +98,9 @@ module.exports.createListing = async (req, res, next) => {
       .send();
 
     if (!geoResponse.body.features.length) {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid location. Please enter a valid city or address.",
-        });
+      return res.status(400).json({
+        message: "Invalid location. Please enter a valid city or address.",
+      });
     }
     const geoData = geoResponse.body.features[0];
 
@@ -149,7 +144,7 @@ module.exports.createListing = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "Listing created successfully!",
-      listing: populatedListing, // Send the fully populated listing
+      listing: populatedListing,
     });
   } catch (err) {
     if (err.code === 11000) {
@@ -157,7 +152,7 @@ module.exports.createListing = async (req, res, next) => {
         .status(400)
         .json({ message: "A listing with this title already exists." });
     }
-    console.error("❌ Error in createListing:", err);
+    console.error(" Error in createListing:", err);
     next(err);
   }
 };
@@ -172,7 +167,6 @@ module.exports.updateListing = async (req, res, next) => {
       return res.status(404).json({ error: "Listing not found" });
     }
 
-    // 1. Update all text/JSON fields (this logic is unchanged and correct)
     listing.title = req.body.title;
     listing.description = req.body.description;
     listing.price = req.body.price;
@@ -190,18 +184,15 @@ module.exports.updateListing = async (req, res, next) => {
         }
       }
 
-      // Then, create the new image array from the uploaded files.
       const newImages = req.files.map((f) => ({
         url: f.path,
         filename: f.filename,
       }));
 
-      // Replace the old image arrays with the new one.
       listing.images = newImages;
-      listing.image = newImages[0]; 
+      listing.image = newImages[0];
     }
 
-    // 3. Save the updated document
     const updatedListing = await listing.save();
 
     res.status(200).json({
@@ -210,7 +201,7 @@ module.exports.updateListing = async (req, res, next) => {
       listing: updatedListing,
     });
   } catch (err) {
-    console.error("❌ Error in updateListing:", err);
+    console.error(" Error in updateListing:", err);
     next(err);
   }
 };
@@ -238,7 +229,6 @@ module.exports.destroyListing = async (req, res) => {
       return res.status(404).json({ error: "Listing not found" });
     }
 
-    // This check is important and correctly placed. req.user is added by Passport.
     if (listing.owner.toString() !== req.user._id.toString()) {
       return res
         .status(403)
@@ -274,7 +264,7 @@ module.exports.addAllAmenities = async (req, res) => {
     ];
 
     const result = await Listing.updateMany(
-      {}, // An empty filter object {} means "update all documents"
+      {}, 
       { $set: { amenities: predefinedAmenities } }
     );
 

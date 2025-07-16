@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Grid, 
-  TextField, 
-  Button, 
-  Stack, 
-  Paper, 
-  Link, 
+import React, { useState } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  Stack,
+  Paper,
+  Link,
   Divider,
   Snackbar, // <-- Added for feedback
-  Alert       // <-- Added for feedback
-} from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import SendIcon from '@mui/icons-material/Send';
+  Alert, // <-- Added for feedback
+} from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SendIcon from "@mui/icons-material/Send";
 // ForumIcon was unused, so it can be removed for cleaner code.
 
 const contactDetails = [
   {
     icon: <LocationOnIcon color="primary" sx={{ fontSize: 32 }} />,
-    title: 'Our Office',
-    detail: '123 Wanderlust Inc, Los Angeles, CA 90005',
+    title: "Our Office",
+    detail: "123 Wanderlust Inc, Los Angeles, CA 90005",
   },
   {
     icon: <EmailIcon color="primary" sx={{ fontSize: 32 }} />,
-    title: 'Email Us',
-    detail: <Link href="mailto:contact@wanderlust.com" underline="hover">contact@wanderlust.com</Link>,
+    title: "Email Us",
+    detail: (
+      <Link href="mailto:contact@wanderlust.com" underline="hover">
+        contact@wanderlust.com
+      </Link>
+    ),
   },
   {
     icon: <PhoneIcon color="primary" sx={{ fontSize: 32 }} />,
-    title: 'Call Us',
-    detail: '+1 (424)-789-7745',
+    title: "Call Us",
+    detail: "+1 (424)-789-7745",
   },
 ];
 
@@ -44,17 +48,17 @@ const Contact = () => {
 
   // State to hold form data
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   // State to manage the snackbar feedback
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
-    severity: 'success', // can be 'error', 'warning', 'info', or 'success'
+    message: "",
+    severity: "success", // can be 'error', 'warning', 'info', or 'success'
   });
 
   // Handles changes in any text field
@@ -72,32 +76,39 @@ const Contact = () => {
 
     // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
-      setSnackbar({ open: true, message: 'Please fill out all required fields.', severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: "Please fill out all required fields.",
+        severity: "error",
+      });
       return;
     }
 
     // --- In a real app, you would send the data to your server/API here ---
-    console.log('Form Submitted:', formData); 
+    console.log("Form Submitted:", formData);
 
     // Show success message
-    setSnackbar({ open: true, message: 'Message sent! We will be in touch soon.', severity: 'success' });
+    setSnackbar({
+      open: true,
+      message: "Message sent! We will be in touch soon.",
+      severity: "success",
+    });
 
     // Reset the form fields after successful submission
     setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
     });
   };
 
   const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbar({ ...snackbar, open: false });
   };
-
 
   return (
     <Box>
@@ -118,10 +129,11 @@ const Contact = () => {
 
       <Divider sx={{ my: { xs: 5, md: 8 } }} />
 
-      {/* Main Content (Styling is unchanged) */}
+      {/* Main Content  */}
       <Container sx={{ py: 1, mb: 4 }}>
-        <Grid container spacing={4}>
-          <Grid>
+        <Grid container spacing={4} alignItems="stretch">
+          {/* Column 1: Contact Info & Map */}
+          <Grid >
             <Stack spacing={3}>
               {contactDetails.map((item, index) => (
                 <Paper
@@ -151,14 +163,15 @@ const Contact = () => {
                 allowFullScreen=""
                 loading="lazy"
                 title="Google Map Placeholder"
-                // referrerpolicy="no-referrer-when-downgrade"
+                referrerPolicy="no-referrer-when-downgrade" // Added for best practice
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2749325989!2d-118.691920484786!3d34.02072992057604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7a163ebddf5%3A0x1111111111111111!2sLos%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1628588880000!5m2!1sen!2sus"
               ></iframe>
             </Box>
           </Grid>
 
-          <Grid>
-            <Paper elevation={3} sx={{ p: { xs: 3, md: 4, width: '40vw' } }}>
+          {/* Column 2: Message Form */}
+          <Grid >
+            <Paper elevation={3} sx={{ p: { xs: 3, md: 4 } }}>
               <Typography
                 variant="h5"
                 component="h2"
@@ -174,12 +187,11 @@ const Contact = () => {
                 onSubmit={handleSubmit}
               >
                 <Stack spacing={3} mt={3}>
-                  {/* --- TextFields are now connected to state --- */}
                   <TextField
                     label="Full Name"
-                    name="name" // <-- Added name prop
-                    value={formData.name} // <-- Added value prop
-                    onChange={handleChange} // <-- Added onChange prop
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     variant="outlined"
                     required
                     fullWidth

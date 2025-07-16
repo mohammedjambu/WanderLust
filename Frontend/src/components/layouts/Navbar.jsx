@@ -24,6 +24,14 @@ import { IoFlame, IoBedOutline } from "react-icons/io5";
 import { authDataContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
+import { LuLuggage } from "react-icons/lu";
+import { PiHeartStraightDuotone } from "react-icons/pi";
+import { IoHomeSharp } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
+import { PiListBulletsFill } from "react-icons/pi";
+
+
+
 const filterItems = [
   { icon: <IoFlame />, label: "Trending" },
   { icon: <GiFamilyHouse />, label: "Villa" },
@@ -81,7 +89,7 @@ const Navbar = () => {
     calculateHeight();
     window.addEventListener("resize", calculateHeight);
     return () => window.removeEventListener("resize", calculateHeight);
-  }, [location.pathname]); 
+  }, [location.pathname]);
 
   useEffect(() => {
     setIsDropdownOpen(false);
@@ -119,6 +127,16 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  // Add this new function inside your Navbar component
+const handleSearchInputChange = (e) => {
+  const newSearchValue = e.target.value;
+  setSearchInput(newSearchValue);
+
+  if (newSearchValue === "") {
+    handleFilterOrSearch("", selectedCategory);
+  }
+};
+
   const renderDropdownMenu = () => {
     if (loading) return null;
 
@@ -152,38 +170,65 @@ const Navbar = () => {
     }
     return (
       <>
-        <Link
-          className="dropdown-item bold"
-          to="/mytrips"
-          onClick={closeAllMenus}
-        >
-          Trips
-        </Link>
-        <Link
-          className="dropdown-item bold"
-          to="/wishlist"
-          onClick={closeAllMenus}
-        >
-          Wishlist
-        </Link>
-        <Link className="dropdown-item" to="/mylisting" onClick={closeAllMenus}>
-          My Listings
-        </Link>
-        <Link className="dropdown-item" to="/profile" onClick={closeAllMenus}>
-          Profile
-        </Link>
+        <div className="dropdown-container">
+          <LuLuggage className="dropdown-navbar-icon" />
+          <Link
+            className="dropdown-item bold"
+            to="/mytrips"
+            onClick={closeAllMenus}
+          >
+            Trips
+          </Link>
+        </div>
+
+        <div className="dropdown-container">
+          <PiHeartStraightDuotone className="dropdown-navbar-icon" />
+          <Link
+            className="dropdown-item bold"
+            to="/wishlist"
+            onClick={closeAllMenus}
+          >
+            Wishlist
+          </Link>
+        </div>
+
+        <div className="dropdown-container">
+          <PiListBulletsFill className="dropdown-navbar-icon" />
+          <Link
+            className="dropdown-item"
+            to="/mylisting"
+            onClick={closeAllMenus}
+          >
+            My Listings
+          </Link>
+        </div>
+
+        <div className="dropdown-container">
+          <CgProfile className="dropdown-navbar-icon" />
+          <Link className="dropdown-item" to="/profile" onClick={closeAllMenus}>
+            Profile
+          </Link>
+        </div>
         <hr />
-        <Link
-          className="dropdown-item"
-          to="/createListing1"
-          onClick={closeAllMenus}
-        >
-          Airbnb your home
-        </Link>
+
+        <div className="dropdown-container">
+          <IoHomeSharp className="dropdown-navbar-icon excep" />
+          <Link
+            className="dropdown-item"
+            to="/createListing1"
+            onClick={closeAllMenus}
+          >
+            Airbnb your home
+          </Link>
+        </div>
         <hr />
-        <button className="dropdown-item" onClick={handleLogout}>
-          Log out
-        </button>
+
+        <div className="dropdown-container">
+          <FiLogOut className="dropdown-navbar-icon " />
+          <button className="dropdown-item" onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
       </>
     );
   };
@@ -212,7 +257,7 @@ const Navbar = () => {
                 className="search-inp"
                 type="search"
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                onChange={handleSearchInputChange}
                 placeholder="Search destinations"
                 aria-label="Search destinations"
               />
@@ -230,6 +275,15 @@ const Navbar = () => {
             aria-controls="mobile-menu-content"
           >
             <FaBars />
+            {authUser ? (
+              <img
+                src={authUser.avatar || "/default-avatar.png"}
+                alt="User profile"
+                className="profile-avatar"
+              />
+            ) : (
+              <CgProfile className="dropdown-icon" />
+            )}
           </button>
 
           {/* Desktop User Menu */}

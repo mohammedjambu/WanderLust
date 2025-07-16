@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import { Box } from "@mui/material";
 import "./App.css";
 import Home from "./pages/Home/Home";
@@ -17,11 +17,19 @@ import MyTrips from "./pages/Home/MyTrips";
 import Profile from "./pages/Profile/Profile";
 import { CreateListingProvider } from "./context/CreateListingContext";
 import Footer from "./components/layouts/Footer";
-import { CssBaseline } from "@mui/material";
 import Privacy from "./components/extras/Privacy";
 import Terms from "./components/extras/Terms";
 import Contact from "./components/extras/Contact";
 import ScrollToTop from "./components/utils/ScrollToTop";
+
+
+const NotFound = () => (
+  <div style={{ textAlign: 'center', marginTop: '5rem' }}>
+    <h2>404 - Page Not Found</h2>
+    <p>The page you are looking for does not exist.</p>
+    <button><Link to="/">Go to Homepage</Link></button>
+  </div>
+);
 
 function App() {
   return (
@@ -43,7 +51,6 @@ function App() {
               <Route path="/createListing1" element={<CreateListing1 />} />
               <Route path="/createListing2" element={<CreateListing2 />} />
               <Route path="/listings/:id/edit" element={<EditListing />} />
-              <Route path="/editListing" element={<EditListing />} />
               <Route path="/myListing" element={<MyListings />} />
               <Route path="/wishlist" element={<MyWishlist />} />
               <Route path="/mytrips" element={<MyTrips />} />
@@ -52,6 +59,8 @@ function App() {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/contact" element={<Contact />} />
+
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </CreateListingProvider>
           <ToastContainer

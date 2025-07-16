@@ -1,4 +1,3 @@
-// models/review.js
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -26,18 +25,6 @@ const reviewSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Listing",
     required: true,
-  },
-  authorName: {
-    // Store name from data.js
-    type: String,
-  },
-  avatar: {
-    // Store avatar from data.js
-    type: String,
-  },
-  reviewDate: {
-    // Store date string from data.js
-    type: String,
   },
 });
 

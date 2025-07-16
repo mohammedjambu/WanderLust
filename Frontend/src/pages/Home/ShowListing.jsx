@@ -322,9 +322,9 @@ const ShowListing = () => {
   const nightsCount =
     checkIn && checkOut ? differenceInCalendarDays(checkOut, checkIn) : 0;
 
-  const CLEANING_FEE = 750; // A realistic flat cleaning fee
-  const SERVICE_FEE_RATE = 0.08; // 14% service fee
-  const TAX_RATE = 0.08; // 18% tax rate (e.g., GST)
+  const CLEANING_FEE = 750; 
+  const SERVICE_FEE_RATE = 0.08; 
+  const TAX_RATE = 0.08; 
 
   const listingPrice = listingData.price || 0;
   

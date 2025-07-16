@@ -8,6 +8,7 @@ const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 // IMPORTANT: Find a real user ID from your MongoDB 'users' collection and paste it here.
 const DEFAULT_OWNER_ID = "67fca0b80d629e439a8c2a78";
+const REVIEWER_USER_ID = "68776d1edf753e92fe51ec6d";
 
 async function main() {
   try {
@@ -23,12 +24,16 @@ async function main() {
 }
 
 const initDB = async () => {
-  if (!DEFAULT_OWNER_ID.match(/^[0-9a-fA-F]{24}$/)) {
+  if (
+    !DEFAULT_OWNER_ID.match(/^[0-9a-fA-F]{24}$/) ||
+    !REVIEWER_USER_ID.match(/^[0-9a-fA-F]{24}$/)
+  ) {
     console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.error("!!! FATAL ERROR: The DEFAULT_OWNER_ID is not a valid ID. !!!");
-    console.error("!!! Please paste a real user ID from your database.      !!!");
+    console.error("!!! FATAL ERROR: One or both of the required user IDs are invalid. !!!");
+    console.error("!!! Please paste real user IDs from your database into      !!!");
+    console.error("!!! DEFAULT_OWNER_ID and REVIEWER_USER_ID.                !!!");
     console.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    return; // Stop the script
+    return;
   }
   
   console.log("Clearing existing listings and reviews...");
@@ -43,11 +48,11 @@ const initDB = async () => {
       price: listingData.price,
       location: listingData.location,
       country: listingData.country,
-      geometry: listingData.geometry, // This will now be saved correctly
+      geometry: listingData.geometry,
       category: listingData.category,
       propertyDetails: listingData.propertyDetails,
       amenities: listingData.amenities,
-      image: listingData.image, // This will now be saved correctly
+      image: listingData.image, 
       images: listingData.images,
       owner: DEFAULT_OWNER_ID,
       reviews: [],
@@ -60,7 +65,7 @@ const initDB = async () => {
             const newReview = new Review({
               comment: reviewData.comment,
               rating: reviewData.rating,
-              author: DEFAULT_OWNER_ID,
+              author: REVIEWER_USER_ID,
               listing: newListing._id,
             });
             await newReview.save();
