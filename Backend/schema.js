@@ -24,9 +24,9 @@ module.exports.listingSchema = Joi.object({
         )
         .required(),
     image: Joi.object({
-        url: Joi.string().uri().required(), // Validate as a URL (e.g., Cloudinary URL)
-        filename: Joi.string().required(), // Validate as a non-empty string
-    }).optional(), // Image is optional during creation/update
+        url: Joi.string().uri().required(), 
+        filename: Joi.string().required(),
+    }).optional(),
     images: Joi.array()
         .items(
             Joi.object({
@@ -34,7 +34,7 @@ module.exports.listingSchema = Joi.object({
                 filename: Joi.string().required(),
             })
         )
-        .optional(), // Images array is optional
+        .optional(),
 });
 
 

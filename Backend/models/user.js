@@ -1,4 +1,3 @@
-// models/user.js
 const { required } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
@@ -11,19 +10,19 @@ const userSchema = new Schema({
   },
   avatar: {
     type: String,
-    default: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.0&w=150&q=80",
+    default: "https://wallpapers.com/images/hd/user-profile-avatar-login-account-male-user-icon-hd-png-download-lrue3mennq6knv5l.jpg",
   },
   fullName: {
     type: String,
-    required: true,
+    default: "", 
   },
   hometown: {
     type: String,
-    required: true
+    default: "",
   },
   phone: {
     type: String,
-    required: true
+    default: "",
   },
   bio: {
     type: String,

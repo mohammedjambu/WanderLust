@@ -1,9 +1,9 @@
 const sampleListings = [
   // Villas (3 listings: 1 Indian, 2 Global)
   {
-    title: "Royal Udaipur Lakefront Villa",
+    title: "The Maharana's View: A Lake Pichola Villa",
     description:
-      "A luxurious villa overlooking Lake Pichola, blending Rajasthani architecture with modern comforts.",
+      "Experience royalty at this exquisite villa perched on the shores of Lake Pichola. With traditional Rajasthani jharokhas (balconies) offering panoramic water views and interiors adorned with intricate marble work, this property blends heritage with five-star comfort. The private pool provides a serene escape, making it a perfect retreat after exploring the vibrant city of Udaipur.",
     image: {
       filename: "image2",
       url: "https://res.cloudinary.com/dcwffxjz4/image/upload/v1752595179/wanderlust_DEV/ypdjfz5nniadowtmrjts.jpg",
@@ -26,11 +26,11 @@ const sampleListings = [
         url: "https://res.cloudinary.com/dcwffxjz4/image/upload/v1752595181/wanderlust_DEV/pdvpnvrbipuo104ozmub.jpg",
       },
     ],
-    price: 4500,
+    price: 32000,
     location: "Udaipur",
     country: "India",
     category: "Villa",
-    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 3 },
+    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 4 },
     amenities: [
       { name: "Private Pool" },
       { name: "Lake View" },
@@ -54,9 +54,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [73.6808, 24.5854] },
   },
   {
-    title: "Santorini Cliffside Villa",
+    title: "Aegean Dream: Santorini Cliffside Escape",
     description:
-      "A stunning villa with panoramic Aegean Sea views, featuring a private infinity pool and whitewashed interiors.",
+      "Carved into the iconic cliffs of Santorini, this villa offers a breathtaking, uninterrupted view of the Aegean Sea. Wake up to the Grecian sun in whitewashed rooms and spend your days lounging by the private infinity pool that seems to merge with the sky. It's an idyllic spot for honeymoons or a luxurious escape, promising unforgettable sunsets from your private terrace.",
     image: {
       filename: "image2",
       url: "https://images.pexels.com/photos/6957079/pexels-photo-6957079.jpeg",
@@ -79,11 +79,11 @@ const sampleListings = [
         url: "https://images.pexels.com/photos/6775268/pexels-photo-6775268.jpeg",
       },
     ],
-    price: 4800,
+    price: 55000,
     location: "Santorini",
     country: "Greece",
     category: "Villa",
-    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 3 },
+    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
       { name: "Infinity Pool" },
       { name: "Lake View" },
@@ -107,9 +107,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [25.4326, 36.4162] },
   },
   {
-    title: "Tuscan Vineyard Villa",
+    title: "Villa Vigna: A Tuscan Vineyard Retreat",
     description:
-      "A charming villa nestled among vineyards, offering rustic elegance and modern amenities.",
+      "Nestled in the rolling hills of Chianti, this charming villa offers an authentic Tuscan experience. Surrounded by lush vineyards and olive groves, the property features traditional terracotta floors, wooden beams, and a modern kitchen. Enjoy a glass of local wine on the stone-paved patio, take a dip in the pool, or try your hand at a cooking class. Perfect for families and groups.",
     image: {
       filename: "image2",
       url: "https://gstatic1.promeai.pro/gallery/publish/2025/01/26/589a70d4fe24450f984c1e3962d5addf.jpg",
@@ -132,7 +132,7 @@ const sampleListings = [
         url: "https://www.homestratosphere.com/wp-content/uploads/2018/01/z-mediterranean-living-room-23-jan2018.jpg",
       },
     ],
-    price: 3500,
+    price: 40000,
     location: "Chianti",
     country: "Italy",
     category: "Villa",
@@ -160,11 +160,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [11.3059, 43.6187] },
   },
 
-  // Farm Houses (3 listings: 1 Indian, 2 Global)
+  // Farm Houses
   {
-    title: "Punjab Countryside Farmhouse",
+    title: "Golden Fields: A Punjabi Farmhouse Experience",
     description:
-      "A traditional Punjabi farmhouse surrounded by lush fields, offering an authentic rural experience.",
+      "Escape the city and embrace the heart of Punjab. This traditional farmhouse is set amidst acres of lush, green fields, offering an authentic and tranquil rural experience. Enjoy fresh, farm-to-table meals, relax on the charpoy in the courtyard, and experience the warm hospitality of a true Punjabi family.",
     image: {
       filename: "image2",
       url: "https://i.pinimg.com/736x/be/a9/ab/bea9ab8414b277bfdd00e6f03e392fad.jpg",
@@ -187,11 +187,11 @@ const sampleListings = [
         url: "https://cdn.pixabay.com/photo/2020/10/18/09/16/bedroom-5664221_1280.jpg",
       },
     ],
-    price: 1500,
+    price: 4500,
     location: "Amritsar",
     country: "India",
     category: "Farm House",
-    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 2 },
+    propertyDetails: { guests: 8, bedrooms: 4, bathrooms: 3 },
     amenities: [
       { name: "Organic Farm" },
       { name: "Free WiFi" },
@@ -215,32 +215,32 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [74.8723, 31.634] },
   },
   {
-    title: "Cotswolds Stone Farmhouse",
+    title: "The Cotswolds Hideaway: A 17th-Century Farmhouse",
     description:
-      "A historic 17th-century farmhouse surrounded by rolling hills, perfect for a serene countryside retreat.",
+      "Step back in time at this historic 17th-century stone farmhouse in the heart of the Cotswolds. Surrounded by rolling green hills and quaint villages, this property is the quintessential English countryside retreat. Cozy up by the original fireplace, wander through the beautiful garden, and enjoy the peace and quiet of this idyllic location.",
     image: {
-    filename: "image5",
-    url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12160/27194/248270-v2-gallery@2x.jpg",
-  },
-  images: [
-    {
-      filename: "mainImage",
-      url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12165/27204/134104-v1-gallery@2x.jpg",
+      filename: "image5",
+      url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12160/27194/248270-v2-gallery@2x.jpg",
     },
-    {
-      filename: "image2",
-      url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/4735/12244/134046-v1-gallery@2x.jpg",
-    },
-    {
-      filename: "image3",
-      url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/4739/12253/134065-v1-gallery@2x.jpg",
-    },
-    {
-      filename: "image4",
-      url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12160/27195/134097-v2-gallery@2x.jpg",
-    },
-  ],
-    price: 1900,
+    images: [
+      {
+        filename: "mainImage",
+        url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12165/27204/134104-v1-gallery@2x.jpg",
+      },
+      {
+        filename: "image2",
+        url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/4735/12244/134046-v1-gallery@2x.jpg",
+      },
+      {
+        filename: "image3",
+        url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/4739/12253/134065-v1-gallery@2x.jpg",
+      },
+      {
+        filename: "image4",
+        url: "https://secure.uniquebookingservices.com/uf/property/7673/gallery/12160/27195/134097-v2-gallery@2x.jpg",
+      },
+    ],
+    price: 18000,
     location: "Cotswolds",
     country: "United Kingdom",
     category: "Farm House",
@@ -267,36 +267,36 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-1.7207, 51.8378] },
   },
   {
-    title: "Vermont Organic Farm Stay",
+    title: "Maple Leaf Farm: A Vermont Organic Stay",
     description:
-      "A cozy farmhouse with organic gardens and nearby hiking trails, ideal for nature lovers.",
+      "Reconnect with nature at this charming farmhouse in Stowe, Vermont. With access to private organic gardens and miles of nearby hiking trails, it's a haven for nature lovers. The interior is cozy and inviting, featuring a fireplace perfect for chilly evenings. A wonderful place for a digital detox and a breath of fresh air.",
     image: {
-    filename: "image5",
-    url: "https://a0.muscache.com/im/pictures/81c1766d-9ddb-4194-95c7-2f689789f203.jpg?im_w=720",
-  },
-  images: [
-    {
-      filename: "mainImage",
-      url: "https://a0.muscache.com/im/pictures/miso/Hosting-16519531/original/fb34d46f-1916-49d3-9263-926fb1f05415.jpeg?im_w=1200",
+      filename: "image5",
+      url: "https://a0.muscache.com/im/pictures/81c1766d-9ddb-4194-95c7-2f689789f203.jpg?im_w=720",
     },
-    {
-      filename: "image2",
-      url: "https://a0.muscache.com/im/pictures/dc1b5bf9-5f1f-4f9e-9aa3-fcc2362d007e.jpg?im_w=1200",
-    },
-    {
-      filename: "image3",
-      url: "https://a0.muscache.com/im/pictures/c41699a5-8ae7-48b3-9f9a-98dc2a56c306.jpg?im_w=1200",
-    },
-    {
-      filename: "image4",
-      url: "https://a0.muscache.com/im/pictures/f79182a9-2de9-4b06-935e-fb8a1f4e0d1d.jpg?im_w=720",
-    },
-  ],
-    price: 1600,
+    images: [
+      {
+        filename: "mainImage",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-16519531/original/fb34d46f-1916-49d3-9263-926fb1f05415.jpeg?im_w=1200",
+      },
+      {
+        filename: "image2",
+        url: "https://a0.muscache.com/im/pictures/dc1b5bf9-5f1f-4f9e-9aa3-fcc2362d007e.jpg?im_w=1200",
+      },
+      {
+        filename: "image3",
+        url: "https://a0.muscache.com/im/pictures/c41699a5-8ae7-48b3-9f9a-98dc2a56c306.jpg?im_w=1200",
+      },
+      {
+        filename: "image4",
+        url: "https://a0.muscache.com/im/pictures/f79182a9-2de9-4b06-935e-fb8a1f4e0d1d.jpg?im_w=720",
+      },
+    ],
+    price: 15000,
     location: "Stowe",
     country: "United States",
     category: "Farm House",
-    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
+    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
       { name: "Organic Farm" },
       { name: "Free WiFi" },
@@ -320,11 +320,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-72.6874, 44.4654] },
   },
 
-  // Pool Houses (3 listings: 1 Indian, 2 Global)
+  // Pool Houses
   {
-    title: "Goa Tropical Pool House",
+    title: "Anjuna Oasis: A Tropical Pool House in Goa",
     description:
-      "A vibrant pool house near Anjuna Beach, offering a private pool and lush tropical surroundings.",
+      "Discover your private paradise just minutes from Anjuna Beach. This vibrant pool house is enveloped in lush tropical greenery, offering a secluded and serene atmosphere. The centerpiece is a stunning private pool, perfect for cooling off after a day at the beach. Ideal for groups looking to experience the best of Goa's sun, sand, and style.",
     image: {
       filename: "image5",
       url: "https://assets.architecturaldigest.in/photos/664ad4b4a1c9b5fb094c8ab1/master/w_1600,c_limit/Fabien%20charuau%20-%20Vianaar%20-%20Villa%20Da%20Zita%20-%2011.jpeg",
@@ -347,11 +347,11 @@ const sampleListings = [
         url: "https://assets.architecturaldigest.in/photos/664ad4e4da1429ed30da6acb/master/w_1600,c_limit/_DSC9749.jpg",
       },
     ],
-    price: 2800,
+    price: 18000,
     location: "Goa",
     country: "India",
     category: "Pool House",
-    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 2 },
+    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 3 },
     amenities: [
       { name: "Private Pool" },
       { name: "Free WiFi" },
@@ -374,9 +374,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [73.7552, 15.5736] },
   },
   {
-    title: "Bali Infinity Pool Retreat",
+    title: "Ubud Serenity: Rice Field Infinity Pool Retreat",
     description:
-      "A modern pool house with an infinity pool overlooking rice fields, ideal for a tropical escape.",
+      "Find your zen at this stunningly modern pool house in the heart of Ubud, Bali. The main attraction is a magnificent infinity pool that overlooks tranquil, emerald-green rice paddies. The open-plan living space and minimalist design create a sense of peace and connection with nature, making it the ultimate tropical escape.",
     image: {
       filename: "image5",
       url: "https://the-pool-house-magnificent-24m-private-pool-in-berawa.all-balihotels.net/data/Pics/OriginalPhoto/9762/976239/976239112/the-pool-house-magnificent-24m-private-pool-in-berawa-canggu-bali-pic-39.JPEG",
@@ -399,7 +399,7 @@ const sampleListings = [
         url: "https://the-pool-house-magnificent-24m-private-pool-in-berawa.all-balihotels.net/data/Pics/OriginalPhoto/9762/976234/976234018/the-pool-house-magnificent-24m-private-pool-in-berawa-canggu-bali-pic-35.JPEG",
       },
     ],
-    price: 3000,
+    price: 25000,
     location: "Ubud",
     country: "Indonesia",
     category: "Pool House",
@@ -426,9 +426,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [115.2624, -8.5098] },
   },
   {
-    title: "Palm Springs Retro Pool House",
+    title: "Desert Modern: A Palm Springs Pool House",
     description:
-      "A mid-century pool house with a private pool and desert views, perfect for a stylish getaway.",
+      "Step into a postcard from the past at this mid-century modern pool house in sunny Palm Springs. With its clean lines, retro furnishings, and stunning desert mountain views, this home is a masterclass in style. The private pool is the heart of the home, perfect for soaking up the California sun. An ideal spot for a chic and stylish getaway.",
     image: {
       filename: "image5",
       url: "https://media.architecturaldigest.com/photos/68432200dfd8e55175172400/4:3/w_1600,c_limit/Screenshot%202025-06-06%20at%201.14.10%20PM.png",
@@ -451,7 +451,7 @@ const sampleListings = [
         url: "https://media.architecturaldigest.com/photos/68482d1620ab6bd99d9e8c77/master/w_1600,c_limit/frank%20sinatra%20three.jpg",
       },
     ],
-    price: 3500,
+    price: 38000,
     location: "Palm Springs",
     country: "United States",
     category: "Pool House",
@@ -479,11 +479,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-116.5453, 33.8303] },
   },
 
-  // Rooms (3 listings: 1 Indian, 2 Global)
+  // Rooms
   {
-    title: "Heritage Room in Jaipur",
+    title: "The Pink City Gem: A Jaipur Haveli Room",
     description:
-      "A cozy room in a heritage haveli in the Pink City, offering traditional Rajasthani decor and modern amenities.",
+      "Stay in a beautifully restored room within a traditional heritage haveli in the heart of Jaipur. Adorned with classic Rajasthani decor, this cozy room offers an authentic cultural experience alongside modern amenities. It’s the perfect, charming base for exploring the vibrant markets and majestic forts of the Pink City.",
     image: {
       filename: "image5",
       url: "https://media.designcafe.com/wp-content/uploads/2020/11/24125350/rajasthan-home-decor-ideas.jpg",
@@ -506,7 +506,7 @@ const sampleListings = [
         url: "https://media.designcafe.com/wp-content/uploads/2020/11/24125420/rajasthani-textiles-for-home-interiors.jpg",
       },
     ],
-    price: 800,
+    price: 2500,
     location: "Jaipur",
     country: "India",
     category: "Rooms",
@@ -533,9 +533,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [75.7873, 26.9124] },
   },
   {
-    title: "Canal House Room in Amsterdam",
+    title: "Amsterdam Canal View Room",
     description:
-      "A charming private room in a historic canal house, perfect for exploring Amsterdam’s vibrant city center.",
+      "Experience Amsterdam like a local in this charming private room in a historic canal house. Wake up to picturesque views of the iconic canals, and enjoy being just a short walk or bike ride away from the city’s most famous museums and cafes. The room is cozy, clean, and the perfect base for urban explorers.",
     image: {
       filename: "image5",
       url: "https://cdn.decoist.com/wp-content/uploads/2020/05/Creating-a-kitchen-and-dining-area-with-white-walls-gray-cabinet-and-wooden-floor-that-adds-visual-warmth-92424.jpg",
@@ -558,7 +558,7 @@ const sampleListings = [
         url: "https://cdn.decoist.com/wp-content/uploads/2020/05/White-and-wood-living-area-with-the-classic-Eames-Lounger-at-its-heart-81376.jpg",
       },
     ],
-    price: 850,
+    price: 9000,
     location: "Amsterdam",
     country: "Netherlands",
     category: "Rooms",
@@ -585,9 +585,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [4.9041, 52.3676] },
   },
   {
-    title: "Cozy Room in Juhu-Style",
+    title: "The Seoul Nest: Modern & Central Room",
     description:
-      "A modern private room in a vibrant Seoul neighborhood, ideal for solo travelers or couples.",
+      "Discover the energy of Seoul from this sleek and modern private room. Located in a vibrant neighborhood with excellent transport links, it's the ideal spot for solo travelers or couples. The room is designed with a minimalist aesthetic, providing a peaceful and comfortable space to recharge after a day of sightseeing and enjoying the city's incredible food scene.",
     image: {
       filename: "image5",
       url: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/665851989.jpg?k=5022dc60050dafb6c33f3193f1d5c376814613bd96422f4d4aaf385fb044a542&o=",
@@ -610,7 +610,7 @@ const sampleListings = [
         url: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/665851842.jpg?k=ec472863f31bfabb40dd9f88d874b846340e19845f882c70da6308b3b426f441&o=",
       },
     ],
-    price: 650,
+    price: 6500,
     location: "Seoul",
     country: "South Korea",
     category: "Rooms",
@@ -637,11 +637,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [126.978, 37.5665] },
   },
 
-  // Flats (3 listings: 1 Indian, 2 Global)
+  // Flats
   {
-    title: "Modern Flat in Mumbai Bandra",
+    title: "Bandra Buzz: A Stylish Urban Flat",
     description:
-      "A stylish flat in Mumbai’s trendy Bandra area, close to cafes, boutiques, and the vibrant nightlife.",
+      "Immerse yourself in the trendiest part of Mumbai with a stay at this stylish flat in Bandra. Perfectly located near the neighborhood's best cafes, designer boutiques, and vibrant nightlife, this is the ultimate spot for the urban explorer. The apartment features a modern design, a comfortable living space, and a private balcony to soak in the city vibes.",
     image: {
       filename: "image5",
       url: "https://thearchitectsdiary.com/wp-content/uploads/2025/04/modern-interior-design-for-home-10.jpg",
@@ -664,11 +664,11 @@ const sampleListings = [
         url: "https://thearchitectsdiary.com/wp-content/uploads/2025/04/modern-interior-design-for-home-11.jpg",
       },
     ],
-    price: 1800,
+    price: 8500,
     location: "Mumbai",
     country: "India",
     category: "Flat",
-    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
+    propertyDetails: { guests: 3, bedrooms: 2, bathrooms: 2 },
     amenities: [
       { name: "Balcony" },
       { name: "Free WiFi" },
@@ -691,9 +691,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [72.8342, 19.0596] },
   },
   {
-    title: "Chic Flat in Paris Le Marais",
+    title: "Le Marais Charm: A Chic Parisian Flat",
     description:
-      "A stylish flat in the heart of Le Marais, perfect for exploring Paris’s art galleries and cafes.",
+      "Live the Parisian dream in this elegant flat located in the historic and fashionable Le Marais district. You'll be surrounded by art galleries, charming cafes, and designer shops. The flat itself is a blend of classic Parisian architecture and modern comfort, featuring high ceilings, a cozy balcony, and everything you need for a memorable stay.",
     image: {
       filename: "image5",
       url: "https://images.trvl-media.com/lodging/18000000/17480000/17471700/17471679/7e8a25dc.jpg?impolicy=resizecrop&rw=1200&ra=fit",
@@ -716,11 +716,11 @@ const sampleListings = [
         url: "https://images.trvl-media.com/lodging/18000000/17480000/17471700/17471679/089e2e63.jpg?impolicy=resizecrop&rw=1200&ra=fit",
       },
     ],
-    price: 2000,
+    price: 16000,
     location: "Paris",
     country: "France",
     category: "Flat",
-    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
+    propertyDetails: { guests: 3, bedrooms: 1, bathrooms: 1 },
     amenities: [
       { name: "Balcony" },
       { name: "Free WiFi" },
@@ -743,9 +743,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [2.3602, 48.8637] },
   },
   {
-    title: "Sleek Flat in Tokyo Shibuya",
+    title: "Shibuya Crossing View: Sleek Tokyo Flat",
     description:
-      "A modern flat in the bustling Shibuya district, close to shopping, dining, and nightlife.",
+      "Positioned in the heart of the electric Shibuya district, this modern flat is your gateway to the best of Tokyo. Witness the world-famous Shibuya Crossing from nearby, and dive into an endless array of shopping, dining, and nightlife. The flat is a compact, efficient, and stylish sanctuary, perfect for recovering from your city adventures.",
     image: {
       filename: "image5",
       url: "https://images.trvl-media.com/lodging/79000000/78520000/78517200/78517186/9b200216.jpg?impolicy=resizecrop&rw=1200&ra=fit",
@@ -768,11 +768,11 @@ const sampleListings = [
         url: "https://images.trvl-media.com/lodging/79000000/78520000/78517200/78517186/b5579b6f.jpg?impolicy=resizecrop&rw=1200&ra=fit",
       },
     ],
-    price: 1900,
+    price: 14000,
     location: "Tokyo",
     country: "Japan",
     category: "Flat",
-    propertyDetails: { guests: 3, bedrooms: 1, bathrooms: 1 },
+    propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
       { name: "Full Kitchen" },
       { name: "Laundry Service" },
@@ -795,11 +795,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [139.7006, 35.6581] },
   },
 
-  // PG (3 listings: All Indian)
+  // PG
   {
-    title: "Affordable PG in Bangalore",
+    title: "The Bangalore Base: Affordable Tech Hub PG",
     description:
-      "A comfortable PG in Bangalore’s tech hub, ideal for students or young professionals.",
+      "An ideal and affordable Paying Guest accommodation for students and young professionals in Bangalore's tech corridor. This PG offers clean, comfortable rooms, high-speed WiFi, and a shared kitchen. With 24/7 security and easy access to major tech parks, it's a practical and smart choice for your stay in the city.",
     image: {
       filename: "image5",
       url: "https://alexandro.in/image/bangalore/settl-santana/5.jpg",
@@ -822,7 +822,7 @@ const sampleListings = [
         url: "https://alexandro.in/image/bangalore/settl-santana/4.jpg",
       },
     ],
-    price: 600,
+    price: 800,
     location: "Bangalore",
     country: "India",
     category: "PG",
@@ -849,9 +849,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [77.5946, 12.9716] },
   },
   {
-    title: "Modern PG in Delhi",
+    title: "Delhi Connect: Modern & Metro-Friendly PG",
     description:
-      "A stylish PG in a vibrant Delhi neighborhood, offering modern amenities and easy metro access.",
+      "This stylish PG in a bustling Delhi neighborhood is designed for the modern professional. Offering contemporary rooms, essential amenities, and unbeatable proximity to the Delhi Metro, it ensures a comfortable and convenient stay. A perfect, budget-friendly option for those working or studying in the capital.",
     image: {
       filename: "image5",
       url: "https://img.cofynd.com/images/original/59cc53393fb89e5cc6c7717ece1a37d87a012f77.jpg",
@@ -874,7 +874,7 @@ const sampleListings = [
         url: "https://img.cofynd.com/images/original/371b0cce34d894c3bb4564d10dfc6595872f462a.jpg",
       },
     ],
-    price: 550,
+    price: 750,
     location: "Delhi",
     country: "India",
     category: "PG",
@@ -901,9 +901,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [77.2167, 28.7041] },
   },
   {
-    title: "Cozy PG in Hyderabad",
+    title: "HITEC Hub: Cozy PG in Hyderabad",
     description:
-      "A budget-friendly PG in Hyderabad’s HITEC City, perfect for tech professionals or students.",
+      "A clean, cozy, and budget-friendly PG located in the heart of Hyderabad’s HITEC City. This accommodation is tailor-made for tech professionals and students, offering all necessary amenities like WiFi and laundry service, ensuring a hassle-free and productive stay. It's the perfect launchpad for your career in Cyberabad.",
     image: {
       filename: "image5",
       url: "https://img.cofynd.com/images/original/6b3def4dd2758e4a73426af3cb2ef7dba2b52368.jpg",
@@ -926,7 +926,7 @@ const sampleListings = [
         url: "https://img.cofynd.com/images/original/c43ccba61b2505c82344be66b16514c6ec210355.jpg",
       },
     ],
-    price: 650,
+    price: 700,
     location: "Hyderabad",
     country: "India",
     category: "PG",
@@ -953,11 +953,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [78.3889, 17.4415] },
   },
 
-  // Cabins (3 listings: 1 Indian, 2 Global)
+  // Cabins
   {
-    title: "Himalayan Cabin in Manali",
+    title: "Himalayan Hideout: A Cozy Cabin in Manali",
     description:
-      "A cozy wooden cabin nestled in the Himalayas, offering stunning mountain views and serene surroundings.",
+      "Nestled amidst the majestic Himalayas in Manali, this cozy wooden cabin is a perfect mountain retreat. Offering stunning views from every window, a warm fireplace, and access to serene hiking trails, it's an ideal escape for those seeking peace, adventure, and a deep connection with nature.",
     image: {
       filename: "image5",
       url: "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NzMxNjcyODcyNTg1MTAzNjU4/original/0ea3b347-f83e-4b3f-838a-9bd8620d889f.jpeg",
@@ -980,7 +980,7 @@ const sampleListings = [
         url: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/671002711.jpg?hp=1&k=9a189a9568652b8ccda844c80bdfea014d1bd588e48f8b2c3ea2f019e4361ba9&o=",
       },
     ],
-    price: 2000,
+    price: 7500,
     location: "Manali",
     country: "India",
     category: "Cabins",
@@ -1007,9 +1007,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [77.1893, 32.2396] },
   },
   {
-    title: "Alpine Cabin in Chamonix",
+    title: "Chamonix Alpine Chalet near Mont Blanc",
     description:
-      "A charming alpine cabin near Mont Blanc, perfect for skiing and mountain adventures.",
+      "Your ultimate base for mountain adventures, this charming alpine cabin is situated near the legendary Mont Blanc in Chamonix. Perfect for skiers and hikers, it offers dedicated ski storage, a cozy fireplace for après-ski relaxation, and breathtaking views of the French Alps. A dream location for adventure sports enthusiasts.",
     image: {
       filename: "image5",
       url: "https://secure.uniquebookingservices.com/uf/property/4547/gallery/9213/21464/50569-v1-672pxh@2x.jpg",
@@ -1032,7 +1032,7 @@ const sampleListings = [
         url: "https://secure.uniquebookingservices.com/uf/property/4547/gallery/3656/9840/123729-v5-672pxh@2x.jpg",
       },
     ],
-    price: 2500,
+    price: 28000,
     location: "Chamonix",
     country: "France",
     category: "Cabins",
@@ -1059,9 +1059,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [6.8694, 45.9237] },
   },
   {
-    title: "Patagonia Secluded Cabin",
+    title: "Patagonian Wilderness Cabin",
     description:
-      "A remote cabin surrounded by Patagonia’s dramatic landscapes, ideal for nature lovers.",
+      "Truly get away from it all in this remote and secluded cabin, surrounded by the raw, dramatic landscapes of Patagonia. This is a place for adventurers, hikers, and nature lovers seeking solitude and stunning vistas. The cabin is rustic yet comfortable, with a wood-burning fireplace to keep you warm as you gaze upon the rugged mountains.",
     image: {
       filename: "image5",
       url: "https://secure.uniquebookingservices.com/uf/property/6610/gallery/8136/19171/184356-v3-gallery@2x.jpg",
@@ -1084,7 +1084,7 @@ const sampleListings = [
         url: "https://secure.uniquebookingservices.com/uf/property/6610/gallery/8142/19183/184386-v1-672pxh@2x.jpg",
       },
     ],
-    price: 1800,
+    price: 16000,
     location: "Patagonia",
     country: "Chile",
     category: "Cabins",
@@ -1111,11 +1111,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-72.3311, -41.3188] },
   },
 
-  // Shops (3 listings: 1 Indian, 2 Global)
+  // Shops
   {
-    title: "Heritage Shop Stay in Varanasi",
+    title: "Ganges View Stay: A Restored Varanasi Shop",
     description:
-      "A unique stay in a restored shop near the Ganges, offering an authentic Varanasi experience.",
+      "A truly unique stay in a beautifully restored heritage shop-house just steps from the sacred Ganges river. Immerse yourself in the spiritual energy of Varanasi, with views of the ghats and easy access to the bustling market alleys. This is an authentic experience for the culturally curious traveler.",
     image: {
       filename: "image5",
       url: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/21/f6/c7/87/lobby.jpg?w=1400&h=-1&s=1",
@@ -1138,13 +1138,13 @@ const sampleListings = [
         url: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/21/f6/cc/4d/room-superior.jpg?w=1400&h=-1&s=1",
       },
     ],
-    price: 1000,
+    price: 3500,
     location: "Varanasi",
     country: "India",
     category: "Shops",
     propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
     amenities: [
-      { name: "Lake View" }, // Proxy for Ganges View
+      { name: "Lake View" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "City Access" },
@@ -1165,9 +1165,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [83.0061, 25.3176] },
   },
   {
-    title: "Artisan Shop Stay in Istanbul",
+    title: "Grand Bazaar Hideout: An Istanbul Artisan Stay",
     description:
-      "A cozy stay in a converted shop in Istanbul’s Grand Bazaar, perfect for a cultural experience.",
+      "Stay in a cozy, converted artisan shop right at the edge of Istanbul's famous Grand Bazaar. This is a dream for those who want to be immersed in the city's vibrant culture and history. Enjoy stunning rooftop views of the old city and spend your days getting lost in the maze of market streets.",
     image: {
       filename: "image5",
       url: "https://az712897.vo.msecnd.net/images/full/15308996-0c85-4bcd-aea9-a462b0c1b34d.jpeg?width=800",
@@ -1190,7 +1190,7 @@ const sampleListings = [
         url: "https://az712897.vo.msecnd.net/images/full/af152e32-f475-4b17-ad1b-2a3f0a8db180.jpeg?width=800",
       },
     ],
-    price: 1100,
+    price: 7000,
     location: "Istanbul",
     country: "Turkey",
     category: "Shops",
@@ -1217,9 +1217,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [28.9784, 41.0082] },
   },
   {
-    title: "Traditional Shop Stay in Kyoto",
+    title: "Kyoto's Gion District: A Traditional Machiya Stay",
     description:
-      "A restored shop in Kyoto’s Gion district, offering a blend of tradition and modern comfort.",
+      "Experience the timeless beauty of Kyoto with a stay in a restored 'machiya' (traditional wooden townhouse) in the historic Gion district. This stay blends authentic Japanese design, like tatami mat flooring, with modern comforts. Enjoy the serene private garden and the incredible convenience of being in one of Kyoto's most famous and atmospheric areas.",
     image: {
       filename: "image5",
       url: "https://www.machiya-inn-japan.com/blog/wp-content/uploads/2023/10/marikoji_img04.jpeg",
@@ -1242,11 +1242,11 @@ const sampleListings = [
         url: "https://www.machiya-inn-japan.com/blog/wp-content/uploads/2023/10/marikoji_img05.jpeg",
       },
     ],
-    price: 1300,
+    price: 11000,
     location: "Kyoto",
     country: "Japan",
     category: "Shops",
-    propertyDetails: { guests: 2, bedrooms: 1, bathrooms: 1 },
+    propertyDetails: { guests: 3, bedrooms: 1, bathrooms: 1 },
     amenities: [
       { name: "Garden" },
       { name: "Free WiFi" },
@@ -1269,11 +1269,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [135.7681, 35.0116] },
   },
 
-  // Beach (3 listings: 1 Indian, 2 Global)
+  // Beach
   {
-    title: "Kerala Backwater Beach House",
+    title: "Alleppey Backwaters & Beach House",
     description:
-      "A serene beach house along Kerala’s backwaters, offering direct beach access and tropical vibes.",
+      "Why choose when you can have both? This serene house in Alleppey offers direct access to a beautiful beach on one side and stunning views of the famous Kerala backwaters on the other. It's a peaceful, tropical paradise, perfect for family holidays and those looking to experience the unique natural beauty of Kerala.",
     image: {
       filename: "image5",
       url: "https://a0.muscache.com/im/pictures/miso/Hosting-730338545541524579/original/b3f2dcdc-0919-4811-b637-0fc4c173989c.jpeg?im_w=1200",
@@ -1296,14 +1296,14 @@ const sampleListings = [
         url: "https://a0.muscache.com/im/pictures/miso/Hosting-730338545541524579/original/155b827d-cda9-4d32-b8c2-e01d80a5ddcf.jpeg?im_w=720",
       },
     ],
-    price: 2500,
+    price: 12000,
     location: "Alleppey",
     country: "India",
     category: "Beach",
-    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 2 },
+    propertyDetails: { guests: 6, bedrooms: 3, bathrooms: 3 },
     amenities: [
       { name: "Beach Access" },
-      { name: "Lake View" }, // Proxy for Backwater View
+      { name: "Lake View" },
       { name: "Free WiFi" },
       { name: "Air Conditioning" },
       { name: "Full Kitchen" },
@@ -1323,9 +1323,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [76.3224, 9.4981] },
   },
   {
-    title: "Malibu Oceanfront Cottage",
+    title: "The Malibu Dream: Oceanfront Cottage",
     description:
-      "A cozy cottage with stunning Pacific Ocean views, steps away from Malibu’s iconic beaches.",
+      "Live the California dream at this cozy cottage with direct access to Malibu's iconic beaches. Enjoy stunning, panoramic views of the Pacific Ocean right from your living room. It's the perfect spot to watch dolphins play in the morning and enjoy spectacular sunsets in the evening. A truly magical beach getaway.",
     image: {
       filename: "image5",
       url: "https://secure.uniquebookingservices.com/uf/property/11107/gallery/11908/26690/246133-v1-gallery@2x.jpg",
@@ -1348,11 +1348,11 @@ const sampleListings = [
         url: "https://secure.uniquebookingservices.com/uf/property/11107/gallery/11900/26675/246114-v2-gallery@2x.jpg",
       },
     ],
-    price: 2800,
+    price: 45000,
     location: "Malibu",
     country: "United States",
     category: "Beach",
-    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 1 },
+    propertyDetails: { guests: 4, bedrooms: 2, bathrooms: 2 },
     amenities: [
       { name: "Beach Access" },
       { name: "Lake View" },
@@ -1375,9 +1375,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-118.7798, 34.0259] },
   },
   {
-    title: "Phuket Beachfront Bungalow",
+    title: "Phuket Sands: A Private Beachfront Bungalow",
     description:
-      "A charming bungalow with direct access to Phuket’s sandy shores, perfect for a tropical escape.",
+      "Your own slice of paradise awaits at this charming bungalow with direct access to the soft, sandy shores of Phuket. This is the perfect tropical escape for those who want to hear the waves from their bedroom. Spend your days swimming, sunbathing, and relaxing on your private patio with a cool drink in hand.",
     image: {
       filename: "image5",
       url: "https://a0.muscache.com/im/pictures/miso/Hosting-947586227795155815/original/c0545be4-22e0-415e-b6a5-f760a7331e1a.jpeg?im_w=1200",
@@ -1400,7 +1400,7 @@ const sampleListings = [
         url: "https://a0.muscache.com/im/pictures/miso/Hosting-947586227795155815/original/5b05b931-9693-4aaf-b083-8035f113d1ba.jpeg?im_w=1200",
       },
     ],
-    price: 2300,
+    price: 15000,
     location: "Phuket",
     country: "Thailand",
     category: "Beach",
@@ -1429,9 +1429,9 @@ const sampleListings = [
 
   // Camping
   {
-    title: "Rishikesh Riverside Camping",
+    title: "Ganga River Camping in Rishikesh",
     description:
-      "A serene camping experience along the Ganges in Rishikesh, perfect for yoga and nature lovers.",
+      "Experience a serene riverside camp on the banks of the holy Ganges in Rishikesh. This is an ideal spot for adventure seekers, yoga lovers, and anyone looking to connect with nature. Enjoy evening campfires, stargazing, and listening to the tranquil sounds of the river. A truly refreshing and spiritual experience.",
     image: {
       filename: "image5",
       url: "https://www.campingale.com/img/ris40-18.jpg",
@@ -1454,7 +1454,7 @@ const sampleListings = [
         url: "https://www.campingale.com/img/ris40-16.jpg",
       },
     ],
-    price: 1200,
+    price: 2500,
     location: "Rishikesh",
     country: "India",
     category: "Camping",
@@ -1481,9 +1481,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [78.2676, 30.0869] },
   },
   {
-    title: "Serengeti Luxury Glamping",
+    title: "Serengeti Safari: Luxury Glamping Tent",
     description:
-      "Luxury glamping in the Serengeti with stunning wildlife views and modern comforts.",
+      "This is not just camping; it's a luxury glamping experience in the heart of the Serengeti. Witness the Great Migration and the Big Five from the comfort of your lavish tent, which features a proper bed and en-suite bathroom. Enjoy guided safaris during the day and gourmet meals under the stars at night. An unforgettable wildlife adventure.",
     image: {
       filename: "image5",
       url: "https://waybird.imgix.net/lodge_images/images/000/054/907/original/Serengeti-Safari-Camp--Tanzania-timbuktu-travel-11.jpg?w=1420&crop=center%20center&fit=max&dpr=1&q=50&auto=format",
@@ -1506,7 +1506,7 @@ const sampleListings = [
         url: "https://waybird.imgix.net/lodge_images/images/000/054/906/original/Serengeti-Safari-Camp--Tanzania-timbuktu-travel-10.jpg?w=1420&crop=center%20center&fit=max&dpr=1&q=50&auto=format",
       },
     ],
-    price: 3500,
+    price: 60000,
     location: "Serengeti",
     country: "Tanzania",
     category: "Camping",
@@ -1533,9 +1533,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [34.8333, -2.6667] },
   },
   {
-    title: "Mongolian Yurt Camping",
+    title: "Gobi Desert Dream: A Traditional Mongolian Yurt",
     description:
-      "Stay in a traditional Mongolian yurt with a nomadic family, offering an authentic cultural experience.",
+      "Embark on a life-changing cultural journey by staying in a traditional Mongolian yurt (ger) with a nomadic family in the Gobi Desert. This is an authentic, rustic experience far from the tourist trail. Learn about the nomadic way of life, enjoy home-cooked meals, and witness the most spectacular star-filled sky you've ever seen.",
     image: {
       filename: "image5",
       url: "https://media.glampinghub.com/CACHE/images/accommodations/handmade-yurts-in-the-heart-of-the-gobi-mongolia-1521796522473/ce1d0d42b41cbacd3847299b17a335ac.jpg",
@@ -1558,11 +1558,11 @@ const sampleListings = [
         url: "https://media.glampinghub.com/CACHE/images/accommodations/handmade-yurts-in-the-heart-of-the-gobi-mongolia-1521796522723/5fdb9a57dd48409765fee9a49dfeeee5.jpg",
       },
     ],
-    price: 1500,
+    price: 8000,
     location: "Gobi Desert",
     country: "Mongolia",
     category: "Camping",
-    propertyDetails: { guests: 3, bedrooms: 1, bathrooms: 0 },
+    propertyDetails: { guests: 4, bedrooms: 1, bathrooms: 0 },
     amenities: [
       { name: "Cultural Immersion" },
       { name: "Stargazing" },
@@ -1585,11 +1585,11 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [103.8466, 43.4187] },
   },
 
-  // Castles (3 listings: 1 Indian, 2 Global)
+  // Castles
   {
-    title: "Rajasthani Fort Palace in Jodhpur",
+    title: "The Jodhpur Citadel: A Royal Fort Palace",
     description:
-      "A majestic fort palace in Jodhpur, offering royal Rajasthani hospitality and stunning city views.",
+      "Live like a Maharaja in your own private wing of a majestic fort palace in Jodhpur. This is an unparalleled heritage experience, offering breathtaking, panoramic views of the 'Blue City.' The property features sprawling courtyards, intricate royal architecture, and dedicated staff to cater to your every need. An unforgettable setting for a special occasion.",
     image: {
       filename: "image5",
       url: "https://plus.unsplash.com/premium_photo-1678916185493-781b5b61b93b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -1612,11 +1612,11 @@ const sampleListings = [
         url: "https://images.unsplash.com/photo-1668517107930-27191d3f4bfa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
     ],
-    price: 40000,
+    price: 150000,
     location: "Jodhpur",
     country: "India",
     category: "Castles",
-    propertyDetails: { guests: 12, bedrooms: 6, bathrooms: 7 },
+    propertyDetails: { guests: 16, bedrooms: 8, bathrooms: 9 },
     amenities: [
       { name: "Entire Palace" },
       { name: "Rooftop View" },
@@ -1639,9 +1639,9 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [73.0297, 26.2389] },
   },
   {
-    title: "Scottish Highland Castle",
+    title: "Lord of the Glen: A Grand Scottish Highland Castle",
     description:
-      "Live like royalty in a 15th-century Scottish castle with grand halls and sprawling grounds.",
+      "Command your own 15th-century Scottish castle, set amidst the dramatic and beautiful Highlands. This exclusive-use property features a grand hall with a roaring fireplace, eight stately bedrooms, and sprawling private grounds. It's the perfect venue for a magnificent family reunion, wedding, or a once-in-a-lifetime luxury holiday.",
     image: {
       filename: "image5",
       url: "https://secure.uniquebookingservices.com/uf/property/1355/gallery/10926/24826/232109-v3-gallery@2x.jpg",
@@ -1664,7 +1664,7 @@ const sampleListings = [
         url: "https://secure.uniquebookingservices.com/uf/property/1355/gallery/10939/24854/232081-v1-gallery@2x.jpg",
       },
     ],
-    price: 45000,
+    price: 220000,
     location: "Highlands",
     country: "Scotland",
     category: "Castles",
@@ -1691,32 +1691,32 @@ const sampleListings = [
     geometry: { type: "Point", coordinates: [-4.2265, 57.4778] },
   },
   {
-    title: "Loire Valley Château",
+    title: "Le Rêve Royal: A Majestic Loire Valley Château",
     description:
-      "A majestic château in France’s Loire Valley, perfect for a lavish holiday or special event.",
+      "Live out your fairytale fantasies at this majestic château in the heart of France’s Loire Valley. Surrounded by manicured gardens and a private lake, this opulent estate boasts a grand ballroom, ten luxurious bedrooms, and exquisite period details. It is the ultimate destination for a lavish wedding, a grand celebration, or an unforgettable holiday.",
     image: {
-    filename: "image5",
-    url: "https://travelmemo.com/wp-content/uploads/2011/07/rolls-royce-chateau-barre-hotel-vanssay-loire-france.jpg",
-  },
-  images: [
-    {
-      filename: "mainImage",
-      url: "https://travelmemo.com/wp-content/uploads/2011/07/garden-view-chateau-barre-hotel-vanssay-loire-france-440x328.jpg",
+      filename: "image5",
+      url: "https://travelmemo.com/wp-content/uploads/2011/07/rolls-royce-chateau-barre-hotel-vanssay-loire-france.jpg",
     },
-    {
-      filename: "image2",
-      url: "https://travelmemo.com/wp-content/uploads/2011/05/dining-room-chateau-barre-hotel-vanssay-loire-france.jpg",
-    },
-    {
-      filename: "image3",
-      url: "https://travelmemo.com/wp-content/uploads/2011/07/yellow-ensuite-guest-room-chateau-barre-hotel-vanssay-loire-france.jpg",
-    },
-    {
-      filename: "image4",
-      url: "https://travelmemo.com/wp-content/uploads/2011/07/salon-chateau-barre-hotel-vanssay-loire-france.jpg",
-    },
-  ],
-    price: 50000,
+    images: [
+      {
+        filename: "mainImage",
+        url: "https://travelmemo.com/wp-content/uploads/2011/07/garden-view-chateau-barre-hotel-vanssay-loire-france-440x328.jpg",
+      },
+      {
+        filename: "image2",
+        url: "https://travelmemo.com/wp-content/uploads/2011/05/dining-room-chateau-barre-hotel-vanssay-loire-france.jpg",
+      },
+      {
+        filename: "image3",
+        url: "https://travelmemo.com/wp-content/uploads/2011/07/yellow-ensuite-guest-room-chateau-barre-hotel-vanssay-loire-france.jpg",
+      },
+      {
+        filename: "image4",
+        url: "https://travelmemo.com/wp-content/uploads/2011/07/salon-chateau-barre-hotel-vanssay-loire-france.jpg",
+      },
+    ],
+    price: 250000,
     location: "Loire Valley",
     country: "France",
     category: "Castles",

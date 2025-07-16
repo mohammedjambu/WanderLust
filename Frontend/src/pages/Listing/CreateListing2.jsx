@@ -7,16 +7,11 @@ import { useCreateListing } from "../../context/CreateListingContext";
 import "./CreateListing.css";
 import ProgressTracker from "./ProgressTracker";
 import ImageUpload from "./ImageUpload";
+import { getAmenityIcon, amenityOptions } from "../../components/utils/getAmenityIcon";
 
 import {
   // Property Details Icons
   Users, Bed, Bath,
-  // Amenity Icons
-  Wifi, ChefHat, Waves, PawPrint, Snowflake, WashingMachine,
-  ThermometerSun, Flame, AirVent, Bike, Binoculars, FlameKindling,
-  Castle, DoorOpen, Fence, Globe2, Backpack, Home, Landmark,
-  Leaf, Mountain, ParkingCircle, Soup, Sprout, Store, Sun,
-  Tent, Trees, Tv2, View, Wine, WavesLadder, HelpCircle, Star, ShieldCheck,
 } from "lucide-react";
 
 // Import icons
@@ -30,10 +25,9 @@ import { FaTreeCity } from "react-icons/fa6";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { BiBuildingHouse } from "react-icons/bi";
 import { IoBedOutline } from "react-icons/io5";
-import { MdBedroomParent, MdOutlinePool, MdBalcony  } from "react-icons/md";
+import { MdBedroomParent, MdOutlinePool  } from "react-icons/md";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
-import { TbBeach } from "react-icons/tb";
-import { FaPeopleRoof } from "react-icons/fa6";
+;
 
 
 // Category options with icons
@@ -51,81 +45,6 @@ const categoryOptions = [
   { name: "Castles", icon: <GiCastle /> },
 ];
 
-// Amenity options with icons
-const allAmenityNames = [
-  "24/7 Security", "Air Conditioning", "Backwater View", "Balcony", "Ballroom",
-  "BBQ Grill", "Beach Access", "Bicycle Rental", "Campfire", "Canal View",
-  "City Access", "City View", "Cultural Immersion", "Entire Castle", "Entire Palace",
-  "Fireplace", "Free Parking", "Free WiFi", "Full Kitchen", "Ganges View",
-  "Garden", "Garden View", "Great Hall", "Guided Safari", "Heating",
-  "Heritage Decor", "Hiking Trails", "Home-cooked Meals", "Infinity Pool",
-  "Lake View", "Laundry Service", "Luxury Tent", "Manicured Gardens",
-  "Market Access", "Mountain Views", "Ocean View", "Organic Farm", "Organic Garden",
-  "Outdoor Dining", "Pet Friendly", "Private Courtyard", "Private Fire Pit",
-  "Private Grounds", "Private Lake", "Private Patio", "Private Pool",
-  "Riverside Tent", "Rooftop Deck", "Rooftop Terrace", "Rooftop View",
-  "Sea View", "Security", "Shared Courtyard", "Shared Kitchen", "Ski Storage",
-  "Smart TV", "Stargazing", "Tatami Mats", "Tropical Garden", "TV", "Washer",
-  "Wildlife Viewing", "Wine Tasting", "Yoga Deck"
-];
-
-const normalizeAmenityName = (name) => {
-  if (!name) return "";
-  return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
-};
-
-const getAmenityIcon = (name) => {
-  const iconClass = "w-6 h-6 text-gray-800 flex-shrink-0";
-  const normalizedName = normalizeAmenityName(name);
-
-  switch (normalizedName) {
-    case "free-wifi": return <Wifi className={iconClass} />;
-    case "free-parking": return <ParkingCircle className={iconClass} />;
-    case "air-conditioning": return <AirVent className={iconClass} />;
-    case "heating": return <ThermometerSun className={iconClass} />;
-    case "pet-friendly": return <PawPrint className={iconClass} />;
-    case "fireplace": return <Flame className={iconClass} />;
-    case "washer": case "laundry-service": return <WashingMachine className={iconClass} />;
-    case "tv": case "smart-tv": return <Tv2 className={iconClass} />;
-    case "security": case "24/7-security": return <ShieldCheck className={iconClass} />;
-    case "tatami-mats": return <Home className={iconClass} />;
-    case "full-kitchen": case "shared-kitchen": return <ChefHat className={iconClass} />;
-    case "wine-tasting": return <Wine className={iconClass} />;
-    case "home-cooked-meals": return <Soup className={iconClass} />;
-    case "outdoor-dining": return <Sun className={iconClass} />;
-    case "bbq-grill": return <Flame className={iconClass} />;
-    case "private-pool": case "infinity-pool": return <WavesLadder className={iconClass} />;
-    case "sea-view": case "lake-view": case "backwater-view": case "ganges-view": case "canal-view": case "ocean-view": case "private-lake": return <Waves className={iconClass} />;
-    case "rooftop-deck": case "rooftop-terrace": case "rooftop-view": return <FaPeopleRoof className={iconClass} />
-    case "private-patio": case "balcony": return <MdBalcony className={iconClass} />;
-    case "city-view": return <View className={iconClass} />;
-    case "garden": case "tropical-garden": case "organic-garden": case "manicured-gardens": case "private-grounds": return <Trees className={iconClass} />;
-    case "garden-view": return <Leaf className={iconClass} />;
-    case "private-courtyard": case "shared-courtyard": return <Fence className={iconClass} />;
-    case "mountain-views": return <Mountain className={iconClass} />;
-    case "organic-farm": return <Sprout className={iconClass} />;
-    case "beach-access": return <TbBeach className={iconClass} />;
-    case "hiking-trails": return <Backpack className={iconClass} />;
-    case "camping-tent": case "riverside-tent": case "luxury-tent": return <Tent className={iconClass} />;
-    case "campfire": case "private-fire-pit": return <FlameKindling className={iconClass} />;
-    case "wildlife-viewing": case "guided-safari": return <Binoculars className={iconClass} />;
-    case "stargazing": return <Star className={iconClass} />;
-    case "bicycle-rental": return <Bike className={iconClass} />;
-    case "cultural-immersion": return <Globe2 className={iconClass} />;
-    case "ski-storage": return <Snowflake className={iconClass} />;
-    case "entire-castle": case "entire-palace": return <Castle className={iconClass} />;
-    case "heritage-decor": return <Landmark className={iconClass} />;
-    case "ballroom": case "great-hall": return <DoorOpen className={iconClass} />;
-    case "market-access": case "city-access": return <Store className={iconClass} />;
-    case "yoga-deck": return <Sprout className={iconClass} />;
-    default: return <HelpCircle className={iconClass} />;
-  }
-};
-
-const amenityOptions = allAmenityNames.map(name => ({
-    name,
-    icon: getAmenityIcon(name)
-}));
 
 
 const CreateListing2 = () => {

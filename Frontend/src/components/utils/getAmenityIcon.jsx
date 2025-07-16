@@ -37,6 +37,49 @@ import { FaPeopleRoof, FaTent } from "react-icons/fa6";
 import { TbBeach, TbGrill, TbToolsKitchen2 } from "react-icons/tb";
 import { GiIndianPalace, GiCircleForest } from "react-icons/gi";
 
+const allAmenityNames = [
+  "24/7 Security",
+  "Air Conditioning",
+  "Balcony",
+  "BBQ Grill",
+  "Beach Access",
+  "Bicycle Rental",
+  "Campfire",
+  "Camping Tent",
+  "City Access",
+  "Cultural Immersion",
+  "Entire Castle",
+  "Entire Palace",
+  "Fireplace",
+  "Free Parking",
+  "Free WiFi",
+  "Full Kitchen",
+  "Garden",
+  "Guided Safari",
+  "Heating",
+  "Hiking Trails",
+  "Home-cooked Meals",
+  "Infinity Pool",
+  "Lake View",
+  "Laundry Service",
+  "Luxury Tent",
+  "Mountain Views",
+  "Organic Farm",
+  "Outdoor Dining",
+  "Pet Friendly",
+  "Private Pool",
+  "Rooftop View",
+  "Shared Kitchen",
+  "Ski Storage",
+  "Smart TV",
+  "Stargazing",
+  "Wildlife Viewing",
+  "Wine Tasting",
+];
+
+// This now works correctly because allAmenityNames exists.
+
+
 const normalizeAmenityName = (name) => {
   if (!name) return "";
   return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");
@@ -125,3 +168,8 @@ export const getAmenityIcon = (name) => {
       return <HelpCircle className={iconClass} />;
   }
 };
+
+export const amenityOptions = allAmenityNames.map((name) => ({
+  name,
+  icon: getAmenityIcon(name),
+}));

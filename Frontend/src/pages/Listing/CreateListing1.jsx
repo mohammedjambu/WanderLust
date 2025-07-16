@@ -8,11 +8,13 @@ import { useCreateListing } from "../../context/CreateListingContext";
 import { authDataContext } from "../../context/AuthContext";
 import ProgressTracker from "./ProgressTracker";
 import "./CreateListing.css";
+import { toast } from 'react-toastify';
 
 const CreateListing1 = () => {
   const navigate = useNavigate();
   const { listingData, updateListingData } = useCreateListing();
   const { authUser, loading: authLoading } = React.useContext(authDataContext);
+  const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
   const [countries, setCountries] = useState([]);
 
@@ -74,38 +76,43 @@ const CreateListing1 = () => {
   }, [navigate, authUser, authLoading]);
 
   const fetchCities = (inputValue, callback) => {
-    if (!selectedCountry || inputValue.length < 2) return callback([]);
-    const geoDbApiUrl = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=10000&namePrefix=${inputValue}&countryIds=${selectedCountry.code}`;
-    const options = {
-      method: "GET",
-      headers: {
-        "x-rapidapi-key": import.meta.env.VITE_GEODB_API_KEY,
-        "x-rapidapi-host": import.meta.env.VITE_GEODB_API_HOST,
-      },
-    };
-    fetch(geoDbApiUrl, options)
-      .then((res) => res.json())
+    if (!selectedCountry || inputValue.length < 2) {
+      return callback([]);
+    }
+    
+    const mapboxApiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      inputValue
+    )}.json?country=${selectedCountry.code}&types=place&access_token=${MAPBOX_TOKEN}`;
+
+    fetch(mapboxApiUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
       .then((apiResponse) => {
-        const cityOptions = (apiResponse.data || []).map((city) => ({
-          value: city.city,
-          label: `${city.city}, ${city.region}`,
+        const cityOptions = (apiResponse.features || []).map((feature) => ({
+          value: feature.text, // e.g., "Udaipur"
+          label: feature.place_name, // e.g., "Udaipur, Rajasthan, India"
         }));
         callback(cityOptions);
       })
       .catch((err) => {
-        console.error("City fetch error:", err);
+        console.error("Mapbox city fetch error:", err);
+        toast.error("Could not fetch city data. Please try again later.");
         callback([]);
       });
   };
+
   const debouncedCityLoad = useMemo(
     () => debounce(fetchCities, 500),
-    [selectedCountry]
+    [selectedCountry, MAPBOX_TOKEN] // Add MAPBOX_TOKEN to dependency array
   );
 
   const onSubmit = (data) => {
     const formattedData = {
       ...data,
       country: data.country.value,
+      countryCode: data.country.code,
       location: data.location.value,
     };
     updateListingData(formattedData);
