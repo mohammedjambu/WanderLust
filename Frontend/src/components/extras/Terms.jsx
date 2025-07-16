@@ -1,8 +1,6 @@
 import React from "react";
 import { Box, Container, Typography, Stack, Divider } from "@mui/material";
 
-// Import icons for the Terms page
-import GavelOutlinedIcon from "@mui/icons-material/GavelOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import DoNotDisturbOnOutlinedIcon from "@mui/icons-material/DoNotDisturbOnOutlined";
@@ -10,7 +8,6 @@ import CopyrightOutlinedIcon from "@mui/icons-material/CopyrightOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
-// --- Data for our Terms of Service ---
 const termsData = [
   {
     id: 1,
@@ -67,7 +64,7 @@ const termsData = [
   },
 ];
 
-// --- The Main Component ---
+// The Main Component
 const Terms = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -84,7 +81,6 @@ const Terms = () => {
             fontWeight: 700,
             color: "#3d7fe3ff",
             mb: 2,
-            // ✅ This makes the font size responsive
             fontSize: { xs: "2.25rem", md: "3.75rem" },
           }}
         >

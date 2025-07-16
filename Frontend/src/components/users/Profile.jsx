@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { authDataContext } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import "./Profile.css"; // Your existing, correct CSS file
+import "../../utils css/Profile.css";
 import {
   User,
   Briefcase,
@@ -16,6 +16,26 @@ import { toast } from "react-toastify";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
+// Skeleton loader for the tab content
+const TabSkeleton = () => (
+  <div className="tab-content">
+    <div
+      className="skeleton-text"
+      style={{ height: "2.5rem", width: "40%", marginBottom: "2rem" }}
+    ></div>
+    <div className="data-card-list">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="data-card">
+          <div className="data-card-image skeleton-image"></div>
+          <div className="data-card-content">
+            <div className="skeleton-text" style={{ width: "80%" }}></div>
+            <div className="skeleton-text" style={{ width: "50%" }}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const AboutTab = ({ authUser, onEditClick }) => (
   <div className="tab-content">
@@ -65,12 +85,10 @@ const AboutTab = ({ authUser, onEditClick }) => (
 );
 
 const BookingsTab = ({ bookings }) => {
-  const validBookings = bookings.filter(b => b && b.listing);
-
+  const validBookings = bookings.filter((b) => b && b.listing);
   return (
     <div className="tab-content">
       <h3>My Trips</h3>
-      {/* Use the new, filtered list to check if we should show the empty state. */}
       {validBookings.length === 0 ? (
         <div className="empty-state">
           <p>You haven't booked any trips yet. Time for a new adventure?</p>
@@ -80,7 +98,6 @@ const BookingsTab = ({ bookings }) => {
         </div>
       ) : (
         <div className="data-card-list">
-          {/* Map over the filtered list to ensure every item is safe to render. */}
           {validBookings.map((b) => (
             <Link
               to={`/listings/${b.listing._id}`}
@@ -111,41 +128,42 @@ const BookingsTab = ({ bookings }) => {
   );
 };
 
-const ReviewsTab = ({ reviews }) => (
-  <div className="tab-content">
-    <h3>Reviews I've Written</h3>
-    {reviews.length === 0 ? (
-      <div className="empty-state">
-        <p>You haven't reviewed any stays yet.</p>
-      </div>
-    ) : (
-      <div className="data-card-list">  
-        {reviews.map((r) => (
-          <div key={r._id} className="data-card">
-            <img
-              src={r.listing.image?.url || "/default-image.jpg"}
-              alt={r.listing?.title}
-              className="data-card-image"
-            />
-            <div className="data-card-content">
-              <p className="data-card-subtitle">Your review for:</p>
-              <p className="data-card-title">
-                {r.listing?.title || "A deleted listing"}
-              </p>
-              <div className="data-card-rating">
-                {[...Array(r.rating)].map((_, i) => (
-                  <StarIcon key={i} size={16} fill="currentColor" />
-                ))}
+const ReviewsTab = ({ reviews }) => {
+  const validReviews = reviews.filter((r) => r && r.listing);
+
+  return (
+    <div className="tab-content">
+      <h3>Reviews I've Written</h3>
+      {validReviews.length === 0 ? (
+        <div className="empty-state">
+          <p>You haven't reviewed any stays yet.</p>
+        </div>
+      ) : (
+        <div className="data-card-list">
+          {validReviews.map((r) => (
+            <div key={r._id} className="data-card">
+              <img
+                src={r.listing?.image?.url || "/default-image.jpg"}
+                alt={r.listing.title}
+                className="data-card-image"
+              />
+              <div className="data-card-content">
+                <p className="data-card-subtitle">Your review for:</p>
+                <p className="data-card-title">{r.listing.title}</p>
+                <div className="data-card-rating">
+                  {[...Array(r.rating)].map((_, i) => (
+                    <StarIcon key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+                <p className="data-card-details">"{r.comment}"</p>
               </div>
-              <p className="data-card-details">"{r.comment}"</p>
             </div>
-          </div>
-        ))}
-      </div>
-      
-    )}
-  </div>
-);
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ListingsTab = ({ listings }) => (
   <div className="tab-content">
@@ -289,21 +307,36 @@ const Profile = () => {
   };
 
   const renderTabContent = () => {
-    if (loadingData) return <p>Loading your data...</p>;
+    if (loadingData) return <TabSkeleton />;
+
     switch (activeTab) {
       case "bookings":
-        return <BookingsTab bookings={bookings} />;
+        return (
+          <div key="bookings" className="tab-content-wrapper">
+            <BookingsTab bookings={bookings} />
+          </div>
+        );
       case "reviews":
-        return <ReviewsTab reviews={reviews} />;
+        return (
+          <div key="reviews" className="tab-content-wrapper">
+            <ReviewsTab reviews={reviews} />
+          </div>
+        );
       case "listings":
-        return <ListingsTab listings={listings} />;
+        return (
+          <div key="listings" className="tab-content-wrapper">
+            <ListingsTab listings={listings} />
+          </div>
+        );
       case "about":
       default:
         return (
-          <AboutTab
-            authUser={authUser}
-            onEditClick={() => setIsModalOpen(true)}
-          />
+          <div key="about" className="tab-content-wrapper">
+            <AboutTab
+              authUser={authUser}
+              onEditClick={() => setIsModalOpen(true)}
+            />
+          </div>
         );
     }
   };
@@ -361,99 +394,110 @@ const Profile = () => {
         className="relative z-50"
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white rounded-xl p-8 max-w-lg w-full shadow-xl">
-            <Dialog.Title className="text-2xl font-semibold mb-4 text-center">
-              Update Your Profile
-            </Dialog.Title>
 
-            <div className="flex flex-col items-center mb-6">
-              <div className="relative">
-                <img
-                  src={avatarPreview || "/default-avatar.png"}
-                  alt="Avatar Preview"
-                  className="w-24 h-24 rounded-full object-cover border-2"
-                />
-                <label
-                  htmlFor="avatar-upload"
-                  className="absolute -bottom-1 -right-1 bg-white p-1.5 rounded-full border shadow-sm cursor-pointer hover:bg-gray-100"
-                >
-                  <Camera size={18} />
-                </label>
-                <input
-                  type="file"
-                  id="avatar-upload"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="hidden"
-                />
-              </div>
-            </div>
+        <div className="fixed inset-0 overflow-y-auto mt-20 dialog-container">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <Dialog.Panel className="modal-panel bg-white rounded-xl max-w-lg w-full shadow-xl">
+              <Dialog.Title className="modal-title">
+                Update Your Profile
+              </Dialog.Title>
 
-            <form onSubmit={handleFormSubmit} className="modal-form">
-              <div className="modal-form-row">
-                <label className="modal-form-label">Full Name</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    handleFormChange(e.target.name, e.target.value)
-                  }
-                  className="modal-input"
-                />
-              </div>
-              <div className="modal-form-row">
-                <label className="modal-form-label">Where you're from</label>
-                <input
-                  type="text"
-                  name="hometown"
-                  value={formData.hometown}
-                  onChange={(e) =>
-                    handleFormChange(e.target.name, e.target.value)
-                  }
-                  className="modal-input"
-                />
-              </div>
-              <div className="modal-form-row">
-                <label className="modal-form-label">Phone Number</label>
-                <div className="modal-phone-input">
-                  <PhoneInput
-                    international
-                    defaultCountry="IN"
-                    value={formData.phone}
-                    onChange={(value) => handleFormChange("phone", value)}
-                  />
+              <form
+                onSubmit={handleFormSubmit}
+                className="modal-form-container"
+              >
+                <div className="modal-scrollable-content">
+                  <div className="flex flex-col items-center mb-6">
+                    <div className="relative">
+                      <img
+                        src={avatarPreview || "/default-avatar.png"}
+                        alt="Avatar Preview"
+                        className="w-24 h-24 rounded-full object-cover border-2"
+                      />
+                      <label
+                        htmlFor="avatar-upload"
+                        className="absolute -bottom-1 -right-1 bg-white p-1.5 rounded-full border shadow-sm cursor-pointer hover:bg-gray-100"
+                      >
+                        <Camera size={18} />
+                      </label>
+                      <input
+                        type="file"
+                        id="avatar-upload"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="modal-form-row">
+                    <label className="modal-form-label">Full Name</label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={(e) =>
+                        handleFormChange(e.target.name, e.target.value)
+                      }
+                      className="modal-input"
+                    />
+                  </div>
+                  <div className="modal-form-row">
+                    <label className="modal-form-label">
+                      Where you're from
+                    </label>
+                    <input
+                      type="text"
+                      name="hometown"
+                      value={formData.hometown}
+                      onChange={(e) =>
+                        handleFormChange(e.target.name, e.target.value)
+                      }
+                      className="modal-input"
+                    />
+                  </div>
+                  <div className="modal-form-row">
+                    <label className="modal-form-label">Phone Number</label>
+                    <div className="modal-phone-input">
+                      <PhoneInput
+                        international
+                        defaultCountry="IN"
+                        value={formData.phone}
+                        onChange={(value) => handleFormChange("phone", value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="modal-form-row vertical">
+                    <label className="modal-form-label">About Me (Intro)</label>
+                    <textarea
+                      name="bio"
+                      rows="3"
+                      value={formData.bio}
+                      onChange={(e) =>
+                        handleFormChange(e.target.name, e.target.value)
+                      }
+                      placeholder="Tell us a little about yourself..."
+                      className="modal-textarea"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="modal-form-row vertical">
-                <label className="modal-form-label">About Me (Intro)</label>
-                <textarea
-                  name="bio"
-                  rows="3"
-                  value={formData.bio}
-                  onChange={(e) =>
-                    handleFormChange(e.target.name, e.target.value)
-                  }
-                  placeholder="Tell us a little about yourself..."
-                  className="modal-textarea"
-                />
-              </div>
 
-              <div className="modal-buttons">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="modal-btn secondary"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="modal-btn primary">
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </Dialog.Panel>
+                <div className="modal-buttons">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="modal-btn secondary"
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="modal-btn primary">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </Dialog.Panel>
+          </div>
         </div>
       </Dialog>
     </>

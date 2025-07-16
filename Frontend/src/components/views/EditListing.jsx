@@ -5,17 +5,11 @@ import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
-import ImageUpload from "../Listing/ImageUpload";
-import "./EditListing.css";
-import { getAmenityIcon, amenityOptions } from "../../components/utils/getAmenityIcon";
+import ImageUpload from "../utils/ImageUpload";
+import "../../utils css/EditListing.css";
+import { getAmenityIcon, amenityOptions } from "../utils/getAmenityIcon";
 
-
-import {
-  Users,
-  Bed,
-  Bath,
-} from "lucide-react";
-
+import { Users, Bed, Bath } from "lucide-react";
 
 const EditListing = () => {
   const { id } = useParams();
@@ -179,13 +173,6 @@ const EditListing = () => {
         </div>
       </div>
     );
-
-  
-
-  // const amenityOptions = allAmenityNames.map((name) => ({
-  //   name,
-  //   icon: getAmenityIcon(name),
-  // }));
 
   const formatOptionLabel = ({ name, icon }) => (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

@@ -77,9 +77,6 @@ const allAmenityNames = [
   "Wine Tasting",
 ];
 
-// This now works correctly because allAmenityNames exists.
-
-
 const normalizeAmenityName = (name) => {
   if (!name) return "";
   return name.toLowerCase().replace(/ /g, "-").replace(/'/g, "");

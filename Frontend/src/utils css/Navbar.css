@@ -270,12 +270,15 @@ body {
 .dropdown-navbar-icon {
   margin-left: 16px;
   font-size: 1.4rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
 }
 
-/* .dropdown-navbar-icon-excep{
-  margin-left: 1rem;
-  font-size: 2rem;
-} */
+.dropdown-container:hover .dropdown-navbar-icon {
+  opacity: 1;
+}
+
+
 
 .dropdown-item {
   display: block;

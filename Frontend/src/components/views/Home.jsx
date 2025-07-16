@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import "./Home.css";
+import "../../utils css/Home.css";
 import axios from "axios";
 import { authDataContext } from "../../context/AuthContext";
 import { MapPin } from "lucide-react";

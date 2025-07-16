@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Edit, Trash2 } from "lucide-react";
 import { authDataContext } from "../../context/AuthContext";
-import "./MyListing.css";
+import "../../utils css/MyListing.css";
 
 const MyListingCard = ({ listing, onDelete }) => {
   return (

@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Container, Typography, Stack, Divider } from "@mui/material";
 
-// Import the icons we'll need
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import DnsOutlinedIcon from "@mui/icons-material/DnsOutlined";
@@ -11,7 +10,6 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
-// --- Expanded Data for our Privacy Policy ---
 const policyData = [
   {
     id: 1,
@@ -104,8 +102,7 @@ const Privacy = () => {
             fontWeight: 700,
             color: "#3d7fe3ff",
             mb: 2,
-            // ✅ This makes the font size responsive
-            fontSize: { xs: "2.25rem", md: "3.75rem" },
+            fontSize: { xs: "2rem", md: "3.75rem" },
           }}
         >
           Privacy Policy

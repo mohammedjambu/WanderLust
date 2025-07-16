@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { authDataContext } from "../../context/AuthContext";
-import "./MyTrips.css";
+import "../../utils css/MyTrips.css";
 
 // A helper function for pretty date formatting
 const formatDate = (dateString) => {

@@ -6,9 +6,9 @@ import AsyncSelect from "react-select/async";
 import { debounce } from "lodash";
 import { useCreateListing } from "../../context/CreateListingContext";
 import { authDataContext } from "../../context/AuthContext";
-import ProgressTracker from "./ProgressTracker";
-import "./CreateListing.css";
-import { toast } from 'react-toastify';
+import ProgressTracker from "../utils/ProgressTracker";
+import "../../utils css/CreateListing.css";
+import { toast } from "react-toastify";
 
 const CreateListing1 = () => {
   const navigate = useNavigate();
@@ -79,10 +79,12 @@ const CreateListing1 = () => {
     if (!selectedCountry || inputValue.length < 2) {
       return callback([]);
     }
-    
+
     const mapboxApiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       inputValue
-    )}.json?country=${selectedCountry.code}&types=place&access_token=${MAPBOX_TOKEN}`;
+    )}.json?country=${
+      selectedCountry.code
+    }&types=place&access_token=${MAPBOX_TOKEN}`;
 
     fetch(mapboxApiUrl)
       .then((res) => {
@@ -91,8 +93,8 @@ const CreateListing1 = () => {
       })
       .then((apiResponse) => {
         const cityOptions = (apiResponse.features || []).map((feature) => ({
-          value: feature.text, // e.g., "Udaipur"
-          label: feature.place_name, // e.g., "Udaipur, Rajasthan, India"
+          value: feature.text,
+          label: feature.place_name,
         }));
         callback(cityOptions);
       })

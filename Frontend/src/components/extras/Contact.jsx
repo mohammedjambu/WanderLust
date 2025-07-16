@@ -10,14 +10,13 @@ import {
   Paper,
   Link,
   Divider,
-  Snackbar, // <-- Added for feedback
-  Alert, // <-- Added for feedback
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SendIcon from "@mui/icons-material/Send";
-// ForumIcon was unused, so it can be removed for cleaner code.
 
 const contactDetails = [
   {
@@ -58,7 +57,7 @@ const Contact = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success", // can be 'error', 'warning', 'info', or 'success'
+    severity: "success",
   });
 
   // Handles changes in any text field
@@ -84,17 +83,14 @@ const Contact = () => {
       return;
     }
 
-    // --- In a real app, you would send the data to your server/API here ---
     console.log("Form Submitted:", formData);
 
-    // Show success message
     setSnackbar({
       open: true,
       message: "Message sent! We will be in touch soon.",
       severity: "success",
     });
 
-    // Reset the form fields after successful submission
     setFormData({
       name: "",
       email: "",
@@ -112,7 +108,7 @@ const Contact = () => {
 
   return (
     <Box>
-      {/* Hero Section (Styling is unchanged) */}
+      {/* Hero Section */}
       <Box textAlign="center" sx={{ bgcolor: "#f5f5f5", py: 6 }}>
         <Typography
           variant="h3"
@@ -133,7 +129,7 @@ const Contact = () => {
       <Container sx={{ py: 1, mb: 4 }}>
         <Grid container spacing={4} alignItems="stretch">
           {/* Column 1: Contact Info & Map */}
-          <Grid >
+          <Grid>
             <Stack spacing={3}>
               {contactDetails.map((item, index) => (
                 <Paper
@@ -163,14 +159,14 @@ const Contact = () => {
                 allowFullScreen=""
                 loading="lazy"
                 title="Google Map Placeholder"
-                referrerPolicy="no-referrer-when-downgrade" // Added for best practice
+                referrerPolicy="no-referrer-when-downgrade"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d423286.2749325989!2d-118.691920484786!3d34.02072992057604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c7a163ebddf5%3A0x1111111111111111!2sLos%20Angeles%2C%20CA!5e0!3m2!1sen!2sus!4v1628588880000!5m2!1sen!2sus"
               ></iframe>
             </Box>
           </Grid>
 
           {/* Column 2: Message Form */}
-          <Grid >
+          <Grid>
             <Paper elevation={3} sx={{ p: { xs: 3, md: 4 } }}>
               <Typography
                 variant="h5"
@@ -241,7 +237,7 @@ const Contact = () => {
         </Grid>
       </Container>
 
-      {/* --- Snackbar for displaying feedback --- */}
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

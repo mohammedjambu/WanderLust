@@ -92,7 +92,7 @@
     border-color: var(--error-color) !important;
 }
 
-/* --- React-Select Custom Styles (for Country/City) --- */
+/* --- React-Select Custom Styles --- */
 .react-select-container.error-border .react-select__control {
     border-color: var(--error-color) !important;
 }
@@ -171,7 +171,7 @@
     opacity: 1;
 }
 
-/* --- New Image Uploader Styles (from ImageUpload component) --- */
+/* --- New Image Uploader Styles --- */
 .dropzone {
     border: 2px dashed var(--border-color-medium);
     border-radius: 12px;

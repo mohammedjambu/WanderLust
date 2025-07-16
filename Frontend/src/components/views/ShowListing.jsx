@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 import axios from "axios";
-import { useParams, useNavigate, useLocation  } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Map, { Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { authDataContext } from "../../context/AuthContext";
@@ -36,8 +36,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { eachDayOfInterval, parseISO } from "date-fns";
 import { Dialog } from "@headlessui/react";
 import { differenceInCalendarDays } from "date-fns";
-import "./ShowListing.css";
-import { getAmenityIcon } from "../../components/utils/getAmenityIcon";
+import "../../utils css/ShowListing.css";
+import { getAmenityIcon } from "../utils/getAmenityIcon";
 
 const ShowListing = () => {
   const { id } = useParams();
@@ -175,7 +175,6 @@ const ShowListing = () => {
     if (id) fetchUnavailableDates();
   }, [id, serverUrl]);
 
-
   useEffect(() => {
     if (!listingData?.location || !listingData?.country) return;
 
@@ -247,7 +246,7 @@ const ShowListing = () => {
     {
       title: "Free cancellation",
       description: "Full refund if canceled at least 5 days before check-in",
-      icon: <XCircle size={28} className="text-red-500 flex-shrink-0"/>,
+      icon: <XCircle size={28} className="text-red-500 flex-shrink-0" />,
     },
   ];
 
@@ -322,21 +321,24 @@ const ShowListing = () => {
   const nightsCount =
     checkIn && checkOut ? differenceInCalendarDays(checkOut, checkIn) : 0;
 
-  const CLEANING_FEE = 750; 
-  const SERVICE_FEE_RATE = 0.08; 
-  const TAX_RATE = 0.08; 
+  const CLEANING_FEE = 750;
+  const SERVICE_FEE_RATE = 0.08;
+  const TAX_RATE = 0.08;
 
   const listingPrice = listingData.price || 0;
-  
+
   const subtotal = listingPrice * nightsCount;
 
-  const serviceFee = nightsCount > 0 ? Math.round(subtotal * SERVICE_FEE_RATE) : 0;
-  const taxes = nightsCount > 0 ? Math.round((subtotal + CLEANING_FEE + serviceFee) * TAX_RATE) : 0;
+  const serviceFee =
+    nightsCount > 0 ? Math.round(subtotal * SERVICE_FEE_RATE) : 0;
+  const taxes =
+    nightsCount > 0
+      ? Math.round((subtotal + CLEANING_FEE + serviceFee) * TAX_RATE)
+      : 0;
 
-  // Calculate the final total
-  const total = nightsCount > 0 ? subtotal + CLEANING_FEE + serviceFee + taxes : 0;
+  const total =
+    nightsCount > 0 ? subtotal + CLEANING_FEE + serviceFee + taxes : 0;
 
-  
   const isOwner = authUser && listingData.owner?._id === authUser._id;
 
   const handleReviewSubmit = async () => {
@@ -457,9 +459,7 @@ const ShowListing = () => {
                     {isFavorited ? "Saved" : "Save"}
                   </span>
                 </motion.button>
-                
               </div>
-
             </div>
           </div>
         </motion.div>
@@ -644,7 +644,7 @@ const ShowListing = () => {
                   listingData.amenities.slice(0, 6).map((amenity) => (
                     <div key={amenity.name} className="flex items-center gap-4">
                       {getAmenityIcon(amenity.name)}
-                      
+
                       <span className="text-gray-700">{amenity.name}</span>
                     </div>
                   ))
@@ -797,7 +797,7 @@ const ShowListing = () => {
                   You won't be charged yet
                 </p>
 
-                  {nightsCount > 0 && (
+                {nightsCount > 0 && (
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600 underline cursor-pointer">
@@ -811,7 +811,9 @@ const ShowListing = () => {
                       <span>₹{CLEANING_FEE.toLocaleString("en-IN")}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Wanderlust service fee</span>
+                      <span className="text-gray-600">
+                        Wanderlust service fee
+                      </span>
                       <span>₹{serviceFee.toLocaleString("en-IN")}</span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -974,6 +976,7 @@ const ShowListing = () => {
             </Dialog.Panel>
           </div>
         </Dialog>
+        <hr className="border-gray-200 mb-4" />
 
         {/* Map section  */}
         <motion.div variants={itemVariants} className="mb-8">

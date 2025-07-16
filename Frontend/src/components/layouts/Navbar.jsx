@@ -5,7 +5,8 @@ import {
   useSearchParams,
   useLocation,
 } from "react-router-dom";
-import "./Navbar.css";
+// import "./Navbar.css";
+import "../../utils css/Navbar.css";
 import { FaBars } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";

@@ -1,4 +1,3 @@
-// AuthContext.jsx
 import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
@@ -28,8 +27,8 @@ function AuthContext({ children }) {
   axios.defaults.withCredentials = true;
 
   const fetchCurrentUser = useCallback(async () => {
-    if (loading) setLoading(true); 
-    
+    if (loading) setLoading(true);
+
     try {
       const response = await axios.get(`${serverUrl}/api/auth/current-user`);
       const user = response.data.user;
@@ -45,11 +44,13 @@ function AuthContext({ children }) {
       console.error("Auth fetch error:", err.message);
       setAuthUser(null);
       localStorage.removeItem("authUser");
-      setError("Failed to fetch user data. Please check your connection or log in again.");
+      setError(
+        "Failed to fetch user data. Please check your connection or log in again."
+      );
     } finally {
       setLoading(false);
     }
-  }, [serverUrl, loading]); // Added loading to dependency array
+  }, [serverUrl, loading]);
 
   useEffect(() => {
     fetchCurrentUser();
@@ -77,7 +78,6 @@ function AuthContext({ children }) {
     setError(null);
     fetchCurrentUser();
   }, [fetchCurrentUser]);
-
 
   return (
     <authDataContext.Provider

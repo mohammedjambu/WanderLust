@@ -1,9 +1,7 @@
-// src/components/ImageUpload.jsx
-
 import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { UploadCloud, X } from "lucide-react";
-import "./CreateListing.css";
+import "../../utils css/CreateListing.css";
 
 const ImageUpload = ({ value = [], onFilesChange, error }) => {
   const [previews, setPreviews] = useState([]);
@@ -22,16 +20,15 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
     );
     setPreviews(newPreviews);
 
-    // This is a CRITICAL cleanup function. It runs when the component unmounts OR when `value` changes again.
     return () =>
       newPreviews.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [value]); // The dependency array `[value]` makes this component truly controlled by its parent.
+  }, [value]);
 
   const onDrop = useCallback(
     (acceptedFiles) => {
-      onFilesChange(acceptedFiles);
+      onFilesChange([...value, ...acceptedFiles]); // Append new files to existing ones
     },
-    [onFilesChange]
+    [onFilesChange, value]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -39,10 +36,11 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
     accept: { "image/*": [".jpeg", ".png", ".jpg", ".webp"] },
   });
 
-  const removeAllPreviews = (e) => {
+  const removeFile = (e, fileToRemove) => {
     e.preventDefault();
     e.stopPropagation();
-    onFilesChange([]); // Tell the parent form to clear the 'newImages' field.
+    const updatedFiles = value.filter((file) => file !== fileToRemove);
+    onFilesChange(updatedFiles);
   };
 
   return (
@@ -67,19 +65,18 @@ const ImageUpload = ({ value = [], onFilesChange, error }) => {
 
       {previews.length > 0 && (
         <div className="previews-grid">
-          {previews.map((file) => (
-            <div key={file.name} className="preview-item">
+          {previews.map((file, index) => (
+            <div key={index} className="preview-item">
               <img src={file.preview} alt="Preview" />
+              <button
+                onClick={(e) => removeFile(e, file)}
+                className="preview-remove-btn"
+                aria-label="Remove image"
+              >
+                <X size={16} />
+              </button>
             </div>
           ))}
-          <button
-            onClick={removeAllPreviews}
-            className="preview-remove-btn"
-            aria-label="Clear all new images"
-            title="Clear all new images"
-          >
-            <X size={16} />
-          </button>
         </div>
       )}
     </div>

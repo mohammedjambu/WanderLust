@@ -1,18 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import Select from 'react-select';
+import Select from "react-select";
 import { toast } from "react-toastify";
 import { useCreateListing } from "../../context/CreateListingContext";
-import "./CreateListing.css";
-import ProgressTracker from "./ProgressTracker";
-import ImageUpload from "./ImageUpload";
-import { getAmenityIcon, amenityOptions } from "../../components/utils/getAmenityIcon";
+import "../../utils css/CreateListing.css";
+import ProgressTracker from "../utils/ProgressTracker";
+import ImageUpload from "../utils/ImageUpload";
+import { getAmenityIcon, amenityOptions } from "../utils/getAmenityIcon";
 
-import {
-  // Property Details Icons
-  Users, Bed, Bath,
-} from "lucide-react";
+import { Users, Bed, Bath } from "lucide-react";
 
 // Import icons
 import {
@@ -25,11 +22,8 @@ import { FaTreeCity } from "react-icons/fa6";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { BiBuildingHouse } from "react-icons/bi";
 import { IoBedOutline } from "react-icons/io5";
-import { MdBedroomParent, MdOutlinePool  } from "react-icons/md";
+import { MdBedroomParent, MdOutlinePool } from "react-icons/md";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
-;
-
-
 // Category options with icons
 const categoryOptions = [
   { name: "Villa", icon: <GiFamilyHouse /> },
@@ -44,8 +38,6 @@ const categoryOptions = [
   { name: "Camping", icon: <GiCampingTent /> },
   { name: "Castles", icon: <GiCastle /> },
 ];
-
-
 
 const CreateListing2 = () => {
   const navigate = useNavigate();
@@ -87,11 +79,11 @@ const CreateListing2 = () => {
     setIsSubmitting(true);
     const formData = new FormData();
 
-    formData.append('title', listingData.title);
-    formData.append('description', listingData.description);
-    formData.append('price', listingData.price);
-    formData.append('country', listingData.country);
-    formData.append('location', listingData.location);
+    formData.append("title", listingData.title);
+    formData.append("description", listingData.description);
+    formData.append("price", listingData.price);
+    formData.append("country", listingData.country);
+    formData.append("location", listingData.location);
 
     if (data.category) {
       formData.append("category", data.category);
@@ -99,7 +91,7 @@ const CreateListing2 = () => {
 
     formData.append("propertyDetails", JSON.stringify(data.propertyDetails));
 
-    const amenitiesToSubmit = data.amenities.map(name => ({ name }));
+    const amenitiesToSubmit = data.amenities.map((name) => ({ name }));
     formData.append("amenities", JSON.stringify(amenitiesToSubmit));
 
     if (data.images && data.images.length > 0) {
@@ -117,10 +109,12 @@ const CreateListing2 = () => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || errorData.error || "Failed to create listing");
+        throw new Error(
+          errorData.message || errorData.error || "Failed to create listing"
+        );
       }
 
-      toast.success( "Listing created successfully!");
+      toast.success("Listing created successfully!");
       resetListingData();
       navigate("/");
     } catch (err) {
@@ -133,37 +127,37 @@ const CreateListing2 = () => {
 
   const propertyDetails = watch("propertyDetails");
 
-const handleDetailChange = (field, amount) => {
+  const handleDetailChange = (field, amount) => {
     const currentValue = propertyDetails[field] || 1;
-    const newValue = Math.max(1, currentValue + amount); 
+    const newValue = Math.max(1, currentValue + amount);
     setValue(`propertyDetails.${field}`, newValue, { shouldValidate: true });
-};
+  };
 
-const formatOptionLabel = ({ name, icon }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+  const formatOptionLabel = ({ name, icon }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       {icon}
       <span>{name}</span>
     </div>
-);
+  );
 
-const customSelectStyles = {
+  const customSelectStyles = {
     menu: (provided) => ({
-        ...provided,
-        width: '580px',
-        maxWidth: '90vw',
+      ...provided,
+      width: "580px",
+      maxWidth: "90vw",
     }),
     menuList: (provided) => ({
-        ...provided,
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '4px',
-        padding: '8px',
+      ...provided,
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "4px",
+      padding: "8px",
     }),
     control: (provided) => ({
-        ...provided,
-        padding: '4px',
+      ...provided,
+      padding: "4px",
     }),
-};
+  };
 
   return (
     <main className="create-listing-container">

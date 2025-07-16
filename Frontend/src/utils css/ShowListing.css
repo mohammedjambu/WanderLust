@@ -84,7 +84,6 @@
 /* Host Section icons */
 .host-meta-new .icon {
     color: var(--text-light);
-    /* Default color */
 }
 
 .host-meta-new .meta-verified .icon {
@@ -106,7 +105,6 @@
     color: var(--brand-color);
 }
 
-/* Brand Red */
 
 
 /* The 4 stat cards below the header */
@@ -172,7 +170,6 @@
     color: #f39c12;
 }
 
-/* Orange */
 
 
 /* About section */
@@ -230,13 +227,6 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-/* 
-.host-actions-new .btn.secondary {
-    display: flex;
-    align-items: center;
-    background-color: white;
-} */
 
 
 .host-actions-new .btn.secondary:hover {

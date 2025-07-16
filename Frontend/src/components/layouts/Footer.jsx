@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 // MUI Components
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Fab from '@mui/material/Fab';
-import Fade from '@mui/material/Fade';
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Fab from "@mui/material/Fab";
+import Fade from "@mui/material/Fade";
 
 // MUI Icons
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ArrowUpward from '@mui/icons-material/ArrowUpward';
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import ArrowUpward from "@mui/icons-material/ArrowUpward";
 
 const MuiFooter = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
   const toggleVisibility = () => {
     if (window.scrollY > 300) {
       setIsVisible(true);
@@ -30,17 +29,16 @@ const MuiFooter = () => {
     }
   };
 
-  // Set up event listener for scrolling
+  // event listener for scrolling
   useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  // Function to scroll to the top of the page
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
