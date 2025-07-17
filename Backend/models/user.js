@@ -11,7 +11,7 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     default:
-      "https://wallpapers.com/images/hd/user-profile-avatar-login-account-male-user-icon-hd-png-download-lrue3mennq6knv5l.jpg",
+      "https://e7.pngegg.com/pngimages/807/677/png-clipart-computer-icons-scalable-graphics-avatar-user-admin-icon-internet-icon-download-thumbnail.png",
   },
   fullName: {
     type: String,
