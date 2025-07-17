@@ -28,6 +28,8 @@ const bookingRoutes = require("./routes/booking.js");
 const coordinateRoutes = require("./routes/coordinates");
 const wishlistRoutes = require("./routes/wishlist");
 
+const port = process.env.PORT || 5000;
+
 // MongoDB connection
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -121,6 +123,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
