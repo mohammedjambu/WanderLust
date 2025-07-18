@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import "../../utils css/SignUp.css";
+import "../../utils css/Signup.css";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { authDataContext } from "../../context/AuthContext";
