@@ -117,25 +117,8 @@ const ShowListing = () => {
       ].slice(0, 5);
 
       setAdditionalImages(displayImages);
-      if (authUser && data._id) {
-        const wishlistRes = await axios.get(`${serverUrl}/api/wishlist`, {
-          withCredentials: true,
-        });
-        setIsFavorited(
-          wishlistRes.data.some((listing) => listing._id === data._id)
-        );
 
-        const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, {
-          withCredentials: true,
-        });
 
-        setHasBooked(
-          bookingRes.data.some((b) => b.listing && b.listing._id === data._id)
-        );
-      } else {
-        setIsFavorited(false);
-        setHasBooked(false);
-      }
     } catch (err) {
       setError("Failed to load listing data: " + err.message);
       setIsFavorited(false);
@@ -150,6 +133,38 @@ const ShowListing = () => {
       fetchListingData();
     }
   }, [serverUrl, id, fetchListingData]);
+
+  // Fetch wishlist status
+  useEffect(() => {
+    
+    if (authLoading || !listingData) return; 
+
+    if (authUser) {
+      // Logic for a logged-in user
+      const isFavorited = authUser.wishlist?.includes(listingData._id);
+      setIsFavorited(!!isFavorited);
+
+      const checkBookingStatus = async () => {
+        try {
+          const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, {
+            withCredentials: true,
+          });
+          const hasBooked = bookingRes.data.some(
+            (b) => b.listing && b.listing._id === listingData._id
+          );
+          setHasBooked(hasBooked);
+        } catch (err) {
+            console.error("Could not fetch user's booking status:", err);
+            setHasBooked(false);
+        }
+      };
+      checkBookingStatus();
+
+    } else {
+      setIsFavorited(false);
+      setHasBooked(false);
+    }
+  }, [id, authUser, authLoading, listingData, serverUrl]);
 
   useEffect(() => {
     const fetchUnavailableDates = async () => {
