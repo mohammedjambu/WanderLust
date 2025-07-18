@@ -76,11 +76,16 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   },
 };
+
+if (process.env.NODE_ENV === "production") {
+  sessionOptions.cookie.secure = true; // Only send cookie over HTTPS
+  sessionOptions.cookie.sameSite = "none"; // Allow cross-site cookie
+}
 
 app.use(session(sessionOptions));
 app.use(flash());
