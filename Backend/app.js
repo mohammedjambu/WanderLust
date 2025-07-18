@@ -87,6 +87,8 @@ if (process.env.NODE_ENV === "production") {
   sessionOptions.cookie.sameSite = "none"; // Allow cross-site cookie
 }
 
+app.set("trust proxy", 1);
+
 app.use(session(sessionOptions));
 app.use(flash());
 

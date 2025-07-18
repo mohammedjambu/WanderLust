@@ -539,7 +539,7 @@ const ShowListing = () => {
                     {listingData.owner?.username || listingData.owner?.name}
                   </h2>
                   <img
-                    src={getSafeAvatarUrl(listingData.owner?.avatar)}
+                    src={getSafeAvatarUrl(listingData.owner.avatar)}
                     alt={listingData.owner?.username || listingData.owner?.name}
                     className="w-14 h-14 rounded-full object-cover flex-shrink-0"
                   />
