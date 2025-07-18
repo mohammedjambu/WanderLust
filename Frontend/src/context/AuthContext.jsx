@@ -31,9 +31,14 @@ function AuthProvider({ children }) {
 
   axios.defaults.withCredentials = true;
 
-  const updateAuthUser = useCallback((updatedUser) => {
-    setAuthUser(updatedUser);
-    localStorage.setItem("authUser", JSON.stringify(updatedUser));
+   const updateAuthUser = useCallback((user) => {
+    if (user) {
+      setAuthUser(user);
+      localStorage.setItem("authUser", JSON.stringify(user));
+    } else {
+      setAuthUser(null);
+      localStorage.removeItem("authUser");
+    }
   }, []);
 
   const fetchCurrentUser = useCallback(async () => {
@@ -41,19 +46,11 @@ function AuthProvider({ children }) {
 
     try {
       const response = await axios.get(`${serverUrl}/api/auth/current-user`);
-      const user = response.data.user;
+      updateAuthUser(response.data.user); 
 
-      if (user) {
-        setAuthUser(user);
-        localStorage.setItem("authUser", JSON.stringify(user));
-      } else {
-        setAuthUser(null);
-        localStorage.removeItem("authUser");
-      }
     } catch (err) {
       console.error("Auth fetch error:", err.message);
-      setAuthUser(null);
-      localStorage.removeItem("authUser");
+      updateAuthUser(null); 
       setError(
         "Failed to fetch user data. Please check your connection or log in again."
       );
@@ -72,11 +69,10 @@ function AuthProvider({ children }) {
     } catch (err) {
       console.error("Logout API call failed:", err.message);
     } finally {
-      setAuthUser(null);
-      localStorage.removeItem("authUser");
+      updateAuthUser(null); 
       setError(null);
     }
-  }, [serverUrl]);
+  }, [serverUrl, updateAuthUser]);
 
   const handleLoginSuccess = useCallback((loginResponseUser) => {
     updateAuthUser(loginResponseUser);

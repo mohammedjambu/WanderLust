@@ -69,13 +69,13 @@ module.exports.updateProfile = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.avatar = req.file.path;
+      updateData.avatar = req.file.path; 
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
-    })
+    });
 
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found." });
