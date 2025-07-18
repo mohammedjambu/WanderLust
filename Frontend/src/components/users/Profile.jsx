@@ -205,6 +205,13 @@ const ListingsTab = ({ listings }) => (
   </div>
 );
 
+const getSafeAvatarUrl = (avatarString) => {
+  if (!avatarString) return "/default-avatar.png";
+  if (avatarString.startsWith("http")) return avatarString;
+  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dcwffxjz4';
+  return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
+};
+
 const Profile = () => {
   const {
     authUser,
@@ -231,45 +238,34 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState("");
 
   useEffect(() => {
-    if (!authLoading && !authUser) {
+    // ✅ DEFINITIVE FIX: The Guard Clause
+    if (authLoading) return; // Do not fetch anything until auth is resolved
+
+    if (!authUser) {
       navigate("/login");
       return;
     }
-    if (authUser) {
-      setFormData({
-        fullName: authUser.fullName || "",
-        hometown: authUser.hometown || "",
-        phone: authUser.phone || "",
-        bio: authUser.bio || "",
-      });
-      setAvatarPreview(authUser.avatar);
-
-      const fetchProfileData = async () => {
-        setLoadingData(true);
-        try {
-          const [bookingsRes, reviewsRes, listingsRes] = await Promise.all([
-            axios.get(`${serverUrl}/api/bookings/mine`, {
-              withCredentials: true,
-            }),
-            axios.get(`${serverUrl}/api/reviews/mine`, {
-              withCredentials: true,
-            }),
-            axios.get(`${serverUrl}/api/listings/mine`, {
-              withCredentials: true,
-            }),
-          ]);
-          setBookings(bookingsRes.data);
-          setReviews(reviewsRes.data);
-          setListings(listingsRes.data);
-        } catch (err) {
-          console.error("Error loading profile data:", err);
-          toast.error("Could not load your profile data.");
-        } finally {
-          setLoadingData(false);
-        }
-      };
-      fetchProfileData();
-    }
+    
+    // Now it's safe to fetch protected data
+    const fetchProfileData = async () => {
+      setLoadingData(true);
+      try {
+        const [bookingsRes, reviewsRes, listingsRes] = await Promise.all([
+          axios.get(`${serverUrl}/api/bookings/mine`, { withCredentials: true }),
+          axios.get(`${serverUrl}/api/reviews/mine`, { withCredentials: true }),
+          axios.get(`${serverUrl}/api/listings/mine`, { withCredentials: true }),
+        ]);
+        setBookings(bookingsRes.data);
+        setReviews(reviewsRes.data);
+        setListings(listingsRes.data);
+      } catch (err) {
+        console.error("Error loading profile data:", err);
+        toast.error("Could not load your profile data.");
+      } finally {
+        setLoadingData(false);
+      }
+    };
+    fetchProfileData();
   }, [authUser, authLoading, serverUrl, navigate]);
 
   const handleFormChange = (name, value) => {
@@ -410,7 +406,7 @@ const Profile = () => {
                   <div className="flex flex-col items-center mb-6">
                     <div className="relative">
                       <img
-                        src={avatarPreview || "/default-avatar.png"}
+                        src={getSafeAvatarUrl(avatarPreview)}
                         alt="Avatar Preview"
                         className="w-24 h-24 rounded-full object-cover border-2"
                       />

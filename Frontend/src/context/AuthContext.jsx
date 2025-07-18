@@ -1,17 +1,7 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 export const authDataContext = createContext();
-
-export const useAuth = () => {
-  return useContext(authDataContext);
-};
 
 function AuthProvider({ children }) {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
@@ -31,7 +21,7 @@ function AuthProvider({ children }) {
 
   axios.defaults.withCredentials = true;
 
-   const updateAuthUser = useCallback((user) => {
+  const updateAuthUser = useCallback((user) => {
     if (user) {
       setAuthUser(user);
       localStorage.setItem("authUser", JSON.stringify(user));
@@ -46,11 +36,10 @@ function AuthProvider({ children }) {
 
     try {
       const response = await axios.get(`${serverUrl}/api/auth/current-user`);
-      updateAuthUser(response.data.user); 
-
+      updateAuthUser(response.data.user);
     } catch (err) {
       console.error("Auth fetch error:", err.message);
-      updateAuthUser(null); 
+      updateAuthUser(null);
       setError(
         "Failed to fetch user data. Please check your connection or log in again."
       );
@@ -69,19 +58,16 @@ function AuthProvider({ children }) {
     } catch (err) {
       console.error("Logout API call failed:", err.message);
     } finally {
-      updateAuthUser(null); 
-      setError(null);
+      updateAuthUser(null);
     }
   }, [serverUrl, updateAuthUser]);
 
-  const handleLoginSuccess = useCallback((loginResponseUser) => {
-    updateAuthUser(loginResponseUser);
-  }, [updateAuthUser]);
-
-  const retryFetchUser = useCallback(() => {
-    setError(null);
-    fetchCurrentUser();
-  }, [fetchCurrentUser]);
+  const handleLoginSuccess = useCallback(
+    (loginResponseUser) => {
+      updateAuthUser(loginResponseUser);
+    },
+    [updateAuthUser]
+  );
 
   return (
     <authDataContext.Provider
@@ -92,7 +78,6 @@ function AuthProvider({ children }) {
         loading,
         fetchCurrentUser,
         logout,
-        retryFetchUser,
         handleLoginSuccess,
         updateAuthUser,
       }}

@@ -41,11 +41,8 @@ import { getAmenityIcon } from "../utils/getAmenityIcon";
 
 const getSafeAvatarUrl = (avatarString) => {
   if (!avatarString) return "/default-avatar.png";
-  if (avatarString.startsWith("http")) {
-    return avatarString;
-  }
-  // Otherwise, construct the full URL for old, broken Public IDs.
-  const cloudName = import.meta.env.VITE_CLOUD_NAME || 'dcwffxjz4'; // Use your cloud name
+  if (avatarString.startsWith("http")) return avatarString;
+  const cloudName = import.meta.env.VITE_CLOUD_NAME || "dcwffxjz4";
   return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
 };
 
@@ -99,61 +96,29 @@ const ShowListing = () => {
   };
 
   // Fetch listing data and wishlist status
-  const fetchListingData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${serverUrl}/api/listings/${id}`, {
-        withCredentials: true,
-      });
-      const data = response.data;
-      setListingData(data);
-
-      const bookingsRes = await axios.get(`${serverUrl}/api/bookings/unavailable/${id}`);
-        const dates = bookingsRes.data.flatMap((range) =>
-          eachDayOfInterval({ start: parseISO(range.checkIn), end: parseISO(range.checkOut) })
-        );
-        setBookedDates(dates);
-
-      // fallback images
-      const fallbackImage =
-        data.image?.url ||
-        "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
-      const allImages =
-        data.images?.length > 0
-          ? data.images.map((i) => i.url)
-          : [fallbackImage];
-
-      const displayImages = [
-        ...allImages,
-        fallbackImage,
-        fallbackImage,
-        fallbackImage,
-        fallbackImage,
-        fallbackImage,
-      ].slice(0, 5);
-
-      setAdditionalImages(displayImages);
-    } catch (err) {
-      setError("Failed to load listing data: " + err.message);
-      setIsFavorited(false);
-      setHasBooked(false);
-    } finally {
-      setLoading(false);
-    }
-  }, [serverUrl, id, authUser]);
-
   useEffect(() => {
-    if (serverUrl && id) {
-      fetchListingData();
-    }
-  }, [serverUrl, id, fetchListingData]);
+    // This effect ONLY fetches public data that anyone can see.
+    const fetchPublicData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const listingRes = await axios.get(`${serverUrl}/api/listings/${id}`);
+        setListingData(listingRes.data);
+      } catch (err) {
+        setError("Failed to load listing data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (serverUrl && id) fetchPublicData();
+  }, [serverUrl, id]);
 
   // Fetch wishlist status
   useEffect(() => {
-    if (authLoading || !listingData) return;
+    // This effect ONLY fetches user-specific data, and it WAITS for auth.
+    if (authLoading || !listingData) return; // The Guard Clause
 
     if (authUser) {
-      // Logic for a logged-in user
       const isFavorited = authUser.wishlist?.includes(listingData._id);
       setIsFavorited(!!isFavorited);
 
@@ -162,13 +127,11 @@ const ShowListing = () => {
           const bookingRes = await axios.get(`${serverUrl}/api/bookings/mine`, {
             withCredentials: true,
           });
-          const hasBooked = bookingRes.data.some(
-            (b) => b.listing && b.listing._id === listingData._id
+          setHasBooked(
+            bookingRes.data.some((b) => b.listing?._id === listingData._id)
           );
-          setHasBooked(hasBooked);
         } catch (err) {
-          console.error("Could not fetch user's booking status:", err);
-          setHasBooked(false);
+          console.error("Could not fetch user booking status:", err);
         }
       };
       checkBookingStatus();
@@ -176,7 +139,7 @@ const ShowListing = () => {
       setIsFavorited(false);
       setHasBooked(false);
     }
-  }, [id, authUser, authLoading, listingData, serverUrl]);
+  }, [authUser, authLoading, listingData, serverUrl, id]);
 
   useEffect(() => {
     const fetchUnavailableDates = async () => {
