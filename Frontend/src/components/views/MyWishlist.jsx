@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { authDataContext } from "../../context/AuthContext";
 
 import { ListingCard, SkeletonCard } from "./Home";
-import "../../utils css/MyWishlist.css";
+import "../../utils css/MyWishList.css";
 
 const MyWishlist = () => {
   const { authUser, serverUrl, updateAuthUser } = useContext(authDataContext);
