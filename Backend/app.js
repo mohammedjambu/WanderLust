@@ -47,9 +47,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 // CORS setup — allow frontend to send cookies
+
+const vercelFrontendURL = "https://wanderlust-ebon-iota.vercel.app";
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // React dev server
+    origin: ["http://localhost:5173", vercelFrontendURL],
     credentials: true,
   })
 );
@@ -63,8 +66,8 @@ const store = MongoStore.create({
 });
 
 store.on("error", (err) => {
-  console.log("ERROR in MONGO SESSION STORE", err); 
-})
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
 
 // Session setup
 const sessionOptions = {
