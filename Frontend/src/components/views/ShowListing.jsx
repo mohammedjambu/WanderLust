@@ -39,6 +39,16 @@ import { differenceInCalendarDays } from "date-fns";
 import "../../utils css/ShowListing.css";
 import { getAmenityIcon } from "../utils/getAmenityIcon";
 
+
+const getSafeAvatarUrl = (avatarString) => {
+  if (!avatarString) return "/default-avatar.png";
+  if (avatarString.startsWith("http")) return avatarString;
+  
+  // Construct the URL for old, broken Public IDs
+  const cloudName = import.meta.env.VITE_CLOUD_NAME || 'dcwffxjz4';
+  return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
+};
+
 const ShowListing = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -118,7 +128,6 @@ const ShowListing = () => {
 
       setAdditionalImages(displayImages);
 
-
     } catch (err) {
       setError("Failed to load listing data: " + err.message);
       setIsFavorited(false);
@@ -136,7 +145,6 @@ const ShowListing = () => {
 
   // Fetch wishlist status
   useEffect(() => {
-    
     if (authLoading || !listingData) return; 
 
     if (authUser) {
@@ -564,7 +572,7 @@ const ShowListing = () => {
                     {listingData.owner?.username || listingData.owner?.name}
                   </h2>
                   <img
-                    src={listingData.owner?.avatar || "/default-avatar.png"}
+                    src={getSafeAvatarUrl(listingData.owner?.avatar)}
                     alt={listingData.owner?.username || listingData.owner?.name}
                     className="w-14 h-14 rounded-full object-cover flex-shrink-0"
                   />
@@ -889,7 +897,7 @@ const ShowListing = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <img
-                      src={review.author.avatar || "/default-avatar.png"}
+                      src={getSafeAvatarUrl(review.author.avatar)}
                       alt={review.author.username}
                       className="w-10 h-10 rounded-full object-cover"
                     />
@@ -1048,7 +1056,7 @@ const ShowListing = () => {
           <div className="host-profile-header-new">
             {listingData.owner?.avatar ? (
               <img
-                src={listingData.owner.avatar}
+                src={getSafeAvatarUrl(listingData.owner?.avatar)}
                 alt={listingData.owner.name}
                 className="host-avatar-new cursor-pointer"
                 onClick={openHostContactModal}
@@ -1187,7 +1195,7 @@ const ShowListing = () => {
               {/* Modal Header */}
               <div className="flex items-center gap-4 mt-4">
                 <img
-                  src={listingData.owner?.avatar}
+                  src={getSafeAvatarUrl(listingData.owner?.avatar)}
                   alt={listingData.owner?.username}
                   className="w-16 h-16 rounded-full object-cover"
                 />
