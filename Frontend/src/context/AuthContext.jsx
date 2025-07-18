@@ -4,7 +4,7 @@ import axios from "axios";
 export const authDataContext = createContext();
 
 function AuthContext({ children }) {
-  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const [authUser, setAuthUser] = useState(() => {
     try {
