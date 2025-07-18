@@ -1,5 +1,5 @@
 const Listing = require("../models/listing.js");
-const geocodingClient = require("../utils/mapbox");
+const geocodingClient = require("../utils/mapBox.js");
 const { cloudinary } = require("../cloudConfig.js");
 
 // Index Route
