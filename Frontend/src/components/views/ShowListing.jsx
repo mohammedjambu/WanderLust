@@ -39,13 +39,13 @@ import { differenceInCalendarDays } from "date-fns";
 import "../../utils css/ShowListing.css";
 import { getAmenityIcon } from "../utils/getAmenityIcon";
 
-
 const getSafeAvatarUrl = (avatarString) => {
   if (!avatarString) return "/default-avatar.png";
-  if (avatarString.startsWith("http")) return avatarString;
-  
-  // Construct the URL for old, broken Public IDs
-  const cloudName = import.meta.env.VITE_CLOUD_NAME || 'dcwffxjz4';
+  if (avatarString.startsWith("http")) {
+    return avatarString;
+  }
+  // Otherwise, construct the full URL for old, broken Public IDs.
+  const cloudName = import.meta.env.VITE_CLOUD_NAME || 'dcwffxjz4'; // Use your cloud name
   return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
 };
 
@@ -108,6 +108,12 @@ const ShowListing = () => {
       const data = response.data;
       setListingData(data);
 
+      const bookingsRes = await axios.get(`${serverUrl}/api/bookings/unavailable/${id}`);
+        const dates = bookingsRes.data.flatMap((range) =>
+          eachDayOfInterval({ start: parseISO(range.checkIn), end: parseISO(range.checkOut) })
+        );
+        setBookedDates(dates);
+
       // fallback images
       const fallbackImage =
         data.image?.url ||
@@ -127,7 +133,6 @@ const ShowListing = () => {
       ].slice(0, 5);
 
       setAdditionalImages(displayImages);
-
     } catch (err) {
       setError("Failed to load listing data: " + err.message);
       setIsFavorited(false);
@@ -145,7 +150,7 @@ const ShowListing = () => {
 
   // Fetch wishlist status
   useEffect(() => {
-    if (authLoading || !listingData) return; 
+    if (authLoading || !listingData) return;
 
     if (authUser) {
       // Logic for a logged-in user
@@ -162,12 +167,11 @@ const ShowListing = () => {
           );
           setHasBooked(hasBooked);
         } catch (err) {
-            console.error("Could not fetch user's booking status:", err);
-            setHasBooked(false);
+          console.error("Could not fetch user's booking status:", err);
+          setHasBooked(false);
         }
       };
       checkBookingStatus();
-
     } else {
       setIsFavorited(false);
       setHasBooked(false);
@@ -897,7 +901,7 @@ const ShowListing = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <img
-                      src={getSafeAvatarUrl(review.author.avatar)}
+                      src={getSafeAvatarUrl(listingData.owner?.avatar)}
                       alt={review.author.username}
                       className="w-10 h-10 rounded-full object-cover"
                     />
