@@ -75,7 +75,7 @@ module.exports.updateProfile = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
-    }).select("-hash -salt");
+    })
 
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found." });
@@ -83,7 +83,16 @@ module.exports.updateProfile = async (req, res) => {
 
     res.status(200).json({
       message: "Profile updated successfully!",
-      user: updatedUser,
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        avatar: updatedUser.avatar,
+        fullName: updatedUser.fullName,
+        hometown: updatedUser.hometown,
+        phone: updatedUser.phone,
+        bio: updatedUser.bio,
+      },
     });
   } catch (err) {
     console.error("Profile update error:", err);

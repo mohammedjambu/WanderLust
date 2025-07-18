@@ -1,9 +1,19 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import axios from "axios";
 
 export const authDataContext = createContext();
 
-function AuthContext({ children }) {
+export const useAuth = () => {
+  return useContext(authDataContext);
+};
+
+function AuthProvider({ children }) {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const [authUser, setAuthUser] = useState(() => {
@@ -16,15 +26,15 @@ function AuthContext({ children }) {
     }
   });
 
-  const updateAuthUser = (updatedUser) => {
-    setAuthUser(updatedUser);
-    localStorage.setItem("authUser", JSON.stringify(updatedUser));
-  };
-
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   axios.defaults.withCredentials = true;
+
+  const updateAuthUser = useCallback((updatedUser) => {
+    setAuthUser(updatedUser);
+    localStorage.setItem("authUser", JSON.stringify(updatedUser));
+  }, []);
 
   const fetchCurrentUser = useCallback(async () => {
     if (loading) setLoading(true);
@@ -50,7 +60,7 @@ function AuthContext({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [serverUrl, loading]);
+  }, [serverUrl, updateAuthUser]);
 
   useEffect(() => {
     fetchCurrentUser();
@@ -68,11 +78,9 @@ function AuthContext({ children }) {
     }
   }, [serverUrl]);
 
-  const handleLoginSuccess = async (loginResponseUser) => {
-    setAuthUser(loginResponseUser);
-    localStorage.setItem("authUser", JSON.stringify(loginResponseUser));
-    await fetchCurrentUser();
-  };
+  const handleLoginSuccess = useCallback((loginResponseUser) => {
+    updateAuthUser(loginResponseUser);
+  }, [updateAuthUser]);
 
   const retryFetchUser = useCallback(() => {
     setError(null);
