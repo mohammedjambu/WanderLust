@@ -864,7 +864,7 @@ const ShowListing = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <img
-                      src={getSafeAvatarUrl(listingData.owner?.avatar)}
+                      src={getSafeAvatarUrl(listingData.author?.avatar)}
                       alt={review.author.username}
                       className="w-10 h-10 rounded-full object-cover"
                     />
@@ -894,7 +894,7 @@ const ShowListing = () => {
                     {review.comment}
                   </p>
 
-                  {authUser?._id === review.author._id && (
+                  {authUser && authUser.id === review.author._id && (
                     <div className="absolute top-3 right-3 flex gap-3">
                       <button
                         onClick={() => openReviewModalForEdit(review)}

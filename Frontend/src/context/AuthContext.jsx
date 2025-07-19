@@ -32,7 +32,7 @@ function AuthProvider({ children }) {
   }, []);
 
   const fetchCurrentUser = useCallback(async () => {
-    if (loading) setLoading(true);
+    setLoading(true);
 
     try {
       const response = await axios.get(`${serverUrl}/api/auth/current-user`);

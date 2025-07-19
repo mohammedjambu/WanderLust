@@ -208,7 +208,8 @@ const ListingsTab = ({ listings }) => (
 const getSafeAvatarUrl = (avatarString) => {
   if (!avatarString) return "/default-avatar.png";
   if (avatarString.startsWith("http")) return avatarString;
-  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dcwffxjz4';
+
+  const cloudName = import.meta.env.VITE_CLOUD_NAME || 'dcwffxjz4';
   return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
 };
 
@@ -238,15 +239,25 @@ const Profile = () => {
   const [avatarPreview, setAvatarPreview] = useState("");
 
   useEffect(() => {
-    // ✅ DEFINITIVE FIX: The Guard Clause
-    if (authLoading) return; // Do not fetch anything until auth is resolved
+    if (authUser) {
+      setFormData({
+        fullName: authUser.fullName || "",
+        hometown: authUser.hometown || "",
+        phone: authUser.phone || "",
+        bio: authUser.bio || "",
+      });
+      setAvatarPreview(authUser.avatar); // Set initial preview from user data
+    }
+  }, [authUser]);
+
+  useEffect(() => {
+    if (authLoading) return;
 
     if (!authUser) {
       navigate("/login");
       return;
     }
     
-    // Now it's safe to fetch protected data
     const fetchProfileData = async () => {
       setLoadingData(true);
       try {
