@@ -40,7 +40,7 @@ import "../../utils css/ShowListing.css";
 import { getAmenityIcon } from "../utils/getAmenityIcon";
 
 const getSafeAvatarUrl = (avatarString) => {
-  if (!avatarString) return "/default-avatar.png";
+  if (!avatarString) return "../../../public/default-avatar.png";
   if (avatarString.startsWith("http")) return avatarString;
   const cloudName = import.meta.env.VITE_CLOUD_NAME || "dcwffxjz4";
   return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;

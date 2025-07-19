@@ -417,7 +417,7 @@ const Profile = () => {
                   <div className="flex flex-col items-center mb-6">
                     <div className="relative">
                       <img
-                        src={getSafeAvatarUrl(avatarPreview)}
+                        src={avatarPreview.startsWith("blob:") ? avatarPreview : getSafeAvatarUrl(avatarPreview)}
                         alt="Avatar Preview"
                         className="w-24 h-24 rounded-full object-cover border-2"
                       />
