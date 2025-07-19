@@ -40,7 +40,7 @@ import "../../utils css/ShowListing.css";
 import { getAmenityIcon } from "../utils/getAmenityIcon";
 
 const getSafeAvatarUrl = (avatarString) => {
-  if (!avatarString) return "../../../public/default-avatar.png";
+  if (!avatarString) return "/default-avatar.png";
   if (avatarString.startsWith("http")) return avatarString;
   const cloudName = import.meta.env.VITE_CLOUD_NAME || "dcwffxjz4";
   return `https://res.cloudinary.com/${cloudName}/image/upload/v1/${avatarString}`;
@@ -104,8 +104,21 @@ const ShowListing = () => {
       try {
         const listingRes = await axios.get(`${serverUrl}/api/listings/${id}`);
         setListingData(listingRes.data);
+
+        const fallbackImage = data.image?.url || "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
+        const allImages = data.images?.length > 0 ? data.images.map((i) => i.url) : [fallbackImage];
+        // Ensure there are always 5 images for the gallery layout
+        setAdditionalImages([...allImages, fallbackImage, fallbackImage, fallbackImage, fallbackImage, fallbackImage].slice(0, 5));
+
+        const bookingsRes = await axios.get(`${serverUrl}/api/bookings/unavailable/${id}`);
+        const dates = bookingsRes.data.flatMap((range) =>
+          eachDayOfInterval({ start: parseISO(range.checkIn), end: parseISO(range.checkOut) })
+        );
+        setBookedDates(dates);
+
       } catch (err) {
         setError("Failed to load listing data.");
+        console.error("Public data fetch error:", err);
       } finally {
         setLoading(false);
       }
