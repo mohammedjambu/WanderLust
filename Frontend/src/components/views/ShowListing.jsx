@@ -96,53 +96,56 @@ const ShowListing = () => {
   };
 
   // Fetch listing data and wishlist status
+  const fetchListingData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const listingRes = await axios.get(`${serverUrl}/api/listings/${id}`);
+      const data = listingRes.data;
+      setListingData(data);
+
+      const fallbackImage =
+        data.image?.url ||
+        "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
+      const allImages =
+        data.images?.length > 0
+          ? data.images.map((i) => i.url)
+          : [fallbackImage];
+      setAdditionalImages(
+        [
+          ...allImages,
+          fallbackImage,
+          fallbackImage,
+          fallbackImage,
+          fallbackImage,
+          fallbackImage,
+        ].slice(0, 5)
+      );
+
+      const bookingsRes = await axios.get(
+        `${serverUrl}/api/bookings/unavailable/${id}`
+      );
+      const dates = bookingsRes.data.flatMap((range) =>
+        eachDayOfInterval({
+          start: parseISO(range.checkIn),
+          end: parseISO(range.checkOut),
+        })
+      );
+      setBookedDates(dates);
+    } catch (err) {
+      setError("Failed to load listing data.");
+      console.error("Public data fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [serverUrl, id]); // Dependencies for this function
+
+  // Effect 1: Fetch public data on initial load.
   useEffect(() => {
-    const fetchPublicData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const listingRes = await axios.get(`${serverUrl}/api/listings/${id}`);
-        const data = listingRes.data;
-        setListingData(data);
-
-        const fallbackImage =
-          data.image?.url ||
-          "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
-        const allImages =
-          data.images?.length > 0
-            ? data.images.map((i) => i.url)
-            : [fallbackImage];
-        // Ensure there are always 5 images for the gallery layout
-        setAdditionalImages(
-          [
-            ...allImages,
-            fallbackImage,
-            fallbackImage,
-            fallbackImage,
-            fallbackImage,
-            fallbackImage,
-          ].slice(0, 5)
-        );
-
-        const bookingsRes = await axios.get(
-          `${serverUrl}/api/bookings/unavailable/${id}`
-        );
-        const dates = bookingsRes.data.flatMap((range) =>
-          eachDayOfInterval({
-            start: parseISO(range.checkIn),
-            end: parseISO(range.checkOut),
-          })
-        );
-        setBookedDates(dates);
-      } catch (err) {
-        setError("Failed to load listing data.");
-        console.error("Public data fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (serverUrl && id) fetchPublicData();
-  }, [serverUrl, id]);
+    if (serverUrl && id) {
+      fetchListingData();
+    }
+  }, [fetchListingData, serverUrl, id]);
 
   // Fetch wishlist status
   useEffect(() => {
@@ -377,7 +380,6 @@ const ShowListing = () => {
         `Review successfully ${editingReviewId ? "updated" : "posted"}!`
       );
       closeReviewModal();
-
       fetchListingData();
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to submit review");
@@ -393,7 +395,6 @@ const ShowListing = () => {
         { withCredentials: true }
       );
       toast.success("Review deleted!");
-
       fetchListingData();
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to delete review");
