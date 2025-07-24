@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useContext  } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
@@ -7,13 +7,15 @@ import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import ImageUpload from "../utils/ImageUpload";
 import "../../utils css/EditListing.css";
-import { getAmenityIcon, amenityOptions } from "../utils/getAmenityIcon";
+import { amenityOptions } from "../utils/getAmenityIcon";
+import { authDataContext } from "../../context/AuthContext"; 
 
 import { Users, Bed, Bath } from "lucide-react";
 
 const EditListing = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { serverUrl } = useContext(authDataContext);
 
   const [isLoading, setIsLoading] = useState(true);
   const [countries, setCountries] = useState([]);
@@ -47,7 +49,7 @@ const EditListing = () => {
       try {
         const [countriesRes, listingRes] = await Promise.all([
           fetch("https://restcountries.com/v3.1/all?fields=name,cca2"),
-          fetch(`http://localhost:5000/api/listings/${id}`),
+          fetch(`${serverUrl}/api/listings/${id}`),
         ]);
 
         if (!countriesRes.ok) throw new Error("Failed to fetch countries");
@@ -145,7 +147,7 @@ const EditListing = () => {
       }
 
       try {
-        const res = await fetch(`http://localhost:5000/api/listings/${id}`, {
+        const res = await fetch(`${serverUrl}/api/listings/${id}`, {
           method: "PUT",
           credentials: "include",
           body: formData,

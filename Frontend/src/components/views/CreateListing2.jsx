@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
@@ -7,7 +7,8 @@ import { useCreateListing } from "../../context/CreateListingContext";
 import "../../utils css/CreateListing.css";
 import ProgressTracker from "../utils/ProgressTracker";
 import ImageUpload from "../utils/ImageUpload";
-import { getAmenityIcon, amenityOptions } from "../utils/getAmenityIcon";
+import { amenityOptions } from "../utils/getAmenityIcon";
+import { authDataContext } from "../../context/AuthContext";
 
 import { Users, Bed, Bath } from "lucide-react";
 
@@ -42,6 +43,7 @@ const categoryOptions = [
 const CreateListing2 = () => {
   const navigate = useNavigate();
   const { listingData, resetListingData } = useCreateListing();
+  const { serverUrl } = useContext(authDataContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -101,7 +103,7 @@ const CreateListing2 = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/listings", {
+      const res = await fetch(`${serverUrl}/api/listings`, {
         method: "POST",
         credentials: "include",
         body: formData,
