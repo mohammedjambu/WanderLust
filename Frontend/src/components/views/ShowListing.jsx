@@ -925,7 +925,7 @@ const ShowListing = () => {
                     {review.comment}
                   </p>
 
-                  {authUser && authUser.id === review.author._id && (
+                  {authUser && authUser._id === review.author._id && (
                     <div className="absolute top-3 right-3 flex gap-3">
                       <button
                         onClick={() => openReviewModalForEdit(review)}

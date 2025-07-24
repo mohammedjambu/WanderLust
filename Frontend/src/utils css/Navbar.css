@@ -394,7 +394,7 @@ body {
 /* For small screens */
 @media (max-width: 360px) {
   .navbar-brand {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 
   .filters {
