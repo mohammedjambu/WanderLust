@@ -97,25 +97,43 @@ const ShowListing = () => {
 
   // Fetch listing data and wishlist status
   useEffect(() => {
-    // This effect ONLY fetches public data that anyone can see.
     const fetchPublicData = async () => {
       setLoading(true);
       setError(null);
       try {
         const listingRes = await axios.get(`${serverUrl}/api/listings/${id}`);
-        setListingData(listingRes.data);
+        const data = listingRes.data;
+        setListingData(data);
 
-        const fallbackImage = data.image?.url || "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
-        const allImages = data.images?.length > 0 ? data.images.map((i) => i.url) : [fallbackImage];
+        const fallbackImage =
+          data.image?.url ||
+          "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&w=800&q=80";
+        const allImages =
+          data.images?.length > 0
+            ? data.images.map((i) => i.url)
+            : [fallbackImage];
         // Ensure there are always 5 images for the gallery layout
-        setAdditionalImages([...allImages, fallbackImage, fallbackImage, fallbackImage, fallbackImage, fallbackImage].slice(0, 5));
+        setAdditionalImages(
+          [
+            ...allImages,
+            fallbackImage,
+            fallbackImage,
+            fallbackImage,
+            fallbackImage,
+            fallbackImage,
+          ].slice(0, 5)
+        );
 
-        const bookingsRes = await axios.get(`${serverUrl}/api/bookings/unavailable/${id}`);
+        const bookingsRes = await axios.get(
+          `${serverUrl}/api/bookings/unavailable/${id}`
+        );
         const dates = bookingsRes.data.flatMap((range) =>
-          eachDayOfInterval({ start: parseISO(range.checkIn), end: parseISO(range.checkOut) })
+          eachDayOfInterval({
+            start: parseISO(range.checkIn),
+            end: parseISO(range.checkOut),
+          })
         );
         setBookedDates(dates);
-
       } catch (err) {
         setError("Failed to load listing data.");
         console.error("Public data fetch error:", err);
@@ -128,8 +146,7 @@ const ShowListing = () => {
 
   // Fetch wishlist status
   useEffect(() => {
-    // This effect ONLY fetches user-specific data, and it WAITS for auth.
-    if (authLoading || !listingData) return; // The Guard Clause
+    if (authLoading || !listingData) return;
 
     if (authUser) {
       const isFavorited = authUser.wishlist?.includes(listingData._id);
@@ -877,7 +894,7 @@ const ShowListing = () => {
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <img
-                      src={getSafeAvatarUrl(listingData.author?.avatar)}
+                      src={getSafeAvatarUrl(review.author.avatar)}
                       alt={review.author.username}
                       className="w-10 h-10 rounded-full object-cover"
                     />
