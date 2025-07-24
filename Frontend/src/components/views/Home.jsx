@@ -69,7 +69,7 @@ const Home = () => {
         const params = new URLSearchParams(searchParams);
         const url = `${serverUrl}/api/listings?${params.toString()}`;
 
-        const response = await axios.get(url, { timeout: 15000 });
+        const response = await axios.get(url, { timeout: 30000 });
         setListings(response.data);
         setError(null);
       } catch (err) {
