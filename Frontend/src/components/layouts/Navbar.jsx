@@ -59,12 +59,46 @@ const Navbar = () => {
     searchParams.get("category") || ""
   );
 
+  const dropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+
   const { authUser, loading, logout } = useContext(authDataContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   const navRef = useRef(null);
   const filtersRef = useRef(null);
+
+  // dropdown click-away handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // dropdown scroll-away handler
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsDropdownOpen(false);
+      setIsMobileMenuOpen(false);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const calculateHeight = () => {
@@ -287,7 +321,7 @@ const handleSearchInputChange = (e) => {
           </button>
 
           {/* Desktop User Menu */}
-          <div className="user-menu-container">
+          <div className="user-menu-container" ref={dropdownRef}>
             <button
               className="dropdown-toggle"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -316,7 +350,7 @@ const handleSearchInputChange = (e) => {
         </div>
 
         {/* Mobile Menu Content */}
-        <div id="mobile-menu-content" className="mobile-menu">
+        <div id="mobile-menu-content" className="mobile-menu" ref={mobileMenuRef}>
           <div className="dropdown-menu">{renderDropdownMenu()}</div>
         </div>
       </nav>
