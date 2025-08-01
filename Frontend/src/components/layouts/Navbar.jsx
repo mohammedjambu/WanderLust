@@ -278,28 +278,30 @@ const handleSearchInputChange = (e) => {
             Wanderlust
           </Link>
 
-          <div className="search-container">
-            <form
-              className="search-form"
-              role="search"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleFilterOrSearch(searchInput, selectedCategory);
-              }}
-            >
-              <input
-                className="search-inp"
-                type="search"
-                value={searchInput}
-                onChange={handleSearchInputChange}
-                placeholder="Search destinations"
-                aria-label="Search destinations"
-              />
-              <button className="search-btn" type="submit" aria-label="Search">
-                <FiSearch className="search-icon" />
-              </button>
-            </form>
-          </div>
+          {location.pathname === "/" && (
+            <div className="search-container">
+              <form
+                className="search-form"
+                role="search"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleFilterOrSearch(searchInput, selectedCategory);
+                }}
+              >
+                <input
+                  className="search-inp"
+                  type="search"
+                  value={searchInput}
+                  onChange={handleSearchInputChange}
+                  placeholder="Search destinations"
+                  aria-label="Search destinations"
+                />
+                <button className="search-btn" type="submit" aria-label="Search">
+                  <FiSearch className="search-icon" />
+                </button>
+              </form>
+            </div>
+          )}
 
           <button
             className="navbar-toggler"

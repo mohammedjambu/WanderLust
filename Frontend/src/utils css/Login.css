@@ -6,6 +6,7 @@
   padding: 2rem 1rem;
   background: linear-gradient(135deg, #fff6ed 0%, #ffdebd 100%);
   box-sizing: border-box;
+  margin-top: 0;
 }
 
 .login-container {
